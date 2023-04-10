@@ -1,18 +1,20 @@
 import React, { useState } from 'react'
 import './main.css'
+import {Route, Routes} from "react-router-dom";
+import { Home } from './pages/Home';
 
-function Test(props: any){
-    console.log(props)
-    return <h2>123</h2>
-}
+
 function App() {
-  const [count, setCount] = useState(0)
 
-        return <h1 className='test'><h3 className='test-child'>
-test
-            <Test type={'1234'}>
-            </Test>
-        </h3></h1>
+
+        return (
+            <>
+            <Routes>
+                        <Route path={'/'} element={<Home/>}></Route>
+
+            </Routes>
+                </>
+        )
 }
 
 export default App
