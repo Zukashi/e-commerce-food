@@ -5,10 +5,14 @@ import './index.css'
 import {
     BrowserRouter
 } from "react-router-dom";
+import { Provider } from 'react-redux'
+import {store} from "./redux/store/store";
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
-        <App />
-    </BrowserRouter>
+    <Provider store={store}>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
 )
