@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:css": "postcss src/main.scss -o dist/style.css",
-    "watch:css": "postcss src/main.scss -o dist/style.css -w",
+    "build:css": "postcss src/scss/main.scss -o dist/style.css",
+    "watch:css": "postcss src/scss/main.scss -o dist/style.css -w",
     "preview": "vite preview"
   },
   "dependencies": {
