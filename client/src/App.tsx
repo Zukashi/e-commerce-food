@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import './main.css'
+import './scss/main.scss'
 import {Route, Routes} from "react-router-dom";
 import { Home } from './pages/Home';
 import {LayoutDefault} from "./layouts/LayoutDefault";
+import {Vendors} from "./pages/Vendors";
+import {Shop} from "./pages/Shop";
 
 
 function App() {
@@ -12,7 +14,9 @@ function App() {
             <>
             <Routes>
                         <Route element={<LayoutDefault/>}>
-                            <Route index element={<Home/>}></Route>
+                            <Route path={'vendors'} element={<Vendors/>}/>
+                            <Route path={'shop'} element={<Shop/>}/>
+                            <Route index element={<Home/>}/>
                         </Route>
 
             </Routes>
