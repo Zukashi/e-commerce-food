@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../product/entities/product.entity';
 import { ProductImage } from '../product-image/entities/product-image.entity';
+import { ProductImageService } from '../product-image/product-image.service';
 const sharp = require('sharp');
 
 @Injectable()
@@ -37,11 +38,7 @@ export class AwsService {
 
     const command = new PutObjectCommand(params);
     await s3Client.send(command);
-    const product = await this.productImageRepository.create({
-      imageName: imageName,
-    });
-    await this.productImageRepository.save(product);
-    return product;
+    return imageName;
   }
 
   async delete(id: string) {
@@ -71,10 +68,6 @@ export class AwsService {
     };
     const command = new PutObjectCommand(params);
     await s3Client.send(command);
-    const newProduct = await this.productImageRepository.preload({
-      imageName: product.imageName,
-    });
-    if (!newProduct) throw new NotFoundException();
-    await this.productImageRepository.save(newProduct);
+    return product;
   }
 }

@@ -23,14 +23,13 @@ export class ProductImageController {
   async getAll() {
     return this.productImageService.getAllImages();
   }
-  @Post()
+  @Post('one')
   @UseInterceptors(FileInterceptor('image'))
   async createOne(@UploadedFile() file: Express.Multer.File) {
-    await this.awsService.create(file);
+    await this.productImageService.create(file);
   }
   @Delete(':id')
   deleteOne(@Param('id') id: string) {
-    void this.awsService.delete(id);
     return this.productImageService.deleteOne(id);
   }
   @Patch(':id')
