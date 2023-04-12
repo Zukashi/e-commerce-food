@@ -29,7 +29,7 @@ export const DrawerComponent =() => {
                     </label>
                 </form>
                <div className='links'>
-                   {arrOfNavLinks.map((navLink) => <NavLink to={navLink} onClick={() => dispatch(setDrawer(false))}   className={({ isActive }) =>
+                   {arrOfNavLinks.map((navLink) => <NavLink key={navLink} to={navLink} onClick={() => dispatch(setDrawer(false))}   className={({ isActive }) =>
                         isActive ? "active" : ""
                    }><p>
                        {navLink !== '/' ? navLink.replace('/', '').charAt(0).toUpperCase() + navLink.replace('/', '').slice(1) : 'Home'
