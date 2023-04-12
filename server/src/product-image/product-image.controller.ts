@@ -1,0 +1,45 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { UpdateProductDto } from '../product/dto/update-product.dto';
+import { AwsService } from '../aws/aws.service';
+import { ProductImageService } from './product-image.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+
+@Controller('product-image')
+export class ProductImageController {
+  constructor(
+    private readonly awsService: AwsService,
+    private readonly productImageService: ProductImageService,
+  ) {}
+  @Get('all')
+  async getAll() {
+    return this.productImageService.getAllImages();
+  }
+  @Post()
+  @UseInterceptors(FileInterceptor('image'))
+  async createOne(@UploadedFile() file: Express.Multer.File) {
+    await this.awsService.create(file);
+  }
+  @Delete(':id')
+  deleteOne(@Param('id') id: string) {
+    void this.awsService.delete(id);
+    return this.productImageService.deleteOne(id);
+  }
+  @Patch(':id')
+  @UseInterceptors(FileInterceptor('image'))
+  updateOne(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    void this.awsService.updateImage(id, file);
+  }
+}
