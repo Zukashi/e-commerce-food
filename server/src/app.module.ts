@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { ProductModule } from './product/product.module';
 import { Product } from './product/entities/product.entity';
+import { AwsModule } from './aws/aws.module';
+import { ProductImageModule } from './product-image/product-image.module';
 
 @Module({
   imports: [
@@ -18,9 +20,9 @@ import { Product } from './product/entities/product.entity';
       synchronize: true,
     }),
     ProductModule,
+    AwsModule,
+    ProductImageModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}
