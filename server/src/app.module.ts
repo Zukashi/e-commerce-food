@@ -3,8 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { ProductModule } from './product/product.module';
 import { Product } from './product/entities/product.entity';
-import { AwsModule } from './aws/aws.module';
-import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -20,7 +18,6 @@ import { ConfigModule } from '@nestjs/config';
       synchronize: true,
     }),
     ProductModule,
-    AwsModule,
   ],
   controllers: [],
   providers: [],
