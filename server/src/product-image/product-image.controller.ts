@@ -9,7 +9,6 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { UpdateProductDto } from '../product/dto/update-product.dto';
 import { AwsService } from '../aws/aws.service';
 import { ProductImageService } from './product-image.service';
 import { FileInterceptor } from '@nestjs/platform-express';

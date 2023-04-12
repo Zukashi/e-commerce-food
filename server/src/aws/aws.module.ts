@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AwsController } from './aws.controller';
 import { AwsService } from './aws.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -9,7 +9,7 @@ import { ProductImageModule } from '../product-image/product-image.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([ProductImage, Product]),
-    ProductImageModule,
+    forwardRef(() => ProductImageModule),
   ],
   controllers: [AwsController],
   providers: [AwsService],
