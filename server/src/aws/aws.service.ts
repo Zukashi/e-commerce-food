@@ -1,41 +1,80 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3Client } from '../../libs/awsClient';
-import { CreateBucketCommand, PutObjectCommand } from '@aws-sdk/client-s3';
+
+import { v4 as uuid } from 'uuid';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Product } from '../product/entities/product.entity';
+import { ProductImage } from '../product-image/entities/product-image.entity';
+const sharp = require('sharp');
+
 @Injectable()
 export class AwsService {
-  async create() {
+  constructor(
+    @InjectRepository(ProductImage)
+    private readonly productImageRepository: Repository<ProductImage>,
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+  ) {}
+
+  randomImageName = () => uuid();
+  async create(file: Express.Multer.File) {
+    const buffer = await sharp(file.buffer)
+      .resize(1920, 1080, {
+        fit: 'contain',
+      })
+      .toBuffer();
+
+    const imageName = this.randomImageName();
     const params = {
-      Bucket: 'e-commerce-app-food-images-bucket', // The name of the bucket. For example, 'sample-bucket-101'.
-      Key: 'sample_object_name.txt', // The name of the object. For example, 'sample_upload.txt'.
-      Body: 'Text for aws object in bucket ', // The content of the object. For example, 'Hello world!".
+      Bucket: process.env.BUCKET_NAME,
+      Key: imageName,
+      Body: buffer,
+      ContentType: file.mimetype,
     };
 
-    // Create an Amazon S3 bucket.
+    const command = new PutObjectCommand(params);
+    await s3Client.send(command);
+    const product = await this.productImageRepository.create({
+      imageName: imageName,
+    });
+    await this.productImageRepository.save(product);
+    return product;
+  }
 
-    // try {
-    //   const data = await s3Client.send(
-    //     new CreateBucketCommand({ Bucket: params.Bucket }),
-    //   );
-    //   console.log(data);
-    //   console.log('Successfully created a bucket called ', data.Location);
-    //   return data; // For unit tests.
-    // } catch (err) {
-    //   console.log('Error', err);
-    // }
-    // Create an object and upload it to the Amazon S3 bucket.
-    try {
-      const results = await s3Client.send(new PutObjectCommand(params));
-      console.log(
-        'Successfully created ' +
-          params.Key +
-          ' and uploaded it to ' +
-          params.Bucket +
-          '/' +
-          params.Key,
-      );
-      return results; // For unit tests.
-    } catch (err) {
-      console.log('Error', err);
-    }
+  async delete(id: string) {
+    const product = await this.productImageRepository.findOneBy({ id });
+    if (!product) throw new NotFoundException();
+    const params = {
+      Bucket: process.env.BUCKET_NAME,
+      Key: product.imageName,
+    };
+    const command = new DeleteObjectCommand(params);
+    await s3Client.send(command);
+  }
+
+  async updateImage(id: string, file: Express.Multer.File) {
+    const product = await this.productImageRepository.findOneBy({ id });
+    if (!product) throw new NotFoundException();
+    const buffer = await sharp(file.buffer)
+      .resize(1920, 1080, {
+        fit: 'contain',
+      })
+      .toBuffer();
+    const params = {
+      Bucket: process.env.BUCKET_NAME,
+      Key: product.imageName,
+      Body: buffer,
+      ContentType: file.mimetype,
+    };
+    const command = new PutObjectCommand(params);
+    await s3Client.send(command);
+    const newProduct = await this.productImageRepository.preload({
+      imageName: product.imageName,
+    });
+    if (!newProduct) throw new NotFoundException();
+    await this.productImageRepository.save(newProduct);
   }
 }
