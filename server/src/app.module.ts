@@ -5,6 +5,8 @@ import { ProductModule } from './product/product.module';
 import { Product } from './product/entities/product.entity';
 import { AwsModule } from './aws/aws.module';
 import { ProductImageModule } from './product-image/product-image.module';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { ProductImageModule } from './product-image/product-image.module';
     ProductModule,
     AwsModule,
     ProductImageModule,
+    AuthModule,
+    UserModule,
   ],
 })
 export class AppModule {
