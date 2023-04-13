@@ -4,6 +4,7 @@ import {Outlet} from "react-router-dom";
 
 
 export const LayoutDefault = () => {
+
     return (<>
         <Nav></Nav>
         <Outlet/>
