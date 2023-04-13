@@ -1,8 +1,12 @@
 import {configureStore} from "@reduxjs/toolkit";
 import {navSlice} from "../nav";
+import {userSlice} from "../userSlice";
 
 export const store = configureStore({
-    reducer: navSlice.reducer
+    reducer: {
+        nav:navSlice.reducer,
+        user:userSlice.reducer
+    }
 })
 export type RootState = ReturnType<typeof store.getState>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
