@@ -9,7 +9,7 @@ import {NavLink} from "react-router-dom";
 export const DrawerComponent =() => {
     const dispatch = useDispatch();
     const arrOfNavLinks = ['/', '/shop', '/vendors'];
-    const drawer = useSelector((state:RootState) => state.drawerBoolean)
+    const drawer = useSelector((state:RootState) => state.nav.drawerBoolean)
     return (<>
         <Drawer
             open={drawer}
