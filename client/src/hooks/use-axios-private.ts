@@ -1,8 +1,6 @@
-import { axiosPrivate } from "../api/axios";
+import axios, { axiosPrivate } from "../api/axios";
 import { useEffect } from "react";
-import axios from "axios";
 import {useDispatch} from "react-redux";
-import {apiUrl} from "../config/api";
 import {setUser} from "../redux/userSlice";
 
 
@@ -23,15 +21,19 @@ export const useAxiosPrivate = () => {
                 const prevRequest = error?.config;
                 if (error?.response?.status === 401 && !prevRequest?.sent) {
                     prevRequest.sent = true;
-                    const res = await axios(`auth/refreshToken`,{
-                        method:'PATCH',
-                        withCredentials:true,
-                    });
-                    dispatch(setUser({
-                        user:res.data.user,
-                    }))
+                   try{
+                       const res = await axios(`auth/refreshToken`,{
+                           method:'PATCH',
+                           withCredentials:true,
+                       });
+                       dispatch(setUser({
+                           user:res.data.user,
+                       }))
 
-                    return axiosPrivate(prevRequest);
+                       return axiosPrivate(prevRequest);
+                   }catch(e){
+                       console.log()
+                   }
                 }
                 return Promise.reject(error);
             }

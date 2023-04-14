@@ -15,6 +15,11 @@ export class User {
   password: string;
 
   @Column({
+    default: 'customer',
+  })
+  role: string;
+
+  @Column({
     nullable: true,
   })
   refresh_token: string;
