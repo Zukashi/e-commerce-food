@@ -7,6 +7,7 @@ import {Vendors} from "./pages/Vendors";
 import {Shop} from "./pages/Shop";
 import PersistLogin from "./components/PersistLogin";
 import {Login} from "./components/login";
+import {RegisterPage} from "./pages/Register";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
                 <Route path='/login' element={<Login/>}>
 
                 </Route>
+                <Route path={'/register'} element={<RegisterPage/>}></Route>
             </Route>
             </Routes>
                 </>
