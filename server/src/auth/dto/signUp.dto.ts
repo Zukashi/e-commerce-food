@@ -15,4 +15,7 @@ export class SignUpDto {
   @IsString()
   @Length(8, 20)
   readonly confirm_password: string;
+
+  @IsString()
+  readonly role: 'vendor' | 'customer';
 }

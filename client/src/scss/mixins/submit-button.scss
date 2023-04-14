@@ -7,6 +7,7 @@
   margin-top:1rem;
   font-size: 1.5rem;
   padding:20px 40px;
+  transition: all 0.2s ease-out;
 
   &:focus{
     outline-color: $base-color;
@@ -16,7 +17,42 @@
   }
   &:hover{
     border-color:$base-color;
-    animation: 0.5s 1 alternate scale;
+    transform:scale(1.1)
+  }
+  @keyframes scale {
+    from{
+      scale:1
+    }
+    50% {
+      scale:1.2
+    }
+    to {
+      scale:1
+    }
+  }
+}
+@mixin inversed-primary-button(){
+
+  background: white;
+  color:$base-color;
+  width:100%;
+  border-color: $base-color;
+  margin-top:1rem;
+  font-size: 1.5rem;
+  padding:20px 40px;
+  transition: all 0.2s ease-out;
+
+  &:focus{
+    outline-color: $base-color;
+  }
+  &:active{
+    outline-color: $base-color;
+  }
+  &:hover{
+    border-color:$base-color;
+    color:white;
+    background: $base-color;
+    transform: scale(1.1);
   }
   @keyframes scale {
     from{
