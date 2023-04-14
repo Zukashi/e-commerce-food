@@ -19,6 +19,7 @@
 .register-form{
   display:flex;
   flex-wrap: wrap;
+  flex-direction:column;
   margin:10px 0;
   gap:20px;
 }
@@ -30,6 +31,13 @@
 }
 .MuiInputBase-root{
   border-radius:5px;
+}
+
+.error-message{
+  display:inline-block;
+  margin-top: 3px;
+  color:$error-color;
+  font-weight: 500;
 }
 
 .MuiButtonBase-root.MuiRadio-root.Mui-checked{

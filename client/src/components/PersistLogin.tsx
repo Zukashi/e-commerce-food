@@ -5,6 +5,7 @@ import {useDispatch} from "react-redux";
 import {apiUrl} from "../config/api";
 import {useAxiosPrivate} from "../hooks/use-axios-private";
 import {setUser} from "../redux/userSlice";
+import {Loader} from "./loader/Loader";
 
 const PersistLogin = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -18,16 +19,14 @@ const PersistLogin = () => {
         const verifyRefreshToken = async () => {
             try {
                 const res = await axiosPrivate.patch(`auth/refreshToken`);
-                if(res.status === 403){
-                    navigate('/login')
-                }
+
                 dispatch(setUser({
                     user:res.data.user,
                 }));
                 // navigate('/home')
             }
             catch (err) {
-                navigate('/')
+
             }
             finally {
                 isMounted && setIsLoading(false);
@@ -39,7 +38,7 @@ const PersistLogin = () => {
     }, [])
 
     if(isLoading){
-        return <h2>Loading</h2>
+        return <Loader/>
     }
     return (
         <>
