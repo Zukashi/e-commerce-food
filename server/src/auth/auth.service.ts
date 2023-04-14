@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -19,18 +20,6 @@ export class AuthService {
   ) {}
 
   async signIn(signInDto: SignInDto, res: Response): Promise<any> {
-    const schema = Joi.alternatives().try(
-      Joi.object().keys({
-        password: Joi.string().required().max(20),
-        username: Joi.string().max(20),
-      }),
-      Joi.object().keys({
-        password: Joi.string().required().max(20),
-        email: Joi.string().email(),
-      }),
-    );
-    if (!schema.validate(signInDto)) throw new UnauthorizedException();
-
     if (!(signInDto.username && signInDto.email)) {
       throw new UnauthorizedException();
     }
@@ -70,14 +59,15 @@ export class AuthService {
   }
 
   async signUp(signUpDto: SignUpDto) {
-    const schema = Joi.object().keys({
-      email: Joi.string().email().required(),
-      username: Joi.string().max(20).required(),
-      password: Joi.string().required().max(20).required(),
-    });
-    if (!schema.validate(signUpDto)) throw new UnauthorizedException();
-    const user = await this.userService.createUser(signUpDto);
-    return `${user.username} has been created`;
+    if (signUpDto.confirm_password === signUpDto.password) {
+      // checks if user is already in database by username / email
+      await this.userService.isAlreadyInDB(signUpDto);
+
+      // creates new user
+      const user = await this.userService.createUser(signUpDto);
+      return `${user.username} has been created`;
+    }
+    throw new BadRequestException();
   }
 
   async refreshToken(refresh_token: string, res: Response) {
