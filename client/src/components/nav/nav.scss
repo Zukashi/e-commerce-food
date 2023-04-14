@@ -1,4 +1,5 @@
 @import '../../scss/vars';
+@import '../../scss/mixins/submit-button';
 .navbar {
   position:sticky;
   height:70px;
@@ -18,13 +19,112 @@
 }
 .right-side-icons-container{
   display:flex;
-  gap:7px;
+  gap:10px;
   height:100%;
-  margin-right:5px;
+  margin-right:15px;
   align-items:center;
 }
 
+// cart
 
+.one-product-in-cart{
+  display:flex;
+  gap: 20px;
+}
+.account-dropdown.cart{
+  width: 270px;
+}
+.account-list.cart-list{
+  padding-bottom:15px;
+  border-bottom:1px solid #ccc;
+}
+.total-cart{
+  margin-top: 5px;
+  display:flex;
+  justify-content: space-between;
+}
+
+.cart-buttons{
+  display:flex;
+  justify-content: space-between;
+}
+.primary-button{
+  @include submit-button;
+  width: 70px;
+  padding: 4px 0;
+  border-radius: 2px;
+  font-size: 12px;
+}
+
+.inversed-primary-button{
+  @include inversed-primary-button;
+  width: 70px;
+  padding: 4px 0;
+  border-radius: 2px;
+  font-size: 12px;
+}
+//user
+.fade-container{
+  position: relative;
+  align-items: center;
+  cursor:default;
+
+}
+.trigger-fade{
+  cursor:pointer;
+}
+.account-dropdown:has(+ .trigger-fade:hover){
+  opacity:1;
+  bottom:-205px;
+  visibility: visible;
+}
+
+//@keyframes slideUp {
+//  from{
+//    bottom:-195px;
+//    opacity:0;
+//  }
+//
+//  to{
+//    bottom:-180px;
+//    opacity:1;
+//  }
+//}
+
+
+.account-dropdown{
+  position: absolute;
+  background: #fff;
+  visibility: hidden;
+  opacity:0;
+  right:0;
+  bottom:-215px;
+  padding:20px 15px;
+  width:150px;
+  border-radius: 15px;
+  border:1px solid #eee;
+  z-index: 10;
+  transition: all 0.3s ease-in;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
+
+
+}
+.account-dropdown:hover{
+  opacity:1;
+  bottom:-205px;
+  visibility: visible;
+}
+.account-list{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  .list-item:hover{
+    color:#0DA487;
+    cursor:pointer;
+    width: 100%;
+  }
+}
 
 .background-for-icon{
   display:flex;
