@@ -1,0 +1,50 @@
+@import '../../scss/vars';
+@import '../../scss/mixins/submit-button';
+.register-section{
+  width:100vw;
+  padding:20px 0;
+}
+.bg-form{
+  width:90%;
+
+  border-radius:15px;
+  border-radius:15px;
+  margin: 0 auto;
+  background: $primary-bg-color;
+}
+.form-box {
+    padding: 15px;
+}
+
+.register-form{
+  display:flex;
+  flex-wrap: wrap;
+  margin:10px 0;
+  gap:20px;
+}
+.MuiTextField-root{
+  background: #fff;
+  width:100%;
+  border-radius:5px;
+
+}
+.MuiInputBase-root{
+  border-radius:5px;
+}
+
+.MuiButtonBase-root.MuiRadio-root.Mui-checked{
+  color: $base-color !important;
+}
+
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
+  border-color: $base-color !important;
+}
+.MuiFormLabel-root.Mui-focused{
+  color:$base-color !important;
+}
+
+
+.submit-button{
+  @include submit-button
+}
