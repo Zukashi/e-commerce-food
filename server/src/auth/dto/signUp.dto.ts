@@ -1,12 +1,18 @@
-import { IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString, Length, Max } from 'class-validator';
 
 export class SignUpDto {
   @IsString()
+  @Length(8, 20)
   readonly username: string;
 
-  @IsString()
+  @IsEmail()
   readonly email: string;
 
   @IsString()
+  @Length(8, 20)
   readonly password: string;
+
+  @IsString()
+  @Length(8, 20)
+  readonly confirm_password: string;
 }
