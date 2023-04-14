@@ -8,13 +8,14 @@ import {Shop} from "./pages/Shop";
 import PersistLogin from "./components/PersistLogin";
 import {Login} from "./components/login";
 import {RegisterPage} from "./pages/Register";
-
+import { ToastContainer } from 'react-toastify';
 
 function App() {
 
 
         return (
             <>
+                <ToastContainer/>
             <Routes>
                         <Route element={<PersistLogin/>}>
                             <Route element={<LayoutDefault/>}>
