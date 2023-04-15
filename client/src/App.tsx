@@ -6,7 +6,7 @@ import {LayoutDefault} from "./layouts/LayoutDefault";
 import {Vendors} from "./pages/Vendors";
 import {Shop} from "./pages/Shop";
 import PersistLogin from "./components/PersistLogin";
-import {Login} from "./components/login";
+import {Login} from "./components/login/login";
 import {RegisterPage} from "./pages/Register";
 import { ToastContainer } from 'react-toastify';
 

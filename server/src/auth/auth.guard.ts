@@ -9,7 +9,6 @@ import { jwtConstants } from './constants';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './decorator/public.decorator';
-import { Cookies } from './decorator/cookie.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -28,7 +27,7 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
 
     const token = request.cookies.access_token;
-    console.log(request.cookies);
+    // console.log(request.cookies);
 
     if (!token) {
       throw new UnauthorizedException();

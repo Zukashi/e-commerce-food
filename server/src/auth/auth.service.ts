@@ -20,9 +20,10 @@ export class AuthService {
   ) {}
 
   async signIn(signInDto: SignInDto, res: Response): Promise<any> {
-    if (!(signInDto.username && signInDto.email)) {
+    if (!(signInDto.username || signInDto.email)) {
       throw new UnauthorizedException();
     }
+    console.log(2);
     const user = await this.userService.findOne(
       signInDto.username
         ? { value: signInDto.username, field: 'username' }
