@@ -3,8 +3,9 @@ import { Public } from '../auth/decorator/public.decorator';
 
 @Controller('user')
 export class UserController {
+  @Public()
   @Get('profile')
   getProfile(@Request() req: any) {
-    return 123;
+    console.log(req.oidc.isAuthenticated());
   }
 }

@@ -15,7 +15,13 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async findOne({ field, value }: { field: string; value: string }) {
+  async findOne({
+    value,
+    field,
+  }: {
+    value: string | undefined;
+    field: string;
+  }) {
     return this.userRepository.findOneBy({ [`${field}`]: value });
   }
 

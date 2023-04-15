@@ -50,7 +50,9 @@ export const Register = () => {
     return (<>
 
     <section className='register-section'>
-
+            <div className="image-container">
+                <img color='register-image' src="https://themes.pixelstrap.com/fastkart/assets/images/inner-page/sign-up.png" alt="image showing woman touching big phone indicating authentication"/>
+            </div>
             <div className='bg-form'>
                     <div className='form-box'>
                             <h3>Create New Account</h3>
