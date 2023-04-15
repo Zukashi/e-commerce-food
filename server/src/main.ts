@@ -5,6 +5,7 @@ import * as cookieParser from 'cookie-parser';
 // somewhere in your initialization file
 
 import * as dotenv from 'dotenv'; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+
 dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -13,6 +14,7 @@ async function bootstrap() {
       credentials: true,
     },
   });
+
   app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({

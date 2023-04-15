@@ -3,7 +3,8 @@
 .navbar {
   position:sticky;
   height:70px;
-  box-shadow:0 4px 5px rgb(0 0 0 / 7%)
+  box-shadow:0 4px 5px rgb(0 0 0 / 7%);
+  z-index: 30;
 }
 
 .container {
@@ -25,6 +26,16 @@
   align-items:center;
 }
 
+.nav-item-text{
+  display:none;
+  color:$primary-text;
+  align-self: end;
+}
+@media(min-width: $lg){
+  .nav-item-text{
+    display:block;
+  }
+}
 // cart
 
 .one-product-in-cart{
@@ -63,19 +74,39 @@
   border-radius: 2px;
   font-size: 12px;
 }
+
+
+.account-dropdown.cart:has( fade-container:hover){
+  opacity:1;
+  bottom:-190px;
+  visibility: visible;
+}
+.account-dropdown.cart:hover{
+  opacity:1;
+  bottom:-190px;
+  visibility: visible;
+}
+
+.account-dropdown.cart{
+  bottom:-210px;
+}
 //user
 .fade-container{
+  display:flex;
   position: relative;
   align-items: center;
   cursor:default;
-
+  visibility: visible;
 }
 .trigger-fade{
   cursor:pointer;
 }
-.account-dropdown:has(+ .trigger-fade:hover){
+.fade-container:hover{
+  cursor:pointer;
+}
+.fade-container:hover .account-dropdown{
   opacity:1;
-  bottom:-205px;
+  bottom:-215px;
   visibility: visible;
 }
 
@@ -98,12 +129,12 @@
   visibility: hidden;
   opacity:0;
   right:0;
-  bottom:-215px;
+  bottom:-230px;
   padding:20px 15px;
   width:150px;
   border-radius: 15px;
   border:1px solid #eee;
-  z-index: 10;
+
   transition: all 0.3s ease-in;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
 
@@ -111,7 +142,7 @@
 }
 .account-dropdown:hover{
   opacity:1;
-  bottom:-205px;
+  bottom:-215px;
   visibility: visible;
 }
 .account-list{
@@ -211,5 +242,32 @@
     a:hover >  p {
       border-bottom: 2px solid $base-color;
     }
+  }
+}
+
+
+// md screen
+
+@media (min-width:$sm) {
+    .container{
+      max-width: $sm;
+      margin:0 auto;
+    }
+}
+
+@media(min-width: $md){
+  .container{
+    max-width: $md;
+
+  }
+}
+@media(min-width: $lg){
+  .container{
+    max-width: $lg;
+  }
+}
+@media(min-width:$xl){
+  .container{
+    max-width:85%;
   }
 }
