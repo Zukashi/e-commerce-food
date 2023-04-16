@@ -15,10 +15,11 @@
   border-radius:15px;
   margin: 0 auto;
   background: $primary-bg-color;
+  max-width: 400px;
 }
 .form-box {
     padding: 15px;
-
+    max-width: 400px;
 }
 
 .register-form{
@@ -67,7 +68,7 @@
 
 @media(min-width: $sm){
     .bg-form{
-      max-width: $sm;
+      max-width: 400px;
     }
 }
 
@@ -88,12 +89,14 @@
     max-width:420px;
   }
   .bg-form{
-    width:25%;
+    width:45%;
     margin:0;
+    max-width: 400px;
   }
   .form-box{
     width:90%;
     margin:0 auto;
+    max-width: 400px;
   }
   .register-image{
     display:block;
