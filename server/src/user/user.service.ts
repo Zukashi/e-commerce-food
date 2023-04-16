@@ -7,6 +7,7 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SignUpDto } from '../auth/dto/signUp.dto';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class UserService {
@@ -22,17 +23,23 @@ export class UserService {
     value: string | undefined;
     field: string;
   }) {
-    return this.userRepository.findOneBy({ [`${field}`]: value });
+    console.log(value, field, 555);
+    const user = await this.userRepository.findOneBy({ [`${field}`]: value });
+    return user;
   }
 
   async createUser(signUpDto: SignUpDto) {
     const user = this.userRepository.create(signUpDto);
+    console.log(user);
     await this.userRepository.save(user);
     return user;
   }
 
-  async updateUser(valueToTransform: any, previousData: User) {
+  async updateUser(valueToTransform: any, userId: string) {
+    const previousData = await this.userRepository.findOneBy({ id: userId });
+
     const user = await this.userRepository.preload({
+      id: userId,
       ...previousData,
       ...valueToTransform,
     });
