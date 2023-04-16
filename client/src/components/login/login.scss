@@ -2,3 +2,17 @@
 .MuiCheckbox-root{
   color: $base-color !important;
 }
+.login-form{
+  display:flex;
+  flex-wrap: wrap;
+  flex-direction:column;
+  margin:10px 0;
+  position: relative;
+}
+.login-form-item{
+  margin:10px 0;
+}
+
+.login-section{
+  margin-top: 100px;
+}

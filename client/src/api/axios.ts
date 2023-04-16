@@ -5,9 +5,7 @@ const BASE_URL = apiUrl;
 export default axios.create({
     baseURL: BASE_URL
 });
-
 export const axiosPrivate = axios.create({
     baseURL: BASE_URL,
-    headers: { 'Content-Type': 'application/json' },
-    withCredentials: true
+    headers: { 'Content-Type': 'application/json', 'Authorization':`Bearer ${localStorage.getItem('access_token')}` },
 });
