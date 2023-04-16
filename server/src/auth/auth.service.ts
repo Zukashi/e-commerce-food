@@ -1,16 +1,19 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from '../user/user.service';
-import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/signUp.dto';
 import { SignInDto } from './dto/signIn.dto';
 import { jwtConstants } from './constants';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 const Joi = require('joi');
+const bcrypt = require('bcrypt');
 
 @Injectable()
 export class AuthService {
@@ -19,44 +22,27 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(signInDto: SignInDto, res: Response): Promise<any> {
+  async signIn(signInDto: SignInDto): Promise<any> {
     if (!(signInDto.username || signInDto.email)) {
       throw new UnauthorizedException();
     }
-    console.log(2);
     const user = await this.userService.findOne(
       signInDto.username
         ? { value: signInDto.username, field: 'username' }
         : { value: signInDto.email, field: 'email' },
     );
-    if (user?.password !== signInDto.password) {
-      throw new UnauthorizedException();
-    }
-    const payload = { username: user.username, sub: user.id };
-
-    const access_token = await this.jwtService.signAsync(payload, {
-      secret: jwtConstants.access_token_secret,
-    });
-    const refresh_token = await this.jwtService.signAsync(payload, {
-      secret: jwtConstants.refresh_token_secret,
-    });
-    res.cookie('access_token', access_token, {
-      expires: new Date(new Date().getTime() + 30 * 1000),
-      sameSite: 'strict',
-      httpOnly: true,
-    });
-    res.cookie('refresh_token', refresh_token, {
-      expires: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7),
-      sameSite: 'strict',
-      httpOnly: true,
-    });
+    if (!user) throw new NotFoundException();
+    const isCorrect = await argon2.verify(user.password, signInDto.password);
+    if (!isCorrect) return new BadRequestException();
+    const tokens = await this.getTokens(user.id, user.username);
+    const refresh = await this.hashData(tokens.refreshToken);
+    await this.updateRefreshToken(user.id, refresh);
     // Update refreshToken of user in database
-    const updatedUser = await this.userService.updateUser(
-      { refresh_token: refresh_token },
-      user,
-    );
 
-    res.json(updatedUser);
+    return {
+      ...tokens,
+      refreshToken: refresh,
+    };
   }
 
   async signUp(signUpDto: SignUpDto) {
@@ -64,31 +50,83 @@ export class AuthService {
       // checks if user is already in database by username / email
       await this.userService.isAlreadyInDB(signUpDto);
 
+      // Hash password
+
+      const hash = await this.hashData(signUpDto.password);
+      const createUserDto = {
+        ...signUpDto,
+        password: hash,
+      };
       // creates new user
-      const user = await this.userService.createUser(signUpDto);
-      return `${user.username} has been created`;
+      const newUser = await this.userService.createUser(createUserDto);
+      const tokens = await this.getTokens(newUser.id, newUser.username);
+      const refresh = await this.hashData(tokens.refreshToken);
+      await this.updateRefreshToken(newUser.id, refresh);
+      return {
+        ...tokens,
+        refresh_token: refresh,
+      };
     }
     throw new BadRequestException();
   }
 
-  async refreshToken(refresh_token: string, res: Response) {
-    const user = await this.userService.findOne({
-      field: 'refresh_token',
-      value: refresh_token,
-    });
+  async refreshToken(userId: string, refreshToken: string, res) {
+    const user = await this.userService.findOne({ value: userId, field: 'id' });
+    if (!user || !user.refresh_token) {
+      throw new ForbiddenException('Access Denied');
+    }
+    console.log(user.refresh_token);
+    const refreshTokenMatches = await bcrypt.compare(
+      refreshToken,
+      user.refresh_token,
+    );
+    console.log(refreshTokenMatches);
+    if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
+    const tokens = await this.getTokens(user.id, user.username);
+    const refresh = await this.hashData(tokens.refreshToken);
+    await this.updateRefreshToken(user.id, refresh);
 
-    if (!user) throw new UnauthorizedException();
-    const payload = { username: user.username, sub: user.id };
-    const access_token = await this.jwtService.signAsync(payload, {
-      secret: jwtConstants.access_token_secret,
-    });
-    console.log(access_token);
-    res
-      .cookie('access_token', access_token, {
-        expires: new Date(new Date().getTime() + 30 * 1000),
-        sameSite: 'strict',
-        httpOnly: true,
-      })
-      .end();
+    return {
+      ...tokens,
+      refresh_token: refresh,
+    };
+  }
+
+  async updateRefreshToken(userId: string, refreshToken: string) {
+    const user = await this.userService.findOne({ value: userId, field: 'id' });
+    if (!user) return new NotFoundException();
+    await this.userService.updateUser({ refresh_token: refreshToken }, user.id);
+    return;
+  }
+
+  async hashData(data: string) {
+    return argon2.hash(data);
+  }
+  async logout(userId: string) {
+    return await this.userService.updateUser({ refresh_token: null }, userId);
+  }
+  async getTokens(userId: string, username: string) {
+    const user = await this.userService.findOne({ value: userId, field: 'id' });
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(
+        { ...user },
+        {
+          secret: jwtConstants.access_token_secret,
+          expiresIn: '15m',
+        },
+      ),
+      this.jwtService.signAsync(
+        { ...user },
+        {
+          secret: jwtConstants.refresh_token_secret,
+          expiresIn: '7d',
+        },
+      ),
+    ]);
+
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 }
