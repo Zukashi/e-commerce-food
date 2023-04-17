@@ -15,6 +15,7 @@ export interface Register {
 import * as yup from "yup";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useNavigate} from "react-router-dom";
+import axios from "../../api/axios";
 
 const schema = yup.object().shape({
 
@@ -27,13 +28,12 @@ export const Register = () => {
     const {register, handleSubmit, formState:{errors}} = useForm<Register>({
         resolver:yupResolver(schema)
     });
-    const axiosPrivate = useAxiosPrivate()
     type registerType = "username" | "email" | "password" | "confirm_password"
     const navigate = useNavigate()
     const labels = [['Username', 'username'], ['Email', 'email'], ['Password', 'password'], ['Confirm Password', 'confirm_password']]
     const sendForm:SubmitHandler<Register> = async (data) => {
                try{
-                   const response =await  axiosPrivate.post('auth/register', data);
+                   const response =await  axios.post('auth/register', data);
                    toast.success(response.data, {
                        position:"top-right",
                        theme:'dark'
