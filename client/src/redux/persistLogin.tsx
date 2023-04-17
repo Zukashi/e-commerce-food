@@ -2,7 +2,6 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
 
 const initialState:any = JSON.parse(localStorage.getItem('persist') as any) || false
-console.log(initialState)
 export const persistSlice = createSlice({
     name: 'persist',
     initialState,

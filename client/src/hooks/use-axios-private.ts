@@ -24,9 +24,7 @@ export const useAxiosPrivate = () => {
                    try{
                        const res = await axios(`auth/refreshToken`,{
                            method:'PATCH',
-                           headers:{
-                               'Authorization':`Header ${localStorage.getItem('refresh_token')}`
-                           },
+                           withCredentials:true
                        });
                        dispatch(setUser({
                            user:res.data.user,

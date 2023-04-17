@@ -25,7 +25,7 @@ export const  Shop = () => {
             const response = await axiosPrivate.get('product-image/all');
             setCurrentImage(response.data[0])
         })()
-    }, [])
+    }, [    ])
 
     return(<>
         <form onSubmit={handleSubmit(onSubmit)}>

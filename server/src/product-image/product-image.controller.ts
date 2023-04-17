@@ -21,7 +21,6 @@ export class ProductImageController {
     private readonly awsService: AwsService,
     private readonly productImageService: ProductImageService,
   ) {}
-  @UseGuards(AccessTokenGuard)
   @Get('all')
   async getAll() {
     return this.productImageService.getAllImages();

@@ -23,7 +23,6 @@ export class UserService {
     value: string | undefined;
     field: string;
   }) {
-    console.log(value, field, 555);
     const user = await this.userRepository.findOneBy({ [`${field}`]: value });
     return user;
   }

@@ -17,8 +17,8 @@ import { SignUpDto } from './dto/signUp.dto';
 import { SignInDto } from './dto/signIn.dto';
 import { Cookies } from './decorator/cookie.decorator';
 import { AccessTokenGuard } from './guards/access-token.guard';
-import { RefreshTokenGuard } from './guards/refresh-token.guards';
 import { User } from '../user/entities/user.entity';
+import { RefreshTokenGuard, ReqWithUser } from './guards/refresh-token.guards';
 
 @Controller('auth')
 export class AuthController {
@@ -26,8 +26,8 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(@Body() signInDto: SignInDto) {
-    return this.authService.signIn(signInDto);
+  async signIn(@Body() signInDto: SignInDto, @Res() res: Response) {
+    return this.authService.signIn(signInDto, res);
   }
 
   @Public()
@@ -39,15 +39,12 @@ export class AuthController {
 
   @UseGuards(RefreshTokenGuard)
   @Patch('refreshToken')
-  async refreshToken(@Req() req: Request) {
-    const userId = (req.user as any).sub.id;
-    console.log(555);
-    const refreshToken = (req.user as any)['refresh_token'];
-    return this.authService.refreshToken(userId, refreshToken);
+  async refreshToken(@Res() res: Response, @Req() req: ReqWithUser) {
+    return this.authService.refreshToken(req.user.id, res);
   }
   @UseGuards(AccessTokenGuard)
   @Delete('logout')
-  async deleteCookies(@Req() req: Request) {
-    return this.authService.logout((req.user as User).id);
+  async deleteCookies(@Req() req: ReqWithUser, @Res() res: Response) {
+    return this.authService.logout(req.user.id, res);
   }
 }
