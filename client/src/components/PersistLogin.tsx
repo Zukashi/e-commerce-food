@@ -12,30 +12,20 @@ const PersistLogin = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const axiosPrivate = useAxiosPrivate();
-    const persist = useSelector((root:RootState) => root.persist)
+    const {persist} = useSelector((root:RootState) => root)
     // @ts-ignore
     useEffect(() => {
         let isMounted = true;
 
         const verifyRefreshToken = async () => {
             try {
-                console.log(44)
-                const res = await axiosPrivate.patch(`auth/refreshToken`, {
-                    headers:{
-                        'Headers':`Bearer ${localStorage.getItem('refresh_token')}`
-                    }
-                });
-                console.log(res.data)
-                localStorage.setItem('refresh_token', res.data.refreshToken)
-                localStorage.setItem('access_token', res.data.accessToken)
+                const res = await axiosPrivate.patch(`auth/refreshToken`);
                 dispatch(setUser({
                     user:res.data.user,
                 }));
 
             }
-            catch (err) {
-                navigate('/login')
-            }
+
             finally {
                 isMounted && setIsLoading(false);
             }
@@ -45,7 +35,10 @@ const PersistLogin = () => {
         return () => isMounted = false;
     }, [])
 
-
+    useEffect(() => {
+        console.log(`isLoading: ${isLoading}`)
+        console.log(persist,'persist')
+    }, [isLoading])
     return (
         <>
             {!persist ? <Outlet/> :
