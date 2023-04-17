@@ -41,8 +41,6 @@ export const Login = () => {
             });
             console.log(res.data)
             localStorage.setItem('persist', getValues('rememberMe') && 'true')
-            localStorage.setItem('refresh_token', res.data.refreshToken)
-            localStorage.setItem('access_token', res.data.accessToken)
             navigate('/')
             toast.success('Logged successfully', {
                 position:"top-right",
