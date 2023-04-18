@@ -36,11 +36,15 @@ export class AuthService {
     if (!user) throw new NotFoundException();
     const isCorrect = await bcrypt.compare(signInDto.password, user.password);
     if (!isCorrect) return new BadRequestException();
-    const accessToken = jwt.sign({ ...user }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '15m',
-    });
+    const accessToken = jwt.sign(
+      { id: user.id },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: '15m',
+      },
+    );
     const refreshToken = jwt.sign(
-      { ...user },
+      { id: user.id },
       process.env.REFRESH_TOKEN_SECRET,
       {
         expiresIn: '7d',
@@ -84,12 +88,15 @@ export class AuthService {
     }
   }
 
-  async refreshToken(userId: string, res: Response) {
-    const user = await this.userService.findOne({ value: userId, field: 'id' });
-
-    const accessToken = jwt.sign({ ...user }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '15m',
-    });
+  async refreshToken(user: User, res: Response) {
+    console.log(user);
+    const accessToken = jwt.sign(
+      { id: user.id },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: '15m',
+      },
+    );
     const accessCookieExpiryDate = new Date(Date.now() + 60 * 15 * 1000);
     res
       .cookie('accessToken', accessToken, {
