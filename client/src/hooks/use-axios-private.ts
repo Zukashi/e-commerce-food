@@ -32,7 +32,6 @@ export const useAxiosPrivate = () => {
 
                        return axiosPrivate(prevRequest);
                    }catch(e){
-                       console.log()
                    }
                 }
                 return Promise.reject(error);
