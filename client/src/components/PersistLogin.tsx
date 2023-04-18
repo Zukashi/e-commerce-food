@@ -1,4 +1,4 @@
-import {Outlet, useNavigate} from "react-router-dom";
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
 import {useDispatch, useSelector} from "react-redux";
@@ -11,8 +11,8 @@ const PersistLogin = () => {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation()
     const axiosPrivate = useAxiosPrivate();
-    const {persist} = useSelector((root:RootState) => root)
     // @ts-ignore
     useEffect(() => {
         let isMounted = true;
@@ -23,9 +23,13 @@ const PersistLogin = () => {
                 dispatch(setUser({
                     user:res.data.user,
                 }));
-
+                console.log(res.data)
             }
-
+            catch(e){
+                navigate('/login', {
+                    state:location.pathname
+                })
+            }
             finally {
                 isMounted && setIsLoading(false);
             }
@@ -37,12 +41,12 @@ const PersistLogin = () => {
 
     useEffect(() => {
         console.log(`isLoading: ${isLoading}`)
-        console.log(persist,'persist')
+
     }, [isLoading])
     return (
         <>
-            {!persist ? <Outlet/> :
-                isLoading ? <Loader/> : <>
+
+            { isLoading ? <Loader/> : <>
                 <Outlet/></>}
         </>
     )
