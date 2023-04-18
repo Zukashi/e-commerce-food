@@ -5,11 +5,10 @@ import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Radio, Ra
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {toast} from "react-toastify";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import './login.scss'
-import {setPersist} from "../../redux/persistLogin";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../redux/store/store";
+
+
 type Login  = {
     usernameOrEmail:string;
     password:string;
@@ -27,21 +26,33 @@ export const Login = () => {
     const {register:registerRemember, getValues} = useForm<{rememberMe:''}>();
     const navigate = useNavigate();
     const axios = useAxiosPrivate();
-    const persist = useSelector((root:RootState) => root.persist);
-    const dispatch = useDispatch()
-    console.log(localStorage.getItem('refresh_token'))
+    const location = useLocation()
+    console.log(location.state)
+    useEffect(() => {
+        // if user came here from different subsite then show this toast
+        if(typeof location.state ==='string'){
+            toast.warning('Log in to access that data',{
+                position:"top-right",
+                theme:'dark',
+                autoClose:4000,
+            })
+        }
+    }, [])
     const onSubmit: SubmitHandler<Login> = async data => {
 
 
         try{
-            console.log(data)
             const res = await axios.post('auth/login', {
                     password:data.password,
+                // depending on if field is username or email pick one
                 ...(data.usernameOrEmail.includes('@') ? {email: data.usernameOrEmail} : {username:data.usernameOrEmail})
             });
-            console.log(res.data)
-            localStorage.setItem('persist', getValues('rememberMe') && 'true')
-            navigate('/')
+
+            if(typeof location.state ==='string'){
+                navigate(location.state)
+            }else{
+                navigate('/')
+            }
             toast.success('Logged successfully', {
                 position:"top-right",
                 theme:'dark',
