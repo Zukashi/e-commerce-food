@@ -1,0 +1,94 @@
+@import '../../scss/vars';
+.vendor-profile-container{
+  width: 100%;
+  margin-top: 2rem;
+}
+.vendor-profile{
+  display:flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 90%;
+  margin:0 auto;
+}
+.vendor-introduction{
+  border: 1px solid #eee;
+  width:100%;
+  margin:0 auto;
+
+  .vendor-introduction-content-container{
+    width: 90%;
+    margin: 15px auto 35px;
+  }
+}
+.vendor-nav{
+  display:flex;
+  flex-direction: column;
+  justify-content: start;
+  a{
+    color:#777;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #eee;
+  }
+}
+
+.products-amount{
+  border-radius:0.2rem;
+  width: 100%;
+  height: 7rem;
+  position: relative;
+  background-image: linear-gradient(145deg, #b1d1ff 0%, #588fe4 100%);
+
+  &:before{
+    content: "";
+    width: 90px;
+    height: 90px;
+    position: absolute;
+    right: -35px;
+    bottom: -2px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.3;
+  }
+  &:after{
+    content: "";
+    width: 90px;
+    height: 90px;
+    position: absolute;
+    right: -2px;
+    bottom: -35px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.3;
+  }
+  .content{
+    font-size: 20px;
+    height:100%;
+    color:white;
+    display:flex;
+    margin-left: 2rem;
+    justify-content: center;
+    flex-direction:column;
+
+    .product{
+      font-size: 18px;
+      font-weight: 500;
+    }
+    .amount{
+      font-weight: 700;
+    }
+
+
+  }
+}
+
+.products-amount.sales{
+  background-image: linear-gradient(145deg, #f9c899, #f79165);
+}
+.products-amount.orders{
+  background-image: linear-gradient(145deg, #fdb8c3, #ec6f85);
+}
+
+.products-amount.earnings{
+  background-image: linear-gradient(145deg, #78ecc7 0%, #2fce9a 100%);
+
+}
