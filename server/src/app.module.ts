@@ -7,6 +7,7 @@ import { AwsModule } from './aws/aws.module';
 import { ProductImageModule } from './product-image/product-image.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { VendorModule } from './vendor/vendor.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UserModule } from './user/user.module';
     ProductImageModule,
     AuthModule,
     UserModule,
+    VendorModule,
   ],
 })
 export class AppModule {

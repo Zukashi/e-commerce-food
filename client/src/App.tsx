@@ -3,7 +3,7 @@ import './scss/main.scss'
 import {Route, Routes} from "react-router-dom";
 import { Home } from './pages/Home';
 import {LayoutDefault} from "./layouts/LayoutDefault";
-import {Vendors} from "./pages/Vendors";
+import {Vendor} from "./pages/Vendor";
 import {Shop} from "./pages/Shop";
 import PersistLogin from "./components/PersistLogin";
 import {Login} from "./components/login/login";
@@ -19,7 +19,7 @@ function App() {
             <Routes>
                         <Route element={<PersistLogin/>}>
                             <Route element={<LayoutDefault/>}>
-                                <Route path={'vendors'} element={<Vendors/>}/>
+                                <Route path={'vendor'} element={<Vendor/>}/>
                                 <Route path={'shop'} element={<Shop/>}/>
                                 <Route index element={<Home/>}/>
                             </Route>
