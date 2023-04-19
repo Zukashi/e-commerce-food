@@ -40,7 +40,34 @@
 
 .one-product-in-cart{
   display:flex;
+  width: 100%;
   gap: 20px;
+}
+.product-info-container{}
+
+.product-title-container{
+    width:100%;
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+
+    .title{
+      color:$base-color;
+      font-weight: 450;
+      font-size: 17px;
+    }
+}
+.product-amount-price-container{
+  display:flex;
+  gap:5px;
+  align-items: center;
+
+  .price{
+    color:$base-color;
+    font-weight: 500;
+    font-size: 18px;
+  }
 }
 .account-dropdown.cart{
   width: 270px;
@@ -53,6 +80,17 @@
   margin-top: 5px;
   display:flex;
   justify-content: space-between;
+  align-items: center;
+  .total{
+    color: #9b9b9b;
+    font-weight: 500;
+    font-size: 17px;
+  }
+  .price{
+    font-weight: 500;
+    font-size: 18px;
+    color: $base-color;
+  }
 }
 
 .cart-buttons{
@@ -64,31 +102,32 @@
   width: 70px;
   padding: 4px 0;
   border-radius: 2px;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .inversed-primary-button{
   @include inversed-primary-button;
   width: 70px;
-  padding: 4px 0;
+  padding: 8px 0px;
   border-radius: 2px;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 
 .account-dropdown.cart:has( fade-container:hover){
   opacity:1;
-  bottom:-190px;
+  bottom:-230px;
   visibility: visible;
 }
 .account-dropdown.cart:hover{
   opacity:1;
-  bottom:-190px;
+  bottom:-230px;
   visibility: visible;
 }
 
 .account-dropdown.cart{
-  bottom:-210px;
+  bottom:-230px;
+  width:290px;
 }
 //user
 .fade-container{
@@ -104,6 +143,12 @@
 .fade-container:hover{
   cursor:pointer;
 }
+.fade-container:hover .account-dropdown.cart{
+  opacity:1;
+  bottom:-220px;
+  visibility: visible;
+}
+
 .fade-container:hover .account-dropdown{
   opacity:1;
   bottom:-215px;

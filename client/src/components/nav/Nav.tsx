@@ -5,6 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import CompareArrowsOutlinedIcon from '@mui/icons-material/CompareArrowsOutlined';
+import ClearIcon from '@mui/icons-material/Clear';
 import {DrawerComponent} from "./DrawerComponent";
 import {useDispatch} from "react-redux";
 import {setDrawer} from "../../redux/nav";
@@ -29,17 +30,17 @@ export const Nav = () => {
                    <div className='account-dropdown dropdown-animate cart'>
                        <ul className='account-list cart-list'>
                            <div className='one-product-in-cart'>
-                               <img src="" alt="test"/>
-                               <div>
-                                   <p>Peanut Butter</p>
-                                   <p>1x $25.64</p>
+                               <img src="" width={'60px'} height={'60px'} alt="test"/>
+                               <div className='product-info-container'>
+                                   <div className='product-title-container'><p className='title'>Peanut Butter </p><ClearIcon fontSize={'small'}/></div>
+                                   <div className='product-amount-price-container'><p>1×</p> <p className='price'>$price</p></div>
                                </div>
                            </div>
 
                        </ul>
                        <div className='total-cart'>
-                           <p>Total:</p>
-                           <p>$price</p>
+                           <p className='total'>Total</p>
+                           <p className='price'>$price</p>
                        </div>
                        <div className='cart-buttons'>
                            <button className='inversed-primary-button'>View Cart</button>
