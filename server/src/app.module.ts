@@ -8,6 +8,8 @@ import { ProductImageModule } from './product-image/product-image.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { VendorModule } from './vendor/vendor.module';
+import { Vendor } from './vendor/entities/vendor.entity';
+import { ProductImage } from './product-image/entities/product-image.entity';
 
 @Module({
   imports: [
@@ -18,7 +20,7 @@ import { VendorModule } from './vendor/vendor.module';
       username: 'postgres',
       password: '',
       database: 'postgres',
-      entities: [Product],
+      entities: [Product, Vendor, ProductImage],
       autoLoadEntities: true,
       synchronize: true,
     }),
