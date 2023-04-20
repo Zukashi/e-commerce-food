@@ -7,6 +7,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {useMutation} from "react-query";
 import {createProduct} from "./fetch";
+import {useAxiosPrivate} from "../../../hooks/use-axios-private";
 const schema = yup.object().shape({
 
     productName: yup.string().required('product name is required'),
@@ -29,13 +30,14 @@ export const UploadsForm = () => {
     const {register, formState:{errors}, handleSubmit} = useForm<UploadProductFormValues>({
         resolver:yupResolver(schema)
     });
+    const axiosPrivate = useAxiosPrivate();
     const createNewProduct  = useMutation({
         mutationFn:createProduct
     })
     type registerType = 'productName' | 'price' | 'quantity'
     const labels = [['Product Name', 'productName'], ['Price (In USD)', 'price'], ['Quantity', 'quantity'] ,['Product Tags', 'tags']]
     const onSubmit = (data:UploadProductFormValues) => {
-        createNewProduct.mutate(data)
+        createNewProduct.mutate({data, axiosPrivate})
     }
     return (<>
        <section>
