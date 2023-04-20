@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import './vendor-uploads.scss'
+import {SubImages} from "./sub-images";
+import {UploadsForm} from "./UploadsForm";
 
 export const VendorUploads = () => {
     const [isPicked, setIsPicked] = useState(false)
@@ -17,13 +19,9 @@ export const VendorUploads = () => {
                 <img src="https://cdn-icons-png.flaticon.com/512/2356/2356780.png" width={'18px'} alt="edit icon"/>
             </div>
         </div>
-        <div className='sub-img-container'>
-            <div><img src="" alt=""/></div>
-            <div><img src="" alt=""/></div>
-            <div><img src="" alt=""/></div>
-            <div><img src="" alt=""/></div>
-            <div><img src="" alt=""/></div>
-            <div><img src="" alt=""/></div>
-        </div>
+        <SubImages/>
+
+        <UploadsForm/>
+
     </section>)
 }
