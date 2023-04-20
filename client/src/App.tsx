@@ -10,6 +10,7 @@ import {RegisterPage} from "./pages/Register";
 import { ToastContainer } from 'react-toastify';
 import {VendorDashboard} from "./components/vendor/vendor-dashboard";
 import { VendorLayout } from './layouts/VendorLayout';
+import {VendorUploads} from "./components/vendor/vendor-uploads/vendor-uploads";
 
 function App() {
 
@@ -22,7 +23,7 @@ function App() {
                             <Route element={<LayoutDefault/>}>
                                 <Route path={'vendor'} element={<VendorLayout/>} >
                                     <Route path={'dashboard'} element={<VendorDashboard/>} index></Route>
-                                    <Route path={'uploads'} ></Route>
+                                    <Route path={'uploads'} element={<VendorUploads/>}></Route>
                                     <Route path={'settings'}></Route>
 
                                 </Route>
