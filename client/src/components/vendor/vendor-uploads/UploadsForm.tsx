@@ -3,13 +3,29 @@ import {FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/materia
 import '../../login/login.scss'
 import {useForm} from "react-hook-form";
 import './form.scss'
+import {yupResolver} from "@hookform/resolvers/yup";
+import * as yup from "yup";
+const schema = yup.object().shape({
+
+    productName: yup.string().required('product name is required'),
+    price: yup.string().required('price is required'),
+    category:yup.string().required('category is required'),
+    quantity: yup.string().required('quantity is required'),
+    tags: yup.string().optional(),
+
+});
 export const UploadsForm = () => {
-    const {register, formState:{errors}, handleSubmit} = useForm();
+    const {register, formState:{errors}, handleSubmit} = useForm({
+        resolver:yupResolver(schema)
+    });
     type registerType = 'productName' | 'price' | 'quantity'
     const labels = [['Product Name', 'productName'], ['Price (In USD)', 'price'], ['Quantity', 'quantity'] ,['Product Tags', 'tags']]
+    const onSubmit = (data:any) => {
+        console.log(data)
+    }
     return (<>
        <section>
-           <form className='form'>
+           <form className='form' onSubmit={handleSubmit(onSubmit)}>
 
                <FormControl fullWidth>
                    <InputLabel id="demo-simple-select-label">Select Category</InputLabel>
@@ -22,8 +38,11 @@ export const UploadsForm = () => {
                        <MenuItem value={'beverages'}>Beverages</MenuItem>
                        <MenuItem value={'meats_&_seafood'}>Meats & Seafood</MenuItem>
                    </Select>
+
                </FormControl>
+               <p className='error-message'>{errors[('category' as registerType)]?.message} </p>
                {labels.map((label,i) => <span className='login-form-item' key={label[1]}><TextField   {...register(label[1] as registerType)} type={i > 0 && i < 3 ? 'number' : 'text'} label={label[0]} variant="outlined"/><p className='error-message'>{errors[(label[1] as registerType)]?.message} </p></span>)}
+               <button type={"submit"} className='confirm-send'>SUBMIT</button>
            </form>
        </section></>)
 }
