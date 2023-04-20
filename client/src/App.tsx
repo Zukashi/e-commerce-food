@@ -3,12 +3,13 @@ import './scss/main.scss'
 import {Route, Routes} from "react-router-dom";
 import { Home } from './pages/Home';
 import {LayoutDefault} from "./layouts/LayoutDefault";
-import {Vendor} from "./pages/Vendor";
 import {Shop} from "./pages/Shop";
 import PersistLogin from "./components/PersistLogin";
 import {Login} from "./components/login/login";
 import {RegisterPage} from "./pages/Register";
 import { ToastContainer } from 'react-toastify';
+import {VendorDashboard} from "./components/vendor/vendor-dashboard";
+import { VendorLayout } from './layouts/VendorLayout';
 
 function App() {
 
@@ -19,7 +20,12 @@ function App() {
             <Routes>
                         <Route element={<PersistLogin/>}>
                             <Route element={<LayoutDefault/>}>
-                                <Route path={'vendor'} element={<Vendor/>}/>
+                                <Route path={'vendor'} element={<VendorLayout/>} >
+                                    <Route path={'dashboard'} element={<VendorDashboard/>} index></Route>
+                                    <Route path={'uploads'} ></Route>
+                                    <Route path={'settings'}></Route>
+
+                                </Route>
                                 <Route path={'shop'} element={<Shop/>}/>
                                 <Route index element={<Home/>}/>
                             </Route>
