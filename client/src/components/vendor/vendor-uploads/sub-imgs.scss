@@ -1,0 +1,30 @@
+.sub-images-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  .sub-images{
+    display:grid;
+    grid-template-columns: repeat(3,auto);
+    gap: 0.5rem;
+    grid-template-rows: repeat(2,78px);
+  }
+}
+
+
+
+
+.main-img-placeholder.sub-image{
+  width:100% !important;
+  height:100% !important;
+}
+.main-img-container.sub-img-container{
+  margin:2px auto 1px ;
+  padding:2px ;
+}
+
+.sub-image{
+  p{
+    font-size: 7px;
+  }
+}
