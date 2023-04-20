@@ -2,6 +2,8 @@
 .vendor-profile-container{
   width: 100%;
   margin-top: 2rem;
+  overflow: hidden;
+  padding-bottom: 2rem;
 }
 .vendor-profile{
   display:flex;
