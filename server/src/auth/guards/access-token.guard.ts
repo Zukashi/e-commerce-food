@@ -4,15 +4,13 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+
 import { User } from '../../user/entities/user.entity';
 const jwt = require('jsonwebtoken');
-import { Request } from 'express';
+
 import { IS_PUBLIC_KEY } from '../decorator/public.decorator';
 import { Reflector } from '@nestjs/core';
-export interface ReqWithUser extends Request {
-  user: User;
-}
+
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
   constructor(private reflector: Reflector) {}

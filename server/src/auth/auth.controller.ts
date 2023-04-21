@@ -15,8 +15,8 @@ import { Response, Request } from 'express';
 import { Public } from './decorator/public.decorator';
 import { SignUpDto } from './dto/signUp.dto';
 import { SignInDto } from './dto/signIn.dto';
-import { AccessTokenGuard } from './guards/access-token.guard';
 import { RefreshTokenGuard, ReqWithUser } from './guards/refresh-token.guards';
+import { AccessTokenGuard } from './guards/access-token.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -37,11 +37,10 @@ export class AuthController {
 
   @UseGuards(RefreshTokenGuard)
   @Patch('refreshToken')
-  async refreshToken(@Res() res: any, @Req() req: any) {
-    console.log(9999);
+  async refreshToken(@Res() res: Response, @Req() req: ReqWithUser) {
     return this.authService.refreshToken(req.user, res);
   }
-  // @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard)
   @Delete('logout')
   async deleteCookies(@Req() req: ReqWithUser, @Res() res: Response) {
     return this.authService.logout(req.user.id, res);
