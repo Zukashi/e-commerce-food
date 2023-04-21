@@ -3,6 +3,8 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Product } from '../../product/entities/product.entity';
@@ -15,7 +17,6 @@ export class Vendor {
   @Column()
   name: string;
 
-  @ManyToMany(() => Product)
-  @JoinTable()
-  products: Product[];
+  @OneToMany((type) => Product, (product) => product.vendor)
+  product: Product;
 }
