@@ -8,6 +8,8 @@ import * as yup from "yup";
 import {useMutation} from "react-query";
 import {createProduct} from "./fetch";
 import {useAxiosPrivate} from "../../../hooks/use-axios-private";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../redux/store/store";
 const schema = yup.object().shape({
 
     productName: yup.string().required('product name is required'),
@@ -30,6 +32,7 @@ export const UploadsForm = () => {
     const {register, formState:{errors}, handleSubmit} = useForm<UploadProductFormValues>({
         resolver:yupResolver(schema)
     });
+    const {vendor} = useSelector((root:RootState) => root)
     const axiosPrivate = useAxiosPrivate();
     const createNewProduct  = useMutation({
         mutationFn:createProduct
@@ -37,7 +40,7 @@ export const UploadsForm = () => {
     type registerType = 'productName' | 'price' | 'quantity'
     const labels = [['Product Name', 'productName'], ['Price (In USD)', 'price'], ['Quantity', 'quantity'] ,['Product Tags', 'tags']]
     const onSubmit = (data:UploadProductFormValues) => {
-        createNewProduct.mutate({data, axiosPrivate})
+        createNewProduct.mutate({data, axiosPrivate, vendor})
     }
     return (<>
        <section>
