@@ -4,7 +4,6 @@ import { User } from './entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './user.controller';
 import { UserMiddleware } from './middleware/user.middleware';
-import { AuthController } from '../auth/auth.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
@@ -14,9 +13,6 @@ import { AuthController } from '../auth/auth.controller';
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(UserMiddleware)
-      .exclude('auth/(login|register)')
-      .forRoutes(UserController, AuthController);
+    consumer.apply(UserMiddleware).forRoutes(UserController);
   }
 }
