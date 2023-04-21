@@ -22,6 +22,7 @@ export class AwsService {
 
   randomImageName = () => uuid();
   async create(file: Express.Multer.File) {
+    console.log(file);
     const buffer = await sharp(file.buffer)
       .resize(1920, 1080, {
         fit: 'contain',
@@ -38,6 +39,7 @@ export class AwsService {
 
     const command = new PutObjectCommand(params);
     await s3Client.send(command);
+    console.log(imageName);
     return imageName;
   }
 

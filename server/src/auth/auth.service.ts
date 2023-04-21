@@ -50,7 +50,6 @@ export class AuthService {
         expiresIn: '7d',
       },
     );
-    console.log(refreshToken);
     // Update refreshToken of user in database
     user.refresh_token = refreshToken;
     await this.userRepository.save(user);
