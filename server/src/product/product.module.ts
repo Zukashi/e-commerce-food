@@ -18,5 +18,6 @@ import { User } from '../user/entities/user.entity';
   ],
   providers: [ProductService],
   controllers: [ProductController],
+  exports: [ProductService],
 })
 export class ProductModule {}
