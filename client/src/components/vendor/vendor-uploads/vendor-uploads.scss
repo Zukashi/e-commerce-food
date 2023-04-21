@@ -5,6 +5,8 @@
   padding:1.5rem;
 
   .main-img-container{
+    display:flex;
+    align-items: center;
     position: relative;
     margin:1.5rem auto 0.3rem;
     padding:1rem ;
@@ -26,6 +28,13 @@
       -moz-border-radius: 25px;
       border-radius: 25px;
       box-shadow: 0 3px 10px rgb(0 0 0 / 0.5);
+
+      .file-input{
+        position: absolute;
+        height:100%;
+        width:100%;
+        opacity:0;
+      }
     }
   .main-img-placeholder{
     width:100%;
