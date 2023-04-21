@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {SubmitHandler, useForm} from "react-hook-form";
+import { useForm} from "react-hook-form";
 import {useAxiosPrivate} from "../hooks/use-axios-private";
 type Inputs = {
     test:string;
@@ -12,8 +11,10 @@ export const  Shop = () => {
     // const {amount} = useSelector((root:RootState) => root);
     const onSubmit = async (data:any) => {
         const formData = new FormData();
-        if(!data.test[0])  throw new Error()
+        if(!data.test[0])  throw new Error();
+        console.log(data.test[0])
         formData.append("image", data.test[0]);
+        console.log(formData)
         const res = await axiosPrivate.patch('product-image/5f23eb0c-bc2f-4992-9403-fd0b12ea5376', formData, {
             headers:{
                 'Content-type':'multipart/form-data'

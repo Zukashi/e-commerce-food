@@ -28,14 +28,12 @@ export class RefreshTokenGuard implements CanActivate {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest();
     //verify jwt
-    console.log('aaaa');
     const checkJwt = () => {
       jwt.verify(
         request.cookies.refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
-        (err: any, user: User) => {
+        (err: unknown) => {
           if (!err) {
-            //assign user to req user for request using access tokens
             return true;
           } else {
             throw new UnauthorizedException();
