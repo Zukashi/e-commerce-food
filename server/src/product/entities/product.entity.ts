@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ProductImage } from '../../product-image/entities/product-image.entity';
 import { Vendor } from '../../vendor/entities/vendor.entity';
 
@@ -21,4 +27,7 @@ export class Product {
 
   @OneToMany((type) => ProductImage, (productImage) => productImage.product)
   productImages: ProductImage[];
+
+  @ManyToOne((type) => Vendor, (vendor) => vendor.product)
+  vendor: Vendor;
 }

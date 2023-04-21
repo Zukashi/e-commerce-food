@@ -12,6 +12,7 @@ export const  OneSubImage = () => {
             // const r = await fetch(URL.createObjectURL(e.target.files[0]));
             // formData.append("image", await r.blob());
             console.log(formData)
+            console.log(123)
             dispatch(setSubImageReducer(URL.createObjectURL(e.target.files[0])))
 
             setImage(URL.createObjectURL(e.target.files[0]))
