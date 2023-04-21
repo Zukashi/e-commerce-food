@@ -13,7 +13,6 @@ import {
 import { AwsService } from '../aws/aws.service';
 import { ProductImageService } from './product-image.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { AccessTokenGuard } from '../auth/guards/access-token.guard';
 
 @Controller('product-image')
 export class ProductImageController {
@@ -28,7 +27,9 @@ export class ProductImageController {
   @Post('one')
   @UseInterceptors(FileInterceptor('image'))
   async createOne(@UploadedFile() file: Express.Multer.File) {
-    await this.productImageService.create(file);
+    try {
+      await this.productImageService.create(file);
+    } catch (e) {}
   }
   @Delete(':id')
   deleteOne(@Param('id') id: string) {

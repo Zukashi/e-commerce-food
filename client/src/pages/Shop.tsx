@@ -15,7 +15,7 @@ export const  Shop = () => {
         console.log(data.test[0])
         formData.append("image", data.test[0]);
         console.log(formData)
-        const res = await axiosPrivate.patch('product-image/5f23eb0c-bc2f-4992-9403-fd0b12ea5376', formData, {
+        const res = await axiosPrivate.post('product-image/one', formData, {
             headers:{
                 'Content-type':'multipart/form-data'
             }
@@ -24,6 +24,7 @@ export const  Shop = () => {
     useEffect(() => {
         (async () => {
             const response = await axiosPrivate.get('product-image/all');
+            console.log(response.data)
             setCurrentImage(response.data[0])
         })()
     }, [])
@@ -33,7 +34,7 @@ export const  Shop = () => {
             <input type="file" {...register("test")}/>
             <button type='submit'></button>
         </form>
-        <img src={`${(currentImage as any).imageUrl}`} alt="product img"/>
+        <img src={`${(currentImage as any)?.imageUrl}`} alt="product img"/>
 
     </>)
 }

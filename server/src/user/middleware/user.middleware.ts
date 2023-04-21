@@ -16,7 +16,6 @@ export class UserMiddleware implements NestMiddleware {
       value: userRefreshCookie,
       field: 'refresh_cookie',
     });
-    console.log(888);
     if (!user) throw new UnauthorizedException();
     req.user = user;
     next();
