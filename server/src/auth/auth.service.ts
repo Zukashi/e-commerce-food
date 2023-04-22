@@ -24,6 +24,8 @@ export class AuthService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private userService: UserService,
+    @InjectRepository(Vendor)
+    private vendorRepository: Repository<Vendor>,
     private readonly vendorService: VendorService,
   ) {}
 
@@ -32,15 +34,17 @@ export class AuthService {
     if (!(signInDto.username || signInDto.email)) {
       throw new UnauthorizedException();
     }
-
+    console.log(role);
     const findBy = signInDto.username
       ? { value: signInDto.username, field: 'username' }
       : { value: signInDto.email, field: 'email' };
 
     let user;
     if (role === 'customer') {
+      console.log(33);
       user = await this.userService.findOne(findBy);
     } else if (role === 'vendor') {
+      console.log(22);
       user = await this.vendorService.findOne(findBy);
     }
     if (!user) throw new NotFoundException();
@@ -61,8 +65,13 @@ export class AuthService {
       },
     );
     // Update refreshToken of user in database
-    user.refresh_token = refreshToken;
-    await this.userRepository.save(user);
+    if (role === 'customer') {
+      user.refresh_token = refreshToken;
+      await this.userRepository.save(user);
+    } else if (role === 'vendor') {
+      user.refresh_token = refreshToken;
+      await this.vendorRepository.save(user);
+    }
     const accessCookieExpiryDate = new Date(Date.now() + 60 * 15 * 1000);
     const refreshCookieExpiryDate = new Date(
       Date.now() + 60 * 60 * 1000 * 24 * 7,
@@ -107,10 +116,9 @@ export class AuthService {
     }
   }
 
-  async refreshToken(user: User, res: Response) {
-    console.log(user);
+  async refreshToken(user: User | Vendor, res: Response) {
     const accessToken = jwt.sign(
-      { id: user.id },
+      { id: user.id, role: user instanceof User ? 'customer' : 'vendor' },
       process.env.ACCESS_TOKEN_SECRET,
       {
         expiresIn: '15m',
