@@ -4,6 +4,7 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Param,
   Patch,
   Post,
   Req,
@@ -23,16 +24,21 @@ export class AuthController {
   constructor(private authService: AuthService) {}
   @Public()
   @HttpCode(HttpStatus.OK)
-  @Post('login')
-  async signIn(@Body() signInDto: SignInDto, @Res() res: Response) {
-    return this.authService.signIn(signInDto, res);
+  @Post('login/:role')
+  async signIn(
+    @Param('role') role: string,
+    @Body() signInDto: SignInDto,
+    @Res() res: Response,
+  ) {
+    console.log('test');
+    return this.authService.signIn(signInDto, role, res);
   }
 
   @Public()
-  @HttpCode(HttpStatus.CREATED)
   @Post('register')
+  @HttpCode(HttpStatus.CREATED)
   async register(@Body() signUpDto: SignUpDto) {
-    void this.authService.signUp(signUpDto);
+    await this.authService.signUp(signUpDto);
   }
 
   @UseGuards(RefreshTokenGuard)
