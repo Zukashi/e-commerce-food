@@ -7,15 +7,17 @@ import { ProductImage } from '../product-image/entities/product-image.entity';
 import { AwsModule } from '../aws/aws.module';
 import { ProductImageModule } from '../product-image/product-image.module';
 import { ProductModule } from '../product/product.module';
+import { Vendor } from './entities/vendor.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Product, ProductImage]),
+    TypeOrmModule.forFeature([Product, ProductImage, Vendor]),
     AwsModule,
     ProductModule,
     ProductImageModule,
   ],
   controllers: [VendorController],
   providers: [VendorService],
+  exports: [VendorService],
 })
 export class VendorModule {}
