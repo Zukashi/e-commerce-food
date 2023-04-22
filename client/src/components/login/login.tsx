@@ -12,11 +12,13 @@ import './login.scss'
 type Login  = {
     usernameOrEmail:string;
     password:string;
+    role:string
 }
 const schema = yup.object().shape({
 
     usernameOrEmail: yup.string().required(),
     password: yup.string().min(8).max(20).required(),
+    role:yup.string().required()
 
 });
 export const Login = () => {
@@ -42,7 +44,7 @@ export const Login = () => {
 
 
         try{
-            const res = await axios.post('auth/login', {
+            const res = await axios.post(`auth/login/${data.role}`, {
                     password:data.password,
                 // depending on if field is username or email pick one
                 ...(data.usernameOrEmail.includes('@') ? {email: data.usernameOrEmail} : {username:data.usernameOrEmail})
@@ -85,6 +87,16 @@ export const Login = () => {
                             <FormControlLabel control={<Checkbox     {...registerRemember('rememberMe', {})}/>} label="Remember me" />
 
                         </FormGroup>
+                        <FormControl>
+                            <FormLabel id="demo-radio-buttons-group-label">Who are you</FormLabel><RadioGroup aria-labelledby="demo-radio-buttons-group-label"
+                                                                                                                                                          defaultValue="customer"
+                                                                                                                                                          name="radio-buttons-group"
+                                                                    >
+                            <FormControlLabel {...register('role')} value="customer" control={<Radio />} label="I am a customer" />
+                            <FormControlLabel  {...register('role')}  value="vendor" control={<Radio />} label="I am a vendor" />
+
+                        </RadioGroup>
+                        </FormControl>
                         <button type={"submit"}  className='submit-button login-button'>Login </button>
                     </form>
 
