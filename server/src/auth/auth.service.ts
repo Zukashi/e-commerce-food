@@ -13,6 +13,8 @@ import { SignInDto } from './dto/signIn.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { Vendor } from '../vendor/entities/vendor.entity';
+import { VendorService } from '../vendor/vendor.service';
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 
@@ -22,29 +24,37 @@ export class AuthService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private userService: UserService,
+    private readonly vendorService: VendorService,
   ) {}
 
-  async signIn(signInDto: SignInDto, res: Response) {
+  async signIn(signInDto: SignInDto, role: string, res: Response) {
+    console.log(signInDto);
     if (!(signInDto.username || signInDto.email)) {
       throw new UnauthorizedException();
     }
-    const user = await this.userService.findOne(
-      signInDto.username
-        ? { value: signInDto.username, field: 'username' }
-        : { value: signInDto.email, field: 'email' },
-    );
+
+    const findBy = signInDto.username
+      ? { value: signInDto.username, field: 'username' }
+      : { value: signInDto.email, field: 'email' };
+
+    let user;
+    if (role === 'customer') {
+      user = await this.userService.findOne(findBy);
+    } else if (role === 'vendor') {
+      user = await this.vendorService.findOne(findBy);
+    }
     if (!user) throw new NotFoundException();
     const isCorrect = await bcrypt.compare(signInDto.password, user.password);
     if (!isCorrect) return new BadRequestException();
     const accessToken = jwt.sign(
-      { id: user.id },
+      { id: user.id, role: role },
       process.env.ACCESS_TOKEN_SECRET,
       {
         expiresIn: '15m',
       },
     );
     const refreshToken = jwt.sign(
-      { id: user.id },
+      { id: user.id, role: role },
       process.env.REFRESH_TOKEN_SECRET,
       {
         expiresIn: '7d',
@@ -75,15 +85,25 @@ export class AuthService {
   async signUp(signUpDto: SignUpDto) {
     if (signUpDto.confirm_password === signUpDto.password) {
       // checks if user is already in database by username / email
-      await this.userService.isAlreadyInDB(signUpDto);
-
+      if (signUpDto.role === 'customer') {
+        await this.userService.isAlreadyInDB(signUpDto);
+      } else if (signUpDto.role === 'vendor') {
+        await this.vendorService.isAlreadyInDb(signUpDto);
+      }
       // Hash password
 
       const hash = await bcrypt.hash(signUpDto.password, 10);
-      await this.userService.createUser({
-        ...signUpDto,
-        password: hash,
-      });
+      if (signUpDto.role === 'customer') {
+        await this.userService.createUser({
+          ...signUpDto,
+          password: hash,
+        });
+      } else if (signUpDto.role === 'vendor') {
+        await this.vendorService.createVendor({
+          ...signUpDto,
+          password: hash,
+        });
+      }
     }
   }
 

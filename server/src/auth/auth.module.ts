@@ -7,9 +7,16 @@ import { UserModule } from '../user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserMiddleware } from '../user/middleware/user.middleware';
 import { UserController } from '../user/user.controller';
+import { Vendor } from '../vendor/entities/vendor.entity';
+import { VendorModule } from '../vendor/vendor.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), UserModule, ConfigModule],
+  imports: [
+    TypeOrmModule.forFeature([User, Vendor]),
+    UserModule,
+    ConfigModule,
+    VendorModule,
+  ],
   controllers: [AuthController],
   providers: [AuthService],
   exports: [AuthService],
