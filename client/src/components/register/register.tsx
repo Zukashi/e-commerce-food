@@ -23,6 +23,7 @@ const schema = yup.object().shape({
     username: yup.string().min(8).max(20).required(),
     password: yup.string().min(8).max(20).required(),
     confirm_password: yup.string().min(8, 'confirm password must be at least 8 characters long').max(20, 'confirm password can be at most 20 characters long').required('Confirm Password is a required field'),
+    role:yup.string()
 });
 export const Register = () => {
     const {register, handleSubmit, formState:{errors}} = useForm<Register>({
@@ -33,13 +34,15 @@ export const Register = () => {
     const labels = [['Username', 'username'], ['Email', 'email'], ['Password', 'password'], ['Confirm Password', 'confirm_password']]
     const sendForm:SubmitHandler<Register> = async (data) => {
                try{
-                   const response =await  axios.post('auth/register', data);
-                   toast.success(response.data, {
+                   const response =await  axios.post(`auth/register`, data);
+                   console.log(response)
+                   toast.success('Successfully registered', {
                        position:"top-right",
                        theme:'dark'
                    })
                    navigate('/login')
                }catch(e: any){
+                   console.log(e)
                    toast.error(e.response.data.message, {
                        position:"top-right",
                        theme:'dark'

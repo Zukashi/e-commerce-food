@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from '../decorator/public.decorator';
 import { Reflector } from '@nestjs/core';
+import { JwtPayload } from 'jsonwebtoken';
 export interface ReqWithUser extends Request {
   user: User;
 }
@@ -32,7 +33,8 @@ export class RefreshTokenGuard implements CanActivate {
       jwt.verify(
         request.cookies.refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
-        (err: unknown) => {
+        (err: unknown, test: JwtPayload) => {
+          console.log(test);
           if (!err) {
             return true;
           } else {

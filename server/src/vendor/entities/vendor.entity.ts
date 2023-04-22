@@ -15,7 +15,18 @@ export class Vendor {
   id: string;
 
   @Column()
-  name: string;
+  username: string;
+
+  @Column()
+  email: string;
+
+  @Column()
+  password: string;
+
+  @Column({
+    nullable: true,
+  })
+  refresh_token: string;
 
   @OneToMany((type) => Product, (product) => product.vendor)
   product: Product;
