@@ -10,12 +10,17 @@ import { Request } from 'express';
 import { IS_PUBLIC_KEY } from '../decorator/public.decorator';
 import { Reflector } from '@nestjs/core';
 import { JwtPayload } from 'jsonwebtoken';
+import { UserService } from '../../user/user.service';
+import { VendorService } from '../../vendor/vendor.service';
 export interface ReqWithUser extends Request {
   user: User;
 }
 @Injectable()
 export class RefreshTokenGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private readonly vendorService: VendorService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<any> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -33,11 +38,13 @@ export class RefreshTokenGuard implements CanActivate {
       jwt.verify(
         request.cookies.refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
-        (err: unknown, test: JwtPayload) => {
-          console.log(test);
+        async (err: unknown, test: JwtPayload) => {
+          console.log(test, 666);
+          request.role = test;
           if (!err) {
             return true;
           } else {
+            console.log(123);
             throw new UnauthorizedException();
           }
         },

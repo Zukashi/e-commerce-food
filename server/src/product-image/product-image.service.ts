@@ -18,7 +18,6 @@ export class ProductImageService {
   async getAllImages() {
     const productsFromDb = await this.productImageRepository.find({});
     if (!productsFromDb) throw new NotFoundException(`Products not found`);
-    console.log(productsFromDb);
     for (const product of productsFromDb) {
       const getObjectParams = {
         Bucket: process.env.BUCKET_NAME,
@@ -29,7 +28,6 @@ export class ProductImageService {
       product.imageUrl = url;
       await this.productImageRepository.save(product);
     }
-    console.log(productsFromDb);
     return productsFromDb;
   }
 
@@ -44,7 +42,6 @@ export class ProductImageService {
       imageName: imageName,
     });
     await this.productImageRepository.save(product);
-    console.log(product);
     return product;
   }
   async update(id: string, file: Express.Multer.File) {
