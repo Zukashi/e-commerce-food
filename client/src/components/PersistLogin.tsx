@@ -26,9 +26,9 @@ const PersistLogin = () => {
                 console.log(res.data)
             }
             catch(e){
-                navigate('/login', {
-                    state:location.pathname
-                })
+                // navigate('/login', {
+                //     state:location.pathname
+                // })
             }
             finally {
                 isMounted && setIsLoading(false);
