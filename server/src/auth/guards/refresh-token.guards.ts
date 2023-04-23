@@ -12,8 +12,12 @@ import { Reflector } from '@nestjs/core';
 import { JwtPayload } from 'jsonwebtoken';
 import { UserService } from '../../user/user.service';
 import { VendorService } from '../../vendor/vendor.service';
+import { Vendor } from '../../vendor/entities/vendor.entity';
 export interface ReqWithUser extends Request {
   user: User;
+}
+export interface ReqWithVendor extends Request {
+  user: Vendor;
 }
 @Injectable()
 export class RefreshTokenGuard implements CanActivate {

@@ -132,7 +132,6 @@ export class AuthService {
         secure: true,
         expires: accessCookieExpiryDate,
       })
-      .status(201)
       .json({ user: user, token: accessToken });
   }
 

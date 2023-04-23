@@ -30,7 +30,7 @@ export class AuthController {
     @Body() signInDto: SignInDto,
     @Res() res: Response,
   ) {
-    console.log('test');
+    console.log('test', role);
     return this.authService.signIn(signInDto, role, res);
   }
 
