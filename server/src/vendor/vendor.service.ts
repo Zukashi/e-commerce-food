@@ -46,6 +46,7 @@ export class VendorService {
       if (!newProduct) throw new NotFoundException();
       await this.productImageRepository.save(newProduct);
     }, Error());
+    return product;
   }
 
   async findOne({
