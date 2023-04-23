@@ -7,9 +7,11 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {useMutation} from "react-query";
 import {createProduct} from "./fetch";
+import {Product} from '../../../../../server/src/product/entities/product.entity'
 import {useAxiosPrivate} from "../../../hooks/use-axios-private";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../redux/store/store";
+import {toast, useToast} from "react-toastify";
 const schema = yup.object().shape({
 
     productName: yup.string().required('product name is required'),
@@ -34,8 +36,15 @@ export const UploadsForm = () => {
     });
     const {vendor} = useSelector((root:RootState) => root)
     const axiosPrivate = useAxiosPrivate();
-    const createNewProduct  = useMutation({
-        mutationFn:createProduct
+    const createNewProduct  = useMutation(  createProduct,{
+        onSuccess:(data:Product) => {
+            console.log(data)
+            toast.success(`Product ${data.productName} has been added`, {
+                position: toast.POSITION.TOP_RIGHT,
+                theme:"dark"
+            });
+        }
+
     })
     type registerType = 'productName' | 'price' | 'quantity'
     const labels = [['Product Name', 'productName'], ['Price (In USD)', 'price'], ['Quantity', 'quantity'] ,['Product Tags', 'tags']]
