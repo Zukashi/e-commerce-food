@@ -11,6 +11,7 @@ import { VendorModule } from './vendor/vendor.module';
 import { Vendor } from './vendor/entities/vendor.entity';
 import { ProductImage } from './product-image/entities/product-image.entity';
 import { APP_PIPE } from '@nestjs/core';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { APP_PIPE } from '@nestjs/core';
       username: 'postgres',
       password: '',
       database: 'postgres',
-      entities: [Product, Vendor, ProductImage],
+      entities: [Product, Vendor, ProductImage, User],
       autoLoadEntities: true,
       synchronize: true,
     }),
