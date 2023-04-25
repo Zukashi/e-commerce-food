@@ -12,9 +12,13 @@ import { Vendor } from './vendor/entities/vendor.entity';
 import { ProductImage } from './product-image/entities/product-image.entity';
 import { APP_PIPE } from '@nestjs/core';
 import { User } from './user/entities/user.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
