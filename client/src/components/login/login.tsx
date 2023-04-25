@@ -32,7 +32,7 @@ export const Login = () => {
     console.log(location.state)
     useEffect(() => {
         // if user came here from different subsite then show this toast
-        if(typeof location.state.from){
+        if(typeof location?.state?.from === 'string'){
             toast.warning("You're not authorized to view that data",{
                 position:"top-right",
                 theme:'dark',
@@ -44,13 +44,13 @@ export const Login = () => {
 
 
         try{
-            const res = await axios.post(`auth/login/${data.role}`, {
+            const res = await axios.post(`auth/log-in`, {
                     password:data.password,
                 // depending on if field is username or email pick one
                 ...(data.usernameOrEmail.includes('@') ? {email: data.usernameOrEmail} : {username:data.usernameOrEmail})
             });
 
-            if(typeof location.state.from){
+            if(typeof location?.state?.from ==='string'){
                 navigate(location.state.from.pathname)
             }else{
                 navigate('/')
