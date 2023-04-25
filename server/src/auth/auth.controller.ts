@@ -45,7 +45,7 @@ export class AuthController {
   @Patch('refreshToken')
   async refreshToken(@Res() res: Response, @Req() req: ReqWithUser) {
     console.log((req as any).user, 555);
-    return this.authService.refreshToken(req.user, res);
+    await this.authService.refreshToken(req.user, res);
   }
   @UseGuards(AccessTokenGuard)
   @Delete('logout')

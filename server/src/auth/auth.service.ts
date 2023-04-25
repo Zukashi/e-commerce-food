@@ -125,14 +125,20 @@ export class AuthService {
       },
     );
     const accessCookieExpiryDate = new Date(Date.now() + 60 * 15 * 1000);
-    res
-      .cookie('accessToken', accessToken, {
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-        expires: accessCookieExpiryDate,
-      })
-      .json({ user: user, token: accessToken });
+    console.log(user, 999);
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      expires: accessCookieExpiryDate,
+    });
+    res.json({
+      user: {
+        user,
+        role: user instanceof User ? 'customer' : 'vendor',
+      },
+      token: accessToken,
+    });
   }
 
   async logout(userId: string, res: Response) {
