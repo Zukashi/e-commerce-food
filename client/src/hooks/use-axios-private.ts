@@ -1,11 +1,16 @@
 import axios, { axiosPrivate } from "../api/axios";
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
-import {setUser} from "../redux/userSlice";
+import {setLoading, setUser} from "../redux/userSlice";
+import {useLocation, useNavigate} from "react-router-dom";
+import {Loader} from "../components/loader/Loader";
 
 
 export const useAxiosPrivate = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+
     useEffect(() => {
 
         const requestIntercept = axiosPrivate.interceptors.request.use(
@@ -20,18 +25,29 @@ export const useAxiosPrivate = () => {
             async (error) => {
                 const prevRequest = error?.config;
                 if (error?.response?.status === 401 && !prevRequest?.sent) {
+                    dispatch(setLoading(true))
                     prevRequest.sent = true;
                    try{
                        const res = await axios(`auth/refreshToken`,{
                            method:'PATCH',
                            withCredentials:true
                        });
+
+                       console.log(88)
                        dispatch(setUser({
                            user:res.data.user,
+                           isAuthenticated:true,
                        }))
 
                        return axiosPrivate(prevRequest);
                    }catch(e){
+                       navigate('/login', {state:{
+                           from:location
+                           }
+
+                       })
+                   }finally{
+                       dispatch(setLoading(false))
                    }
                 }
                 return Promise.reject(error);
@@ -43,6 +59,5 @@ export const useAxiosPrivate = () => {
             axiosPrivate.interceptors.response.eject(responseIntercept);
         }
     }, [])
-
     return axiosPrivate;
 }
