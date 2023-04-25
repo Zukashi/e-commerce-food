@@ -6,13 +6,15 @@ import {useAxiosPrivate} from "../hooks/use-axios-private";
 import {setUser} from "../redux/userSlice";
 import {Loader} from "./loader/Loader";
 import {RootState} from "../redux/store/store";
+import {Root} from "react-dom/client";
 
-const PersistLogin = () => {
+export  const RefreshUserDataOnEveryRequest = () => {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation()
     const axiosPrivate = useAxiosPrivate();
+    const {loading} = useSelector((root:RootState) => root.user)
     // @ts-ignore
     useEffect(() => {
         let isMounted = true;
@@ -22,6 +24,7 @@ const PersistLogin = () => {
                 const res = await axiosPrivate.patch(`auth/refreshToken`);
                 dispatch(setUser({
                     user:res.data.user,
+                    isAuthenticated:true,
                 }));
                 console.log(res.data)
             }
@@ -37,8 +40,8 @@ const PersistLogin = () => {
         void verifyRefreshToken()
 
         return () => isMounted = false;
-    }, [])
-
+    }, []);
+    console.log(loading)
     useEffect(() => {
         console.log(`isLoading: ${isLoading}`)
 
@@ -46,10 +49,10 @@ const PersistLogin = () => {
     return (
         <>
 
-            { isLoading ? <Loader/> : <>
+            { isLoading || loading ? <Loader/> : <>
                 <Outlet/></>}
         </>
     )
 }
 
-export default PersistLogin
+

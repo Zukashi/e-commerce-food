@@ -32,8 +32,8 @@ export const Login = () => {
     console.log(location.state)
     useEffect(() => {
         // if user came here from different subsite then show this toast
-        if(typeof location.state ==='string'){
-            toast.warning('Log in to access that data',{
+        if(typeof location.state.from){
+            toast.warning("You're not authorized to view that data",{
                 position:"top-right",
                 theme:'dark',
                 autoClose:4000,
@@ -50,8 +50,8 @@ export const Login = () => {
                 ...(data.usernameOrEmail.includes('@') ? {email: data.usernameOrEmail} : {username:data.usernameOrEmail})
             });
 
-            if(typeof location.state ==='string'){
-                navigate(location.state)
+            if(typeof location.state.from){
+                navigate(location.state.from.pathname)
             }else{
                 navigate('/')
             }
