@@ -14,18 +14,15 @@ import { APP_PIPE } from '@nestjs/core';
 import { User } from './user/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import Joi from 'joi';
+import { PassportModule } from '@nestjs/passport';
+import { LocalStrategy } from './auth/local.strategy';
+import { JwtRefreshTokenStrategy } from './auth/strategy/jwt-refresh-token-strategy';
+import { JwtStrategy } from './auth/strategy/jwt-strategy';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: Joi.object({
-        JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
-        JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
-        JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
-        JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
-        // ...
-      }),
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -44,8 +41,12 @@ import Joi from 'joi';
     AuthModule,
     UserModule,
     VendorModule,
+    PassportModule,
   ],
   providers: [
+    LocalStrategy,
+    JwtRefreshTokenStrategy,
+    JwtStrategy,
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
