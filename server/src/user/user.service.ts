@@ -1,5 +1,7 @@
 import {
   ConflictException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -8,8 +10,7 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SignUpDto } from '../auth/dto/signUp.dto';
-import { AuthService } from '../auth/auth.service';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   constructor(
@@ -26,6 +27,7 @@ export class UserService {
   }) {
     console.log(value, field);
     const user = await this.userRepository.findOneBy({ [`${field}`]: value });
+    if (!user) throw new NotFoundException();
     return user;
   }
 
@@ -34,6 +36,52 @@ export class UserService {
     console.log(user);
     await this.userRepository.save(user);
     return user;
+  }
+  async setCurrentRefreshToken(refreshToken: string, userId: string) {
+    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    const user = await this.userRepository.preload({
+      id: userId,
+      refresh_token: currentHashedRefreshToken,
+    });
+    if (!user) throw new NotFoundException();
+    await this.userRepository.save(user);
+  }
+
+  async getById(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
+    if (user) {
+      return user;
+    }
+    throw new HttpException(
+      'User with this id does not exist',
+      HttpStatus.NOT_FOUND,
+    );
+  }
+  async removeRefreshToken(userId: string) {
+    const user = await this.userRepository.preload({
+      id: userId,
+      refresh_token: '',
+    });
+    if (!user) throw new NotFoundException();
+    await this.userRepository.save(user);
+  }
+  async create(registrationData: any) {
+    const user = this.userRepository.create(registrationData);
+    return this.userRepository.save(user);
+  }
+  async getUserIfRefreshTokenMatches(refreshToken: string, userId: string) {
+    const user = await this.getById(userId);
+    if (!user.refresh_token) {
+      throw new UnauthorizedException('Not found token');
+    }
+    const isRefreshTokenMatching = await bcrypt.compare(
+      refreshToken,
+      user.refresh_token,
+    );
+
+    if (isRefreshTokenMatching) {
+      return user;
+    }
   }
 
   async updateUser(valueToTransform: any, userId: string) {

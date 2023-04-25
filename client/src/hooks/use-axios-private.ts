@@ -28,8 +28,8 @@ export const useAxiosPrivate = () => {
                     dispatch(setLoading(true))
                     prevRequest.sent = true;
                    try{
-                       const res = await axios(`auth/refreshToken`,{
-                           method:'PATCH',
+                       const res = await axios(`auth/refresh`,{
+                           method:'GET',
                            withCredentials:true
                        });
 

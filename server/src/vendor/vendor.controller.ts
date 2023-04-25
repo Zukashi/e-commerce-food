@@ -9,10 +9,6 @@ import {
 
 import { VendorService } from './vendor.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import {
-  ReqWithUser,
-  ReqWithVendor,
-} from '../auth/guards/refresh-token.guards';
 const sharp = require('sharp');
 
 @Controller('vendor')
@@ -22,7 +18,7 @@ export class VendorController {
   @UseInterceptors(FilesInterceptor('image'))
   async createProduct(
     @UploadedFiles() files: Array<Express.Multer.File>,
-    @Req() req: ReqWithVendor,
+    @Req() req: any,
     @Body('product') createProductDto: string,
   ) {
     console.log(req.user);
