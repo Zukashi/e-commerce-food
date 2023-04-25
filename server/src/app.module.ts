@@ -13,11 +13,19 @@ import { ProductImage } from './product-image/entities/product-image.entity';
 import { APP_PIPE } from '@nestjs/core';
 import { User } from './user/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
+import Joi from 'joi';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      validationSchema: Joi.object({
+        JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
+        JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+        JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
+        JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+        // ...
+      }),
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
