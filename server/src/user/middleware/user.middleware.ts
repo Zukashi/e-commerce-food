@@ -22,7 +22,9 @@ export class UserMiddleware implements NestMiddleware {
       value: userRefreshCookie,
       field: 'refresh_token',
     });
+
     if (user?.refresh_token !== userRefreshCookie && user?.id) {
+      console.log(22222);
       throw new NotFoundException();
     }
     if (user?.refresh_token !== userRefreshCookie) {
@@ -34,7 +36,8 @@ export class UserMiddleware implements NestMiddleware {
       if (!user) throw new NotFoundException();
       req.user = user;
       next();
+    } else {
+      next();
     }
-    next();
   }
 }
