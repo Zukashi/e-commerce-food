@@ -4,13 +4,14 @@ import {Route, Routes} from "react-router-dom";
 import { Home } from './pages/Home';
 import {LayoutDefault} from "./layouts/LayoutDefault";
 import {Shop} from "./pages/Shop";
-import PersistLogin from "./components/PersistLogin";
 import {Login} from "./components/login/login";
 import {RegisterPage} from "./pages/Register";
 import { ToastContainer } from 'react-toastify';
 import {VendorDashboard} from "./components/vendor/vendor-dashboard";
 import { VendorLayout } from './layouts/VendorLayout';
 import {VendorUploads} from "./components/vendor/vendor-uploads/vendor-uploads";
+import {ProtectedRoute} from "./auth/ProtectedRoute";
+import {RefreshUserDataOnEveryRequest} from "./components/PersistLogin";
 
 function App() {
 
@@ -19,12 +20,14 @@ function App() {
             <>
                 <ToastContainer/>
             <Routes>
-                        <Route element={<PersistLogin/>}>
+                        <Route element={<RefreshUserDataOnEveryRequest/>}>
                             <Route element={<LayoutDefault/>}>
-                                <Route path={'vendor'} element={<VendorLayout/>} >
-                                    <Route path={'dashboard'} element={<VendorDashboard/>} index></Route>
-                                    <Route path={'uploads'} element={<VendorUploads/>}></Route>
-                                    <Route path={'settings'}></Route>
+                                <Route  element={<ProtectedRoute requiredPermission={'vendor'}/>} >
+                                    <Route element={<VendorLayout/>} path={'vendor'}>
+                                        <Route path={'dashboard'} element={<VendorDashboard/>} index></Route>
+                                        <Route path={'uploads'} element={<VendorUploads/>}></Route>
+                                        <Route path={'settings'}></Route>
+                                    </Route>
 
                                 </Route>
                                 <Route path={'shop'} element={<Shop/>}/>
