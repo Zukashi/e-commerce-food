@@ -1,159 +1,93 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { Response } from 'express';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
-const jwt = require('jsonwebtoken');
-import { SignUpDto } from './dto/signUp.dto';
-import { SignInDto } from './dto/signIn.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../user/entities/user.entity';
-import { Repository } from 'typeorm';
-import { Vendor } from '../vendor/entities/vendor.entity';
-import { VendorService } from '../vendor/vendor.service';
-const Joi = require('joi');
-const bcrypt = require('bcrypt');
+import { TokenPayload } from './tokenPaylod';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class AuthService {
+export class AuthenticationService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
-    private userService: UserService,
-    @InjectRepository(Vendor)
-    private vendorRepository: Repository<Vendor>,
-    private readonly vendorService: VendorService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
-  async signIn(signInDto: SignInDto, role: string, res: Response) {
-    console.log(signInDto);
-    if (!(signInDto.username || signInDto.email)) {
-      throw new UnauthorizedException();
-    }
-    console.log(role);
-    const findBy = signInDto.username
-      ? { value: signInDto.username, field: 'username' }
-      : { value: signInDto.email, field: 'email' };
-
-    let user;
-    if (role === 'customer') {
-      console.log(33);
-      user = await this.userService.findOne(findBy);
-    } else if (role === 'vendor') {
-      console.log(22);
-      user = await this.vendorService.findOne(findBy);
-    }
-    if (!user) throw new NotFoundException();
-    const isCorrect = await bcrypt.compare(signInDto.password, user.password);
-    if (!isCorrect) return new BadRequestException();
-    const accessToken = jwt.sign(
-      { id: user.id, role: role },
-      process.env.ACCESS_TOKEN_SECRET,
-      {
-        expiresIn: '15m',
-      },
-    );
-    const refreshToken = jwt.sign(
-      { id: user.id, role: role },
-      process.env.REFRESH_TOKEN_SECRET,
-      {
-        expiresIn: '7d',
-      },
-    );
-    // Update refreshToken of user in database
-    if (role === 'customer') {
-      user.refresh_token = refreshToken;
-      await this.userRepository.save(user);
-    } else if (role === 'vendor') {
-      user.refresh_token = refreshToken;
-      await this.vendorRepository.save(user);
-    }
-    const accessCookieExpiryDate = new Date(Date.now() + 60 * 15 * 1000);
-    const refreshCookieExpiryDate = new Date(
-      Date.now() + 60 * 60 * 1000 * 24 * 7,
-    );
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      expires: accessCookieExpiryDate,
-    });
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      expires: refreshCookieExpiryDate,
-    });
-    res.json({ user, accessToken });
+  public getCookiesForLogOut() {
+    return [
+      'Authentication=; HttpOnly; Path=/; Max-Age=0',
+      'Refresh=; HttpOnly; Path=/; Max-Age=0',
+    ];
   }
-
-  async signUp(signUpDto: SignUpDto) {
-    if (signUpDto.confirm_password === signUpDto.password) {
-      // checks if user is already in database by username / email
-      if (signUpDto.role === 'customer') {
-        await this.userService.isAlreadyInDB(signUpDto);
-      } else if (signUpDto.role === 'vendor') {
-        await this.vendorService.isAlreadyInDb(signUpDto);
+  public getCookieWithJwtAccessToken(userId: string) {
+    const payload = { userId };
+    console.log(payload);
+    console.log(this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME'));
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get(
+        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      )}s`,
+    });
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+    )}`;
+  }
+  public async getAuthenticatedUser(email: string, hashedPassword: string) {
+    try {
+      const user = await this.userService.findOne({
+        value: email,
+        field: 'email',
+      });
+      const isPasswordMatching = await bcrypt.compare(
+        hashedPassword,
+        user.password as string,
+      );
+      if (!isPasswordMatching) {
+        throw new HttpException(
+          'Wrong credentials provided',
+          HttpStatus.BAD_REQUEST,
+        );
       }
-      // Hash password
-
-      const hash = await bcrypt.hash(signUpDto.password, 10);
-      if (signUpDto.role === 'customer') {
-        await this.userService.createUser({
-          ...signUpDto,
-          password: hash,
-        });
-      } else if (signUpDto.role === 'vendor') {
-        await this.vendorService.createVendor({
-          ...signUpDto,
-          password: hash,
-        });
-      }
+      return user;
+    } catch (error) {
+      throw new HttpException(
+        'Wrong credentials provided',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
-
-  async refreshToken(user: User | Vendor, res: Response) {
-    const accessToken = jwt.sign(
-      { id: user.id, role: user instanceof User ? 'customer' : 'vendor' },
-      process.env.ACCESS_TOKEN_SECRET,
-      {
-        expiresIn: '15m',
-      },
-    );
-    const accessCookieExpiryDate = new Date(Date.now() + 60 * 15 * 1000);
-    console.log(user, 999);
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
-      expires: accessCookieExpiryDate,
+  public async register(registrationData: any) {
+    const hashedPassword = await bcrypt.hash(registrationData.password, 10);
+    try {
+      const createdUser = await this.userService.create({
+        ...registrationData,
+        password: hashedPassword,
+      });
+      return createdUser;
+    } catch (error) {
+      throw new HttpException(
+        'Something went wrong',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+  public getCookieWithJwtRefreshToken(userId: string) {
+    const payload: any = { userId };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get(
+        'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+      )}s`,
     });
-    res.json({
-      user: {
-        user,
-        role: user instanceof User ? 'customer' : 'vendor',
-      },
-      token: accessToken,
-    });
+    const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+    )}`;
+    return {
+      cookie,
+      token,
+    };
   }
 
-  async logout(userId: string, res: Response) {
-    await this.userService.updateUser({ refresh_token: null }, userId);
-    res
-      .clearCookie('accessToken', {
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-      })
-      .clearCookie('refreshToken', {
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-      })
-      .sendStatus(200);
-  }
+  // ...
 }
