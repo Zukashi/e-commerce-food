@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateVendorProductDTO } from './dto/createProduct.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,6 +15,7 @@ import { ProductService } from '../product/product.service';
 import { SignInDto } from '../auth/dto/signIn.dto';
 import { Vendor } from './entities/vendor.entity';
 import { SignUpDto } from '../auth/dto/signUp.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class VendorService {
@@ -57,6 +59,7 @@ export class VendorService {
     value: string | undefined;
   }) {
     const user = await this.vendorRepository.findOneBy({ [`${field}`]: value });
+    if (!user) throw new NotFoundException();
     return user;
   }
 
@@ -80,5 +83,31 @@ export class VendorService {
     const user = await this.vendorRepository.create(signUpDto);
     console.log('save vendor');
     return this.vendorRepository.save(user);
+  }
+
+  async setCurrentRefreshToken(token: string, id: string) {
+    const currentHashedRefreshToken = await bcrypt.hash(token, 10);
+    const user = await this.vendorRepository.preload({
+      id,
+      refresh_token: currentHashedRefreshToken,
+    });
+    if (!user) throw new NotFoundException();
+    await this.vendorRepository.save(user);
+  }
+
+  async getVendorIfRefreshTokenMatches(refreshToken: any, userId: string) {
+    console.log(777);
+    const user = await this.findOne({ field: 'id', value: userId });
+    if (!user.refresh_token) {
+      throw new UnauthorizedException('Not found token');
+    }
+    const isRefreshTokenMatching = await bcrypt.compare(
+      refreshToken,
+      user.refresh_token,
+    );
+
+    if (isRefreshTokenMatching) {
+      return user;
+    }
   }
 }
