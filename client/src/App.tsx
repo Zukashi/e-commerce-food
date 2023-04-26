@@ -28,7 +28,6 @@ function App() {
                                         <Route path={'uploads'} element={<VendorUploads/>}></Route>
                                         <Route path={'settings'}></Route>
                                     </Route>
-
                                 </Route>
                                 <Route path={'shop'} element={<Shop/>}/>
                                 <Route index element={<Home/>}/>
