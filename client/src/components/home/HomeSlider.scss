@@ -1,0 +1,50 @@
+.slider-container{
+  width: 95%;
+  margin:40px auto 0px;
+
+  .hero{
+    padding:4rem 0;
+    border-radius:25px;
+    background-size:cover;
+    background: url("../../assets/header-bg.png") center center;
+  }
+}
+
+.slider{
+  display:flex;
+  justify-content: center;
+  .slider-content{
+    display:flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 85%;
+  }
+  h2{
+    font-size: 2rem;
+    line-height: 2.2rem;
+    font-weight: 700;
+  }
+}
+.form{
+  position: relative;
+  border-radius:25px !important;
+  .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline{
+    border-radius: 25px !important;
+  }
+  .MuiFormControl-root.MuiTextField-root{
+    border-radius: 25px !important;
+  }
+  .submit-button.newsletter{
+    position: absolute;
+    right: 0;
+    margin: 0;
+    padding: 0 3.5rem;
+    border-radius:25px;
+    width: 40px;
+    height: 55px;
+    font-size: 15px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
