@@ -20,33 +20,55 @@ import JwtRefreshGuard from './guards/jwtRefreshGuard';
 import JwtAuthenticationGuard from './guards/JwtAuthGuard';
 import { User } from '../user/entities/user.entity';
 import { Request } from 'express';
+import { VendorService } from '../vendor/vendor.service';
+import { Vendor } from '../vendor/entities/vendor.entity';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authenticationService: AuthenticationService,
     private usersService: UserService,
+    private vendorService: VendorService,
   ) {}
 
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')
-  refresh(@Req() request: Request & { user: any }) {
+  refresh(@Req() request: Request & { user: User | Vendor }) {
     const accessTokenCookie =
       this.authenticationService.getCookieWithJwtAccessToken(request.user.id);
 
     request?.res?.setHeader('Set-Cookie', accessTokenCookie);
-    return request.user;
+    // return role customer if user is customer or vendor if user is vendor
+    if (request.user instanceof Vendor) {
+      return {
+        ...request.user,
+        role: 'vendor',
+      };
+    } else {
+      return {
+        ...request.user,
+        role: 'customer',
+      };
+    }
   }
   @HttpCode(200)
-  @Post('log-in')
-  async logIn(
-    @Body() body: { username: string; password: string },
+  @Post('log-in/customer')
+  async logInCustomer(
+    @Body() body: { email: string; password: string; username: string },
     @Req() request: Request,
   ) {
-    const user = await this.usersService.findOne({
+    let user = await this.usersService.findOne({
       value: body.username,
       field: 'username',
     });
+    console.log(body);
+    console.log(user.username, body.username, 555);
+    if (user.username !== body.username) {
+      user = await this.usersService.findOne({
+        value: body.email,
+        field: 'email',
+      });
+    }
 
     const accessTokenCookie =
       this.authenticationService.getCookieWithJwtAccessToken(user.id);
@@ -61,9 +83,48 @@ export class AuthController {
       accessTokenCookie,
       refreshTokenCookie.cookie,
     ]);
-    return user;
+    return {
+      ...user,
+      role: 'customer',
+    };
   }
+  @HttpCode(200)
+  @Post('log-in/vendor')
+  async logInVendor(
+    @Body() body: { email: string; password: string; username: string },
+    @Req() request: Request,
+  ) {
+    let user = await this.vendorService.findOne({
+      value: body.username,
+      field: 'username',
+    });
+    console.log(body);
+    console.log(user.username, body.username, 555);
+    if (user.username !== body.username) {
+      user = await this.vendorService.findOne({
+        value: body.email,
+        field: 'email',
+      });
+    }
 
+    const accessTokenCookie =
+      this.authenticationService.getCookieWithJwtAccessToken(user.id);
+    const refreshTokenCookie =
+      this.authenticationService.getCookieWithJwtRefreshToken(user.id);
+    await this.vendorService.setCurrentRefreshToken(
+      refreshTokenCookie.token,
+      user.id,
+    );
+    console.log(user);
+    request?.res?.setHeader('Set-Cookie', [
+      accessTokenCookie,
+      refreshTokenCookie.cookie,
+    ]);
+    return {
+      ...user,
+      role: 'vendor',
+    };
+  }
   @Post('register')
   async register(@Body() registrationData: any) {
     return this.authenticationService.register(registrationData);
