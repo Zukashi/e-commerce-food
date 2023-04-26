@@ -42,9 +42,9 @@ export const Login = () => {
     }, [])
     const onSubmit: SubmitHandler<Login> = async data => {
 
-
+        console.log(data.usernameOrEmail)
         try{
-            const res = await axios.post(`auth/log-in`, {
+            const res = await axios.post(`auth/log-in/${data.role}`, {
                     password:data.password,
                 // depending on if field is username or email pick one
                 ...(data.usernameOrEmail.includes('@') ? {email: data.usernameOrEmail} : {username:data.usernameOrEmail})

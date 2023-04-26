@@ -22,8 +22,9 @@ export  const RefreshUserDataOnEveryRequest = () => {
         const verifyRefreshToken = async () => {
             try {
                 const res = await axiosPrivate.get(`auth/refresh`);
+                console.log(res.data)
                 dispatch(setUser({
-                    user:res.data.user,
+                    user:res.data,
                     isAuthenticated:true,
                 }));
                 console.log(res.data)
