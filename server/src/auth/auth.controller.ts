@@ -61,8 +61,6 @@ export class AuthController {
       value: body.username,
       field: 'username',
     });
-    console.log(body);
-    console.log(user.username, body.username, 555);
     if (user.username !== body.username) {
       user = await this.usersService.findOne({
         value: body.email,
@@ -98,8 +96,7 @@ export class AuthController {
       value: body.username,
       field: 'username',
     });
-    console.log(body);
-    console.log(user.username, body.username, 555);
+
     if (user.username !== body.username) {
       user = await this.vendorService.findOne({
         value: body.email,

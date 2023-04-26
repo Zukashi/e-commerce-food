@@ -81,7 +81,6 @@ export class VendorService {
 
   async createVendor(signUpDto: SignUpDto) {
     const user = await this.vendorRepository.create(signUpDto);
-    console.log('save vendor');
     return this.vendorRepository.save(user);
   }
 
@@ -96,7 +95,6 @@ export class VendorService {
   }
 
   async getVendorIfRefreshTokenMatches(refreshToken: any, userId: string) {
-    console.log(777);
     const user = await this.findOne({ field: 'id', value: userId });
     if (!user.refresh_token) {
       throw new UnauthorizedException('Not found token');
