@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextField} from "@mui/material";
+import {FormControlLabel, Radio, TextField} from "@mui/material";
 import {useForm} from "react-hook-form";
 import './HomeSlider.scss'
 export const HomeSlider = () => {
@@ -20,7 +20,10 @@ export const HomeSlider = () => {
                         <TextField className='input'   {...register('email')}  label='Your email address' variant="outlined"/>
                         <button className='submit-button newsletter'>Subscribe</button>
                     </form>
-
+                    <ul className='dots'>
+                        <li className='dott'>1</li>
+                        <li className='dott'>2</li>
+                    </ul>
                 </div>
             </div>
         </div>
