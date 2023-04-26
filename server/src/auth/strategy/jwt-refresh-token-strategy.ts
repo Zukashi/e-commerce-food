@@ -1,10 +1,11 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 import { TokenPayload } from '../tokenPaylod';
 import { UserService } from '../../user/user.service';
+import { VendorService } from '../../vendor/vendor.service';
 
 @Injectable()
 export class JwtRefreshTokenStrategy extends PassportStrategy(
@@ -14,6 +15,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
   constructor(
     private readonly configService: ConfigService,
     private readonly userService: UserService,
+    private readonly vendorService: VendorService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -28,9 +30,19 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
 
   async validate(request: Request, payload: TokenPayload) {
     const refreshToken = request.cookies?.Refresh;
-    return this.userService.getUserIfRefreshTokenMatches(
-      refreshToken,
-      payload.userId,
-    );
+    try {
+      const user = await this.userService.getUserIfRefreshTokenMatches(
+        refreshToken,
+        payload.userId,
+      );
+      return user;
+    } catch (e) {
+      const user = await this.vendorService.getVendorIfRefreshTokenMatches(
+        refreshToken,
+        payload.userId,
+      );
+      if (!user) throw new NotFoundException();
+      return user;
+    }
   }
 }
