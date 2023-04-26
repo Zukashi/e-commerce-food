@@ -41,11 +41,7 @@ export const useAxiosPrivate = () => {
 
                        return axiosPrivate(prevRequest);
                    }catch(e){
-                       navigate('/login', {state:{
-                           from:location
-                           }
 
-                       })
                    }finally{
                        dispatch(setLoading(false))
                    }

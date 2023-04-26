@@ -38,6 +38,7 @@ export class UserService {
     return user;
   }
   async setCurrentRefreshToken(refreshToken: string, userId: string) {
+    console.log(123);
     const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
     const user = await this.userRepository.preload({
       id: userId,

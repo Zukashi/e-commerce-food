@@ -5,6 +5,7 @@ export interface User {
     access_token:boolean | string,
     isAuthenticated:boolean,
     loading:boolean,
+    role:string,
 }
 const initialState:User = {
     user:{},
@@ -12,6 +13,7 @@ const initialState:User = {
     access_token:localStorage.getItem('access_token') || false,
     isAuthenticated:false,
     loading:false,
+    role:''
 
 }
 
