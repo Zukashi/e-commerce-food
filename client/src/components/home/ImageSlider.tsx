@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {TextField} from "@mui/material";
 import {Slides} from "./HomeSlider";
 import {SubmitHandler, useForm} from "react-hook-form";
@@ -14,11 +14,16 @@ export const ImageSlider = ({slides}:{slides:Slides}) => {
     }>();
     const axiosPrivate = useAxiosPrivate();
     const handleNextSlide = () => {
-        setCurrentIndex((currentIndex + 1) % slides.length);
+        setCurrentIndex((prev) => prev  === slides.length - 1  ? 0 : prev + 1);
     };
-
+    useEffect(() => {
+        const interval =  setInterval(() => {
+            handleNextSlide()
+        }, 5000);
+        return () => clearInterval(interval)
+    }, [currentIndex])
     const handlePrevSlide = () => {
-        setCurrentIndex(currentIndex === 0 ? slides.length - 1 : currentIndex - 1);
+        setCurrentIndex((prev) => prev === 0 ? slides.length - 1 : prev - 1);
     };
 
     const setupNewsletter:SubmitHandler<{email:string}> = async (data) => {
