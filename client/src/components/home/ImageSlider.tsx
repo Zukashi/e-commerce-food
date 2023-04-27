@@ -22,7 +22,7 @@ export const ImageSlider = ({slides}:{slides:Slides}) => {
     };
 
     const setupNewsletter:SubmitHandler<{email:string}> = async (data) => {
-        await axiosPrivate.post('/newsletter', data);
+        await axiosPrivate.post('email-scheduling/newsletter', data);
         toast.success("Thank you for subscribing to our newsletter", {
             theme:"dark",
         })
@@ -35,7 +35,7 @@ export const ImageSlider = ({slides}:{slides:Slides}) => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{duration:.15}}
+                      transition={{duration:.25}}
                       className='hero' style={{backgroundImage:`url("${slides[currentIndex].img}")`}}
                       drag="x" // enable horizontal drag
                       dragConstraints={{right:0, left:0}} // constrain drag within slide container
