@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../redux/store/store";
 import {setDrawer} from "../../redux/nav";
 import {NavLink} from "react-router-dom";
-import { motion } from 'framer-motion';
+import {AnimatePresence, motion} from 'framer-motion';
 
 export const DrawerComponent =() => {
     const dispatch = useDispatch();
@@ -16,15 +16,16 @@ export const DrawerComponent =() => {
             open={drawer}
 
             onClose={() => dispatch(setDrawer(false))}
-        >
+        ><AnimatePresence>
             <div className='drawer'>
                 <div className='modal-header'>
                     <p>Logo</p><div className='background-for-icon'>
+
                     <motion.div className='container'
                                 initial={{opacity:0, rotate:-512}}
                                 animate={{opacity:1, rotate:0}}
                                 transition={{ duration: 0.5 }}
-                                whileTap={{ rotate:512 }}
+                                whileTap={{ rotate:256 }}
                                 onClick={() => dispatch(setDrawer(false))}
                     >
                         <CloseIcon />
@@ -39,16 +40,16 @@ export const DrawerComponent =() => {
                 </form>
                <ul className='links'>
                    {arrOfNavLinks.map((navLink,i) => <motion.li
-                                                                 initial={{ opacity: 0, x: -300 }}
-                                                                 animate={{ opacity: 1, x:0 }}
-                                                                 exit={{ opacity: 0, y: -50 }}
-                                                                 transition={{ duration: 0.5, delay:i * 0.1 }}><NavLink key={navLink} to={navLink} onClick={() => dispatch(setDrawer(false))}   className={({ isActive }) =>
+                     initial={{ opacity: 0, x: -300 }}
+                     animate={{ opacity: 1, x:0 }}
+                     exit={{ opacity: 0, x: -300 }}
+                     transition={{ duration: 0.5, delay:i * 0.1 }}><NavLink key={navLink} to={navLink} onClick={() => dispatch(setDrawer(false))}   className={({ isActive }) =>
                        isActive ? "active" : ""
                    }><p>
                        {navLink !== '/' ? navLink.replace('/', '').charAt(0).toUpperCase() + navLink.replace('/', '').slice(1) : 'Home'
                        }
                    </p></NavLink></motion.li>)}
                </ul>
-            </div>
+            </div></AnimatePresence>
         </Drawer></>)
 }
