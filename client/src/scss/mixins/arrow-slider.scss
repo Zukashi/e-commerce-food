@@ -20,4 +20,17 @@
     border-radius:50%;
     background: #fff;
   }
+
+  @media(min-width:$lg){
+    i{
+      padding: 28px;
+      transition: all .15s ease-out;
+    &:hover{
+      background: $base-color;
+      color: #fff;
+
+    }
+    }
+
+  }
 }
