@@ -15,12 +15,7 @@ export const slides = [
         header:'Fresh vegetables big discount',
         text:'Save up to 50% on your first order',
         img :'https://wp.alithemes.com/html/nest/demo/assets/imgs/slider/slider-2.png'
-},
-    {
-        header:'Test 3',
-        text:'Save up to 50% on your first order',
-        img :'https://wp.alithemes.com/html/nest/demo/assets/imgs/slider/slider-2.png'
-    }
+}
 ]
 export type Slides = typeof slides
 export const HomeSlider = () => {
