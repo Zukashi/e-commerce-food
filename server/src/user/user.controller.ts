@@ -1,9 +1,7 @@
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
-import { Public } from '../auth/decorator/public.decorator';
+import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 
 @Controller('user')
 export class UserController {
-  @Public()
   @Get('profile')
   getProfile(@Request() req: any) {
     console.log(req.oidc.isAuthenticated());

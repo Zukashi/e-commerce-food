@@ -18,9 +18,13 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './auth/local.strategy';
 import { JwtRefreshTokenStrategy } from './auth/strategy/jwt-refresh-token-strategy';
 import { JwtStrategy } from './auth/strategy/jwt-strategy';
+import { EmailModule } from './email/email.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { EmailSchedulingModule } from './email-scheduling/email-scheduling.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -42,6 +46,8 @@ import { JwtStrategy } from './auth/strategy/jwt-strategy';
     UserModule,
     VendorModule,
     PassportModule,
+    EmailModule,
+    EmailSchedulingModule,
   ],
   providers: [
     LocalStrategy,
