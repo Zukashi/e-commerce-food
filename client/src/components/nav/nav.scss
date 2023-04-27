@@ -202,13 +202,15 @@
 }
 
 .background-for-icon{
-  display:flex;
-  justify-content: center;
-  align-items: center;
   border-radius:50%;
   background: #def9ec;
   height:32px;
   width:32px;
+  .container{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 // drawer
