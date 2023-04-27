@@ -16,13 +16,12 @@
 }
 
 .icon {
-  margin: 0 20px;
+  margin: 0 20px 0px 0px;
 }
 .right-side-icons-container{
   display:flex;
   gap:10px;
   height:100%;
-  margin-right:15px;
   align-items:center;
 }
 
@@ -308,11 +307,13 @@
 }
 @media(min-width: $lg){
   .container{
+    width: 85%;
     max-width: $lg;
   }
 }
 @media(min-width:$xl){
   .container{
+    width:85%;
     max-width:85%;
   }
 }
