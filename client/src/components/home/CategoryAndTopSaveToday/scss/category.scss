@@ -10,12 +10,14 @@
 .category-list{
   display:flex;
   gap: 1rem;
+  margin: 1.5rem 0;
 
   li{
     font-size: 1.03rem;
 
   }
   li.active{
-    color:$primary-text
+    color:$base-color;
+    font-weight:600;
   }
 }

@@ -1,0 +1,30 @@
+@import '../../../../scss/vars';
+.top-products{
+  padding-bottom: 3rem;
+}
+.product-container{
+  border:1px solid #ccc;
+  border-radius:15px;
+  padding: 2rem 0 2rem;
+  display:flex;
+  flex-direction:column;
+  gap: 0.3rem;
+  .product-content-container{
+    width: 85%;
+    margin:0 auto;
+    .img-wrapper{
+      width: 85%;
+      margin:0 auto 2rem;
+    }
+    .product-price-add-container{
+      display:flex;
+      margin-top: 1rem;
+      justify-content: space-between;
+      align-items: center;
+      p{
+        font-weight:bold;
+        color: $base-color;
+      }
+    }
+  }
+}
