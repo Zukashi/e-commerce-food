@@ -43,12 +43,24 @@ export class ProductService {
   }
 
   async getFilteredByOneCategory(filter: string) {
-    const productsFromDb = await this.dataSource
-      .getRepository(Product)
-      .createQueryBuilder('product')
-      .innerJoinAndSelect('product.productImages', 'productImages')
-      .where('product.category = :category', { category: filter })
-      .getMany();
+    let productsFromDb;
+    if (filter === 'all') {
+      productsFromDb = await this.dataSource
+        .getRepository(Product)
+        .createQueryBuilder('product')
+        .innerJoinAndSelect('product.productImages', 'productImages')
+        .innerJoinAndSelect('product.vendor', 'vendor')
+        .getMany();
+    } else {
+      productsFromDb = await this.dataSource
+        .getRepository(Product)
+        .createQueryBuilder('product')
+        .innerJoinAndSelect('product.productImages', 'productImages')
+        .innerJoinAndSelect('product.vendor', 'vendor')
+        .where('product.category = :category', { category: filter })
+        .getMany();
+    }
+
     for (const product of productsFromDb) {
       const productImagesSigned = await Promise.all(
         product.productImages.map(async (productImage) => {
