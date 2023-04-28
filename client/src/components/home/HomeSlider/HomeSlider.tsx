@@ -1,9 +1,8 @@
 import React from 'react';
-import {FormControlLabel, Radio, TextField} from "@mui/material";
-import {useForm} from "react-hook-form";
+
 import './HomeSlider.scss';
 import {ImageSlider} from "./ImageSlider";
-import { motion, AnimatePresence } from "framer-motion"
+import {  AnimatePresence } from "framer-motion"
 export const slides = [
     {
         header:"Don't miss amazing grocery deals",

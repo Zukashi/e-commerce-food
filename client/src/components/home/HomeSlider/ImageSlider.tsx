@@ -4,7 +4,7 @@ import {Slides} from "./HomeSlider";
 import {SubmitHandler, useForm} from "react-hook-form";
 import './HomeSlider.scss';
 import {AnimatePresence, motion} from 'framer-motion';
-import {useAxiosPrivate} from "../../hooks/use-axios-private";
+import {useAxiosPrivate} from "../../../hooks/use-axios-private";
 import {toast} from "react-toastify";
 import * as yup from "yup";
 import {yupResolver} from "@hookform/resolvers/yup";

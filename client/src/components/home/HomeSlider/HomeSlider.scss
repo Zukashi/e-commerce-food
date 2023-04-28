@@ -1,7 +1,6 @@
-@import '../../scss/vars';
-@import '../../scss/mixins/arrow-slider.scss';
+@import '../../../scss/vars';
+@import '../../../scss/mixins/arrow-slider';
 .slider-container{
-  width: 95%;
   margin:40px auto 0px;
   .slider-dots{
     display:flex;
@@ -18,7 +17,7 @@
     }
   }
   .hero{
-    padding: 4rem 0;
+    padding: 2rem 0;
     border-radius:25px;
     width: 100%;
     height: 100%;
@@ -37,6 +36,7 @@
   }
 }
 .slide{
+
   position: relative;
   cursor:grab ;
 }
@@ -53,6 +53,7 @@
   h2{
     font-size: 2rem;
     line-height: 2.2rem;
+    height:90px;
     font-weight: 700;
   }
 }
@@ -60,7 +61,7 @@
 
 @media(min-width: $lg){
   .slider-container{
-    width: 85%;
+
     .hero{
       display:flex;
       flex-direction: column;
