@@ -7,6 +7,6 @@ export interface Product {
     price:number,
     category:string,
     quantity:number,
-    productImages?:ProductImage[],
+    productImages:ProductImage[],
     vendor:Vendor
 }
