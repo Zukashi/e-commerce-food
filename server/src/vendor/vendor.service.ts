@@ -33,8 +33,9 @@ export class VendorService {
   async createProduct(
     createProductDto: CreateVendorProductDTO,
     files: Array<Express.Multer.File>,
+    vendor: Vendor,
   ) {
-    const product = await this.productService.create(createProductDto);
+    const product = await this.productService.create(createProductDto, vendor);
     const products = await Promise.all(
       files.map(async (file) => {
         return this.productImageService.create(file);

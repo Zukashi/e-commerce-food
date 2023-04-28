@@ -8,7 +8,6 @@ import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './user.controller';
-import { UserMiddleware } from './middleware/user.middleware';
 import { VendorModule } from '../vendor/vendor.module';
 
 @Module({
@@ -17,8 +16,4 @@ import { VendorModule } from '../vendor/vendor.module';
   exports: [UserService],
   controllers: [UserController],
 })
-export class UserModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UserMiddleware).forRoutes(UserController);
-  }
-}
+export class UserModule {}

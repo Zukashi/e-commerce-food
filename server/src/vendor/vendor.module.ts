@@ -13,8 +13,6 @@ import { AwsModule } from '../aws/aws.module';
 import { ProductImageModule } from '../product-image/product-image.module';
 import { ProductModule } from '../product/product.module';
 import { Vendor } from './entities/vendor.entity';
-import { UserMiddleware } from '../user/middleware/user.middleware';
-import { UserController } from '../user/user.controller';
 import { UserModule } from '../user/user.module';
 
 @Module({
@@ -29,8 +27,4 @@ import { UserModule } from '../user/user.module';
   providers: [VendorService],
   exports: [VendorService],
 })
-export class VendorModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UserMiddleware).forRoutes(VendorController);
-  }
-}
+export class VendorModule {}

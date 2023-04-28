@@ -10,7 +10,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { UserModule } from '../user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserMiddleware } from '../user/middleware/user.middleware';
 import { Vendor } from '../vendor/entities/vendor.entity';
 import { VendorModule } from '../vendor/vendor.module';
 import { PassportModule } from '@nestjs/passport';

@@ -4,26 +4,30 @@ import {
   Post,
   Req,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 
 import { VendorService } from './vendor.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import JwtAuthenticationGuard from '../auth/guards/JwtAuthGuard';
+import { ReqWithCustomer } from '../auth/types/Req/User';
+import { ReqWithVendor } from '../auth/types/Req/Vendor';
 const sharp = require('sharp');
 
 @Controller('vendor')
 export class VendorController {
   constructor(private vendorService: VendorService) {}
+  @UseGuards(JwtAuthenticationGuard)
   @Post('product')
   @UseInterceptors(FilesInterceptor('image'))
   async createProduct(
     @UploadedFiles() files: Array<Express.Multer.File>,
-    @Req() req: any,
+    @Req() req: ReqWithVendor,
     @Body('product') createProductDto: string,
   ) {
-    console.log(req.user);
     // parse createProductDto because it's in JSON currently
     const product = JSON.parse(createProductDto);
-    return await this.vendorService.createProduct(product, files);
+    return await this.vendorService.createProduct(product, files, req.user);
   }
 }

@@ -14,8 +14,8 @@ import {RootState} from "../../../redux/store/store";
 import {toast, useToast} from "react-toastify";
 const schema = yup.object().shape({
 
-    productName: yup.string().required('product name is required'),
-    price: yup.string().required('price is required'),
+    productName: yup.string().strict().required('product name is required'),
+    price: yup.string().required('price is required').strict(),
     category:yup.string().required('category is required'),
     quantity: yup.string().required('quantity is required'),
     tags: yup.string().optional(),
@@ -47,7 +47,7 @@ export const UploadsForm = () => {
 
     })
     type registerType = 'productName' | 'price' | 'quantity'
-    const labels = [['Product Name', 'productName'], ['Price (In USD)', 'price'], ['Quantity', 'quantity'] ,['Product Tags', 'tags']]
+    const labels = [['Product Name', 'productName'], ['Price (In USD)', 'price'], ['Quantity', 'quantity'] ,['Product Tags', 'tags']];
     const onSubmit = (data:UploadProductFormValues) => {
         createNewProduct.mutate({data, axiosPrivate, vendor})
     }
@@ -68,6 +68,7 @@ export const UploadsForm = () => {
                    </Select>
 
                </FormControl>
+               <p className='error-message'>{errors['category']?.message} </p>
                <p className='error-message'>{errors[('category' as registerType)]?.message} </p>
                {labels.map((label,i) => <span className='login-form-item' key={label[1]}><TextField   {...register(label[1] as registerType)} type={i > 0 && i < 3 ? 'number' : 'text'} label={label[0]} variant="outlined"/><p className='error-message'>{errors[(label[1] as registerType)]?.message} </p></span>)}
                <button type={"submit"} className='confirm-send'>SUBMIT</button>
