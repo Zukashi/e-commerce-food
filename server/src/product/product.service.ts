@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateVendorProductDTO } from '../vendor/dto/createProduct.dto';
 import { Vendor } from '../vendor/entities/vendor.entity';
 
@@ -15,6 +15,7 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
+    private dataSource: DataSource,
   ) {}
 
   async findOne(id: string) {
@@ -32,5 +33,15 @@ export class ProductService {
     });
     await this.productRepository.save(product);
     return product;
+  }
+
+  async getFilteredByOneCategory(filter: string) {
+    const products = await this.dataSource
+      .getRepository(Product)
+      .createQueryBuilder('product')
+      .innerJoinAndSelect('product.productImages', 'productImages')
+      .where('product.category = :category', { category: filter })
+      .getMany();
+    return products;
   }
 }
