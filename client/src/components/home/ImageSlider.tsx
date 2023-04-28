@@ -73,7 +73,7 @@ export const ImageSlider = ({slides}:{slides:Slides}) => {
                     <p>{slides[currentIndex].text}</p>
 
 
-                    <form className={'form'} autoComplete={'off'} onSubmit={handleSubmit(setupNewsletter)} >
+                    <form className={'form image-slider'} autoComplete={'off'} onSubmit={handleSubmit(setupNewsletter)} >
                         <TextField className='input'   {...register('email')}  label='Your email address' variant="outlined"/>
                         <button className='submit-button newsletter' type={"submit"}>Subscribe</button>
                     </form>

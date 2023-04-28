@@ -8,6 +8,18 @@
     gap: 1rem;
   }
 }
+
+  .MuiTextField-root{
+    width:100%;
+    border-radius:5px;
+    background: #fff;
+    input{
+      padding-left:3rem;
+    }
+
+
+  }
+
 .confirm-send{
   @include submit-button;
 }
