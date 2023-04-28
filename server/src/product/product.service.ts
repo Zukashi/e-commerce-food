@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { CreateVendorProductDTO } from '../vendor/dto/createProduct.dto';
+import { Vendor } from '../vendor/entities/vendor.entity';
 
 @Injectable()
 export class ProductService {
@@ -22,11 +23,12 @@ export class ProductService {
     return oneProduct;
   }
 
-  async create(createProductDto: CreateVendorProductDTO) {
+  async create(createProductDto: CreateVendorProductDTO, vendor: Vendor) {
     const product = await this.productRepository.create({
       ...createProductDto,
       price: Number(createProductDto.price),
       quantity: Number(createProductDto.quantity),
+      vendor,
     });
     await this.productRepository.save(product);
     return product;
