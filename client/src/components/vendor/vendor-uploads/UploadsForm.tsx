@@ -67,6 +67,8 @@ export const UploadsForm = () => {
                        label="Select Category"
                    >
                        <MenuItem value={'vegetables_&_fruits'}>Vegetables & Fruits</MenuItem>
+                       <MenuItem value={'milks_&_dairies'}>Milks & Dairies</MenuItem>
+
                        <MenuItem value={'beverages'}>Beverages</MenuItem>
                        <MenuItem value={'meats_&_seafood'}>Meats & Seafood</MenuItem>
                    </Select>

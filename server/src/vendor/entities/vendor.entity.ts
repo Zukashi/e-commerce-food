@@ -33,5 +33,5 @@ export class Vendor {
   refresh_token: string;
 
   @OneToMany((type) => Product, (product) => product.vendor)
-  product: Product;
+  products: Product[];
 }
