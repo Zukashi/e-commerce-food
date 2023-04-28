@@ -1,0 +1,21 @@
+@import '../../../../scss/vars';
+
+.popular-header{
+  font-size: 2rem;
+  font-weight: 500;
+  margin-top: 2.5rem;
+
+
+}
+.category-list{
+  display:flex;
+  gap: 1rem;
+
+  li{
+    font-size: 1.03rem;
+
+  }
+  li.active{
+    color:$primary-text
+  }
+}
