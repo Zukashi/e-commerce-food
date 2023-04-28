@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, {useState} from 'react';
 import {useDispatch} from "react-redux";
 import {setSubImageReducer} from "../../../redux/vendor-uploads";
@@ -20,7 +21,10 @@ export const  OneSubImage = () => {
     }
     return (<>
 
-           <div className='main-img-container sub-img-container'>
+           <motion.div className='main-img-container sub-img-container'
+                initial={{opacity:0, y:30}}
+                animate={{opacity:1, y:0}}
+                transition={{duration:0.6}}>
                {image ? <img width={'100%'} src={image} alt="123"/> : <div className='main-img-placeholder sub-image'>
                    <div className='text-inside-placeholder-container'>
                        <div className='dimensions-container sub-image'>
@@ -35,5 +39,5 @@ export const  OneSubImage = () => {
                    </div>
 
 
-       </div></>)
+       </motion.div></>)
 }

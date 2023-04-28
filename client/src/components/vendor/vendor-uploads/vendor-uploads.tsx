@@ -4,6 +4,7 @@ import {SubImages} from "./sub-images";
 import {UploadsForm} from "./UploadsForm";
 import {useDispatch} from "react-redux";
 import { setMainImageReducer} from "../../../redux/vendor-uploads";
+import { motion } from 'framer-motion';
 
 export type FormValues = {
     img:FileList
@@ -27,7 +28,11 @@ export const VendorUploads = () => {
     }
     console.log(image)
     return (<section className='vendor-uploads-section'>
-        <div className='main-img-container'>
+        <motion.div className='main-img-container'
+        initial={{opacity:0, y:30}}
+        animate={{opacity:1, y:0}}
+        transition={{duration:0.6}}
+        >
             {image ? <img width={'100%'} src={image} alt="main image"/> : <div className='main-img-placeholder'>
                 <div className='text-inside-placeholder-container'>
                     <div className='dimensions-container'>
@@ -40,7 +45,7 @@ export const VendorUploads = () => {
                 <input type="file" className="file-input" onChange={onImageChange} />
                 <img src={"https://cdn-icons-png.flaticon.com/512/2356/2356780.png"} width={'18px'} alt="edit icon"/>
             </div>
-        </div>
+        </motion.div>
 
         <SubImages/>
 

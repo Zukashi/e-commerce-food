@@ -12,6 +12,7 @@ import {useAxiosPrivate} from "../../../hooks/use-axios-private";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../redux/store/store";
 import {toast, useToast} from "react-toastify";
+import {OneFormItem} from "./OneFormItem";
 const schema = yup.object().shape({
 
     productName: yup.string().strict().required('product name is required'),
@@ -29,11 +30,13 @@ export type UploadProductFormValues = {
     quantity: string;
     tags?: string;
 };
-
+export type registerType = 'productName' | 'price' | 'quantity'
+const labels = [['Product Name', 'productName'], ['Price (In USD)', 'price'], ['Quantity', 'quantity'] ,['Product Tags', 'tags']];
 export const UploadsForm = () => {
     const {register, formState:{errors}, handleSubmit} = useForm<UploadProductFormValues>({
         resolver:yupResolver(schema)
     });
+
     const {vendor} = useSelector((root:RootState) => root)
     const axiosPrivate = useAxiosPrivate();
     const createNewProduct  = useMutation(  createProduct,{
@@ -45,9 +48,10 @@ export const UploadsForm = () => {
             });
         }
 
-    })
-    type registerType = 'productName' | 'price' | 'quantity'
-    const labels = [['Product Name', 'productName'], ['Price (In USD)', 'price'], ['Quantity', 'quantity'] ,['Product Tags', 'tags']];
+    });
+
+
+
     const onSubmit = (data:UploadProductFormValues) => {
         createNewProduct.mutate({data, axiosPrivate, vendor})
     }
@@ -68,9 +72,9 @@ export const UploadsForm = () => {
                    </Select>
 
                </FormControl>
-               <p className='error-message'>{errors['category']?.message} </p>
                <p className='error-message'>{errors[('category' as registerType)]?.message} </p>
-               {labels.map((label,i) => <span className='login-form-item' key={label[1]}><TextField   {...register(label[1] as registerType)} type={i > 0 && i < 3 ? 'number' : 'text'} label={label[0]} variant="outlined"/><p className='error-message'>{errors[(label[1] as registerType)]?.message} </p></span>)}
+              {labels.map((label,i) => <OneFormItem label={label} i={i} register={register} errors={errors}></OneFormItem>)}
+
                <button type={"submit"} className='confirm-send'>SUBMIT</button>
            </form>
        </section></>)

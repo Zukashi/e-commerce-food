@@ -2,8 +2,11 @@
 
 .form{
   margin-top: 2rem;
-  display:flex;
-  flex-direction: column;
+  div{
+    display:flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 .confirm-send{
   @include submit-button;
