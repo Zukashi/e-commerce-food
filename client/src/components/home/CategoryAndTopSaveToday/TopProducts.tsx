@@ -5,15 +5,15 @@ import {AxiosInstance} from "axios";
 import './scss/top-products.scss'
 import {useSearchParams} from "react-router-dom";
 import {Product} from "../../../types/product";
-const fetchProducts = async (axios:AxiosInstance, params:URLSearchParams| null) => {
+const fetchProducts = async (axios:AxiosInstance, params:URLSearchParams| null):Promise<Product[]> => {
     console.log(params)
     const res = await  axios.get(`product/all?${params}`);
-    return res.data as Product[]
+    return res.data
 }
 
 export const TopProducts = () => {
     const axiosPrivate = useAxiosPrivate();
-    const [params, setSearchParams] = useSearchParams();
+    const [params] = useSearchParams();
     const {data, refetch} = useQuery('products', () => fetchProducts(axiosPrivate, params));
     console.log(data)
     useEffect(() => {

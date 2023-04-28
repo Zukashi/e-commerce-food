@@ -9,6 +9,11 @@ import { Product } from './entities/product.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateVendorProductDTO } from '../vendor/dto/createProduct.dto';
 import { Vendor } from '../vendor/entities/vendor.entity';
+import { GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { s3Client } from '../../libs/awsClient';
+import { ProductImageService } from '../product-image/product-image.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ProductService {
@@ -16,6 +21,8 @@ export class ProductService {
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
     private dataSource: DataSource,
+    private productImageService: ProductImageService,
+    private configService: ConfigService,
   ) {}
 
   async findOne(id: string) {
@@ -36,12 +43,21 @@ export class ProductService {
   }
 
   async getFilteredByOneCategory(filter: string) {
-    const products = await this.dataSource
+    const productsFromDb = await this.dataSource
       .getRepository(Product)
       .createQueryBuilder('product')
       .innerJoinAndSelect('product.productImages', 'productImages')
       .where('product.category = :category', { category: filter })
       .getMany();
-    return products;
+    for (const product of productsFromDb) {
+      const productImagesSigned = await Promise.all(
+        product.productImages.map(async (productImage) => {
+          return this.productImageService.createOneSignedUrl(productImage);
+        }),
+      );
+      product.productImages = productImagesSigned;
+      await this.productRepository.save(product);
+    }
+    return productsFromDb;
   }
 }

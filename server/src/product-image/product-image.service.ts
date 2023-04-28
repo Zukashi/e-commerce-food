@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProductImage } from './entities/product-image.entity';
 import { Repository } from 'typeorm';
 import { AwsService } from '../aws/aws.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ProductImageService {
@@ -13,6 +14,7 @@ export class ProductImageService {
     @InjectRepository(ProductImage)
     private readonly productImageRepository: Repository<ProductImage>,
     private readonly awsService: AwsService,
+    private readonly configService: ConfigService,
   ) {}
 
   async getAllImages() {
@@ -55,5 +57,17 @@ export class ProductImageService {
     });
     if (!newProduct) throw new NotFoundException();
     await this.productImageRepository.save(newProduct);
+  }
+
+  async createOneSignedUrl(productImage: ProductImage) {
+    const getObjectParams = {
+      Bucket: this.configService.get<string>('BUCKET_NAME'),
+      Key: productImage.imageName,
+    };
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3Client, command, { expiresIn: 1000 });
+    productImage.imageUrl = url;
+    await this.productImageRepository.save(productImage);
+    return productImage;
   }
 }
