@@ -12,8 +12,6 @@ import {useAxiosPrivate} from "../../../hooks/use-axios-private";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../redux/store/store";
 import {toast, useToast} from "react-toastify";
-import {motion} from 'framer-motion';
-import {useInView} from "react-intersection-observer";
 import {OneFormItem} from "./OneFormItem";
 const schema = yup.object().shape({
 

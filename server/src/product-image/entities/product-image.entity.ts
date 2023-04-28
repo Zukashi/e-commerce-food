@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Product } from '../../product/entities/product.entity';
 
 @Entity()
@@ -12,6 +18,7 @@ export class ProductImage {
   @Column({ nullable: true })
   imageUrl: string;
 
+  @Index('product-image_productId_index')
   @ManyToOne((type) => Product, (product) => product.productImages, {
     onDelete: 'CASCADE',
   })

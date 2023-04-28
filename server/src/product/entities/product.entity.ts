@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -14,7 +15,9 @@ export class Product {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   productName: string;
 
   @Column()
@@ -31,6 +34,7 @@ export class Product {
   })
   productImages: ProductImage[];
 
+  @Index('product_vendorId_index')
   @ManyToOne((type) => Vendor, (vendor) => vendor.product, {
     cascade: true,
     nullable: false,

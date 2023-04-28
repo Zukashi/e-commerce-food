@@ -6,12 +6,17 @@ import './HomeSlider.scss';
 import {AnimatePresence, motion} from 'framer-motion';
 import {useAxiosPrivate} from "../../hooks/use-axios-private";
 import {toast} from "react-toastify";
+import * as yup from "yup";
+import {yupResolver} from "@hookform/resolvers/yup";
+const schema = yup.object({
+    email:yup.string().email().required()
+})
 export const ImageSlider = ({slides}:{slides:Slides}) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const containerRef = useRef(null);
-    const {handleSubmit, register} = useForm<{
-        email:string
-    }>();
+    const {handleSubmit, register, formState: {errors}, watch} = useForm<{
+        email:string,
+    }>({resolver:yupResolver(schema)});
     const axiosPrivate = useAxiosPrivate();
     const handleNextSlide = () => {
         setCurrentIndex((prev) => prev  === slides.length - 1  ? 0 : prev + 1);
@@ -21,7 +26,7 @@ export const ImageSlider = ({slides}:{slides:Slides}) => {
             handleNextSlide()
         }, 5000);
         return () => clearInterval(interval)
-    }, [currentIndex])
+    }, [currentIndex, watch('email')])
     const handlePrevSlide = () => {
         setCurrentIndex((prev) => prev === 0 ? slides.length - 1 : prev - 1);
     };
@@ -47,6 +52,7 @@ export const ImageSlider = ({slides}:{slides:Slides}) => {
                       dragTransition={{
                           bounceDamping:400
                       }}
+                        // change slide on drag end
                       onDragEnd={(event, info) => {
                           const { offset, velocity } = info;
                           if (offset.x > 100 || velocity.x > 500) {
@@ -55,7 +61,7 @@ export const ImageSlider = ({slides}:{slides:Slides}) => {
                           } else if (offset.x < -100 || velocity.x < -500) {
                               handleNextSlide()
                           }
-                      }} // change slide on drag end
+                      }}
         >
 
 
@@ -73,8 +79,9 @@ export const ImageSlider = ({slides}:{slides:Slides}) => {
                     <p>{slides[currentIndex].text}</p>
 
 
-                    <form className={'form image-slider'} autoComplete={'off'} onSubmit={handleSubmit(setupNewsletter)} >
-                        <TextField className='input'   {...register('email')}  label='Your email address' variant="outlined"/>
+                    <form className={'form image-slider'} onPointerDownCapture={e => e.stopPropagation()} autoComplete={'off'} onSubmit={handleSubmit(setupNewsletter)} >
+                        <TextField className='input'    {...register('email')}  label='Your email address' variant="outlined"/>
+                        <p className={'error-message'} style={{paddingLeft:'0.4rem'}}>{errors?.email?.message}</p>
                         <button className='submit-button newsletter' type={"submit"}>Subscribe</button>
                     </form>
                 </div>
