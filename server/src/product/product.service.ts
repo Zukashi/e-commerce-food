@@ -56,7 +56,6 @@ export class ProductService {
         .where('product.category = :category', { category: filter })
         .getMany();
     }
-
     for (const product of productsFromDb) {
       const productImagesSigned = await Promise.all(
         product.productImages.map(async (productImage) => {

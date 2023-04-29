@@ -9,14 +9,14 @@ import {
 import { ProductImage } from '../../product-image/entities/product-image.entity';
 import { Vendor } from '../../vendor/entities/vendor.entity';
 export type productCategoryTypes =
-  | 'vegetables_&_fruits'
-  | 'meats_&_seafood'
-  | 'milks_&_dairies'
+  | 'vegetables & fruits'
+  | 'meats & seafood'
+  | 'milks & dairies'
   | 'beverages';
 export enum ProductCategoryEnum {
-  VEGETABLES_FRUITS = 'vegetables_&_fruits',
-  MEATS_SEAFOOD = 'meats_&_seafood',
-  MILKS_DAIRIES = 'milks_&_dairies',
+  VEGETABLES_FRUITS = 'vegetables & fruits',
+  MEATS_SEAFOOD = 'meats & seafood',
+  MILKS_DAIRIES = 'milks & dairies',
   BEVERAGES = 'beverages',
 }
 @Entity()

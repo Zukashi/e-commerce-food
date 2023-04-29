@@ -6,7 +6,7 @@ export class ProductController {
   constructor(private productService: ProductService) {}
 
   @Get('all')
-  async getSpecifiedCategory(@Query('filter') filter: any) {
+  async getSpecifiedCategory(@Query('filter') filter: string) {
     console.log(filter);
     return this.productService.getFilteredByOneCategory(filter);
   }

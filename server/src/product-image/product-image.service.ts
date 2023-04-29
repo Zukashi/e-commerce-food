@@ -67,6 +67,7 @@ export class ProductImageService {
     const command = new GetObjectCommand(getObjectParams);
     const url = await getSignedUrl(s3Client, command, { expiresIn: 1000 });
     productImage.imageUrl = url;
+    console.log(productImage);
     await this.productImageRepository.save(productImage);
     return productImage;
   }
