@@ -10,7 +10,8 @@ export const Category = () => {
         setCurrentIndex(i)
         params.set('filter', value.toLowerCase());
         setSearchParams(params)
-    }
+    };
+
     const categories = ['All', 'Milks & Dairies', 'Coffee & Teas']
     return (<section className='section-category'>
 

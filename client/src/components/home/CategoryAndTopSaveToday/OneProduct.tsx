@@ -2,10 +2,10 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import {Product} from "../../../types/product";
 
-export const OneProduct = ({product}:{product:Product}) => {
+export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLSearchParams}) => {
     return (<>
 
-          <motion.div initial={{opacity:0, y:-20}} animate={{opacity:1, y:0}} className='product-container'>
+          <motion.div key={framerKey.get('filter')} initial={{opacity:0, y:40}} animate={{opacity:1,y:0}}  className='product-container'>
               <div className='product-content-container'>
                   <div className={'img-wrapper'}>
                       <img src={product.productImages[0].imageUrl} alt={`Image of ${product.productName} product`}/>
