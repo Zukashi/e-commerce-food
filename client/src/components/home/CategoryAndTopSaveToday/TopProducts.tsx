@@ -8,8 +8,8 @@ import {Product} from "../../../types/product";
 import {OneProduct} from "./OneProduct";
 import {AnimatePresence, motion, useAnimate, usePresence} from 'framer-motion';
 import {Loader} from "../../loader/Loader";
-const fetchProducts = async (axios:AxiosInstance, params:URLSearchParams| null):Promise<Product[]> => {
-    console.log(params)
+const fetchProducts = async (axios:AxiosInstance, params:URLSearchParams):Promise<Product[]> => {
+    console.log(params.get('filter'))
     const res = await  axios.get(`product/all?${params}`);
     return res.data
 }
@@ -17,21 +17,25 @@ const fetchProducts = async (axios:AxiosInstance, params:URLSearchParams| null):
 export const TopProducts = () => {
     const axiosPrivate = useAxiosPrivate();
     const [params] = useSearchParams();
-
-    const {data, refetch, isLoading} = useQuery('products', () => fetchProducts(axiosPrivate, params));
-    console.log(data)
+    const [loading ,setLoading] = useState(true)
+    const {data, refetch, isLoading, isRefetching, } = useQuery('products', () => fetchProducts(axiosPrivate, params));
     useEffect(() => {
+
         void refetch();
     }, [params]);
-
+    if(isRefetching){
+        return <motion.section className='top-products'></motion.section>
+    }
+    console.log(isLoading)
     return (
 
-        <AnimatePresence >
 
-        <motion.section className='top-products'>
-            {!isLoading ?
-            data?.map((product) => <OneProduct framerKey={params} key={product.id} product={product}></OneProduct>)
-                : <Loader/>}
+
+        <motion.section className='top-products'
+      >
+            {data?.map((product) => <OneProduct framerKey={params} key={product.id} product={product}></OneProduct>)}
+
+
         </motion.section>
-    </AnimatePresence>)
+   )
 }
