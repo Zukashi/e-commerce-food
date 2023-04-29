@@ -1,4 +1,5 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { ProductCategoryEnum } from '../../product/entities/product.entity';
 
 export class CreateVendorProductDTO {
   @IsString()
@@ -7,8 +8,8 @@ export class CreateVendorProductDTO {
   @IsNumber()
   readonly price: number;
 
-  @IsString()
-  readonly category: string;
+  @IsEnum(ProductCategoryEnum)
+  readonly category: ProductCategoryEnum;
 
   @IsNumber()
   readonly quantity: number;

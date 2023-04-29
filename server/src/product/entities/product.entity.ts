@@ -8,8 +8,17 @@ import {
 } from 'typeorm';
 import { ProductImage } from '../../product-image/entities/product-image.entity';
 import { Vendor } from '../../vendor/entities/vendor.entity';
-import { Field } from 'mysql2';
-
+export type productCategoryTypes =
+  | 'vegetables_&_fruits'
+  | 'meats_&_seafood'
+  | 'milks_&_dairies'
+  | 'beverages';
+export enum ProductCategoryEnum {
+  VEGETABLES_FRUITS = 'vegetables_&_fruits',
+  MEATS_SEAFOOD = 'meats_&_seafood',
+  MILKS_DAIRIES = 'milks_&_dairies',
+  BEVERAGES = 'beverages',
+}
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn('uuid')
@@ -23,8 +32,11 @@ export class Product {
   @Column()
   price: number;
 
-  @Column()
-  category: string;
+  @Column({
+    type: 'enum',
+    enum: ProductCategoryEnum,
+  })
+  category: productCategoryTypes;
 
   @Column()
   quantity: number;

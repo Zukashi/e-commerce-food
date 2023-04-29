@@ -1,7 +1,6 @@
 import {
-  HttpException,
-  HttpStatus,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,9 +8,6 @@ import { Product } from './entities/product.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateVendorProductDTO } from '../vendor/dto/createProduct.dto';
 import { Vendor } from '../vendor/entities/vendor.entity';
-import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { s3Client } from '../../libs/awsClient';
 import { ProductImageService } from '../product-image/product-image.service';
 import { ConfigService } from '@nestjs/config';
 
