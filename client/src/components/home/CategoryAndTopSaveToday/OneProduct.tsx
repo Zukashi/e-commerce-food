@@ -1,4 +1,4 @@
-import { Skeleton } from '@mui/material';
+import {Rating, Skeleton} from '@mui/material';
 import { motion } from 'framer-motion';
 import React, {useState} from 'react';
 import {Product} from "../../../types/product";
@@ -23,12 +23,12 @@ export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLS
                       />
                   </div>
                   <p className={'product-category'}>{product.category}</p>
-                  <span>{product.productName}</span>
-                  <div>stars</div>
-                  <p>By {product.vendor.username}</p>
+                  <span className='product-name'>{product.productName}</span>
+                  <div ><Rating size={"small"}   name="read-only" value={4} readOnly /></div>
+                  <p className='product-vendor'>By {product.vendor.username}</p>
                   <div className='product-price-add-container'>
                       <p>${product.price}</p>
-                      <button>Add</button>
+                      <motion.button className='product-button' whileHover={{ transition: { duration: 0.2 },y:-3, backgroundColor:'#3bb77e', color:"white", opacity:1}}>Add</motion.button>
                   </div>
               </div>
           </motion.div>

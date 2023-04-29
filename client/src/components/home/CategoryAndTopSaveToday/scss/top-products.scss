@@ -19,9 +19,24 @@
   .product-content-container{
     width: 85%;
     margin:0 auto;
+    display:flex;
+    flex-direction: column;
+    align-items: start;
 
     .product-category{
       text-transform:capitalize;
+      font-size: 11px;
+      color:#999;
+    }
+    .product-name{
+      font-weight: 500;
+      font-size: 17px;
+    }
+    .product-vendor{
+      text-transform: capitalize;
+      color:#999;
+      font-size: 12px;
+      font-weight: 500;
     }
     .img-wrapper{
       width: 85%;
@@ -30,11 +45,25 @@
     .product-price-add-container{
       display:flex;
       margin-top: 1rem;
+      width: 100%;
       justify-content: space-between;
       align-items: center;
       p{
         font-weight:bold;
+        font-size: 1.2rem;
         color: $base-color;
+      }
+      .product-button{
+        background-color: rgba(37, 241, 88, 0.4);
+        opacity:0.7;
+        padding:0.45rem 1.4rem;
+        font-size: 14px;
+        color: #08491f;
+        font-weight: 600;
+        &:hover{
+          border:0
+        }
+
       }
     }
   }
