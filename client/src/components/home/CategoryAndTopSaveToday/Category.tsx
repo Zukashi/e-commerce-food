@@ -8,10 +8,7 @@ export const Category = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // on standard request all images
-    useEffect(() => {
-        params.set('filter', 'all')
-        setSearchParams(params)
-    }, [])
+
 
 
     const onClick = (value:string, i:number) => {
