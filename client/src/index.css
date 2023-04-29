@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color: rgba(255, 255, 255, 0.87);
-
-
+  height: 100%;
+  scroll-behavior: revert;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -24,9 +24,9 @@ a:hover {
 
 body {
   color:black;
+  height:100%;
+  padding-top: 70px;
   margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
 }
 
 h1 {
