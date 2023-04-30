@@ -6,8 +6,6 @@ import {motion, useScroll, useTransform, useViewportScroll} from 'framer-motion'
 
 export const LayoutDefault = () => {
     const [scrollPosition, setScrollPosition] = useState(0);
-
-
     const [isTop, setIsTop] = useState(true);
 
     const handleScroll = () => {
@@ -18,7 +16,8 @@ export const LayoutDefault = () => {
         const scrollToTop = () => {
             const currentPosition = window.pageYOffset;
             if (currentPosition > 0) {
-                window.scrollTo(0, currentPosition - currentPosition / 8);
+                // increasing the number currentPosition divides slows down the animation
+                window.scrollTo(0, currentPosition - currentPosition / 16);
                 requestAnimationFrame(scrollToTop);
             }
         };
