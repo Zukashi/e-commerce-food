@@ -1,11 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../user/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
-import { Cart } from './entities/cart';
+import {
+  DataSource,
+  Repository,
+  SelectQueryBuilder,
+  UpdateQueryBuilder,
+} from 'typeorm';
+import { Cart } from './entities/cart.entity';
 import { ReqWithCustomer } from '../auth/types/Req/User';
 import { AddItemDto } from './dto/AddItem.dto';
 import { Product } from '../product/entities/product.entity';
+import { CartItem } from './entities/cart-item.entity';
 @Injectable()
 export class CartService {
   constructor(
@@ -15,6 +21,8 @@ export class CartService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(CartItem)
+    private readonly cartItemRepository: Repository<CartItem>,
   ) {}
   async getItems(req: ReqWithCustomer) {
     console.log(req.user);
@@ -51,22 +59,52 @@ export class CartService {
       // If the user is logged in, retrieve the cart items from the database
       let cart = await this.cartRepository
         .createQueryBuilder('cart')
-        .innerJoinAndSelect('cart.user', 'user')
-        .innerJoinAndSelect('cart.products', 'products')
+        .leftJoinAndSelect('cart.user', 'user')
+        .leftJoinAndSelect('cart.products', 'cartItems')
+        .leftJoinAndSelect('cartItems.product', 'product')
         .where('user.id =:userId', { userId: req.user.id })
         .getOne();
       console.log(cart);
       if (!cart) {
         // If cart does not exist, create a new one
-        cart = new Cart();
-        cart.user = req.user;
-        cart.products = [product];
+        cart = await this.cartRepository.create({
+          user: req.user,
+          products: [],
+        });
+        await this.cartRepository.save(cart);
+        const cartItem = await this.cartItemRepository.create({
+          cart,
+          product,
+          quantity: 1,
+        });
+        cart.products.push(cartItem);
+        console.log(cart);
+        await this.cartItemRepository.save(cartItem);
       } else {
         // If cart exists, add the new product to the existing products
-        cart.products.push(product);
+        let cartItem: any = await this.cartItemRepository
+          .createQueryBuilder('cartItem')
+          .leftJoinAndSelect('cartItem.product', 'product')
+          .where('product.id =:id', {
+            id: productId,
+          });
+        if (!cartItem) {
+        } else {
+          cartItem = await this.cartItemRepository
+            .createQueryBuilder('cartItem')
+            .leftJoinAndSelect('cartItem.product', 'product')
+            .update(CartItem)
+            .set({
+              quantity: () => `"quantity" + 1`,
+            })
+            .where('product.id =:productId', { productId })
+            .execute();
+        }
+        console.log(cartItem);
+        await this.cartRepository.save(cart);
+        await this.cartItemRepository.save(cartItem);
       }
-      await this.cartRepository.save(cart);
-      console.log(cart);
+
       return cart;
     } else {
       // If the user is not logged in, retrieve the cart items from the cookie
