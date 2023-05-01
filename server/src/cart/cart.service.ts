@@ -74,7 +74,7 @@ export class CartService {
         const cartItem = await this.cartItemRepository.create({
           cart,
           product,
-          quantity: 1,
+          quantity: addItemDto.quantity,
         });
         cart.products.push(cartItem);
         await this.cartItemRepository.save(cartItem);
@@ -91,23 +91,34 @@ export class CartService {
           const cartItem = await this.cartItemRepository.create({
             cart,
             product,
-            quantity: 1,
+            quantity: addItemDto.quantity,
           });
           cart.products.push(cartItem);
           await this.cartItemRepository.save(cartItem);
         } else {
-          const cartItemNew = await this.cartItemRepository.preload({
-            id: cartItem?.id,
-            quantity: cartItem.quantity + 1,
-          });
+          const cartItemNew = await this.cartItemRepository
+            .createQueryBuilder('cartItem')
+            .leftJoinAndSelect('cartItem.product', 'product')
+            .update(CartItem)
+            .set({
+              quantity: addItemDto.quantity,
+            })
+            .where('product.id = :productId', { productId })
+            .execute();
+          console.log(cartItemNew, 222);
           if (!cartItemNew) throw new NotFoundException();
-          await this.cartItemRepository.save(cartItemNew);
           await this.cartRepository.save(cart);
         }
         await this.cartRepository.save(cart);
       }
       console.log(cart.products[0]);
-      return cart;
+      const cartUpdated = await this.cartRepository
+        .createQueryBuilder('cart')
+        .leftJoinAndSelect('cart.products', 'products')
+        .leftJoinAndSelect('products.product', 'product')
+        .where('cart.id = :cartId', { cartId: cart.id })
+        .getOne();
+      return cartUpdated;
     } else {
       // If the user is not logged in, retrieve the cart items from the cookie
       const cartItems = req.cookies['cart'] || [];

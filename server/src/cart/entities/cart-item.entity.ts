@@ -19,7 +19,6 @@ export class CartItem {
   })
   cart: Cart;
   @OneToOne(() => Product, {
-    eager: true,
     cascade: true,
   })
   @JoinColumn()
