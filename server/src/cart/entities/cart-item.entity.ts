@@ -5,24 +5,26 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Product } from 'src/product/entities/product.entity';
 import { Cart } from './cart.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class CartItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Cart, (cart) => cart.products, {
-    cascade: true,
-  })
+  @ManyToOne(() => Cart, (cart) => cart.products, {})
   cart: Cart;
-  @OneToOne(() => Product, {
+  @ManyToMany(() => Product, {
     cascade: true,
   })
-  @JoinColumn()
-  product: Product;
+  @JoinTable()
+  product: Product[];
 
   @Column({
     type: 'integer',

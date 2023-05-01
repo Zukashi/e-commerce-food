@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { ProductImage } from '../../product-image/entities/product-image.entity';
 import { Vendor } from '../../vendor/entities/vendor.entity';
+import { CartItem } from '../../cart/entities/cart-item.entity';
 export type productCategoryTypes =
   | 'vegetables & fruits'
   | 'meats & seafood'

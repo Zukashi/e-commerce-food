@@ -70,14 +70,16 @@ export class CartService {
           user: req.user,
           products: [],
         });
+        console.log(cart);
         await this.cartRepository.save(cart);
         const cartItem = await this.cartItemRepository.create({
           cart,
           product,
           quantity: addItemDto.quantity,
         });
-        cart.products.push(cartItem);
+        console.log(cartItem);
         await this.cartItemRepository.save(cartItem);
+        cart.products.push(cartItem);
       } else {
         // If cart exists, add the new product to the existing products
         const cartItem = await this.cartItemRepository
@@ -86,7 +88,8 @@ export class CartService {
           .where('product.id =:id', {
             id: productId,
           })
-          .getOne();
+          .getMany();
+        console.log(cartItem, 999999);
         if (!cartItem) {
           const cartItem = await this.cartItemRepository.create({
             cart,
@@ -99,13 +102,14 @@ export class CartService {
           const cartItemNew = await this.cartItemRepository
             .createQueryBuilder('cartItem')
             .leftJoinAndSelect('cartItem.product', 'product')
+            .leftJoinAndSelect('cartItem.cart', 'cart')
             .update(CartItem)
             .set({
               quantity: addItemDto.quantity,
             })
             .where('product.id = :productId', { productId })
+            .andWhere('cart.id = :cartId', { cartId: cart.id })
             .execute();
-          console.log(cartItemNew, 222);
           if (!cartItemNew) throw new NotFoundException();
           await this.cartRepository.save(cart);
         }
@@ -124,6 +128,29 @@ export class CartService {
       const cartItems = req.cookies['cart'] || [];
       console.log(333);
       return cartItems;
+    }
+  }
+
+  async deleteItemFromCart(req: ReqWithCustomer, productId: string) {
+    const product = await this.productRepository.findOneBy({
+      id: productId,
+    });
+    if (req.user) {
+      // If the user is logged in, retrieve the cart items from the database
+      const cart = await this.cartRepository
+        .createQueryBuilder('cart')
+        .leftJoinAndSelect('cart.user', 'user')
+        .leftJoinAndSelect('cart.products', 'cartItems')
+        .leftJoinAndSelect('cartItems.product', 'product')
+        .where('user.id =:userId', { userId: req.user.id })
+        .getOne();
+
+      if (!cart) throw new NotFoundException();
+      await this.cartItemRepository
+        .createQueryBuilder('cartItem')
+        .delete()
+        .from(CartItem)
+        .where('cart =:cart', { cart });
     }
   }
 }

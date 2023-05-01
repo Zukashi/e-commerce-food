@@ -25,6 +25,7 @@ export class Cart {
 
   @OneToMany(() => CartItem, (cartItem) => cartItem.cart, {
     eager: true,
+    cascade: true,
   })
   products: CartItem[];
 }
