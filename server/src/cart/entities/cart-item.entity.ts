@@ -14,17 +14,20 @@ export class CartItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Cart, (cart) => cart.products)
+  @ManyToOne(() => Cart, (cart) => cart.products, {
+    cascade: true,
+  })
   cart: Cart;
   @OneToOne(() => Product, {
     eager: true,
+    cascade: true,
   })
   @JoinColumn()
   product: Product;
 
   @Column({
     type: 'integer',
-    default: 1,
+    default: 0,
   })
   quantity: number;
 }

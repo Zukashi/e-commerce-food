@@ -21,8 +21,7 @@ export class UserMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: ReqWithUser, res: Response, next: NextFunction) {
-    const userRefreshCookie = req.cookies.Refresh; // get user id from session
-    console.log(userRefreshCookie, 'test');
+    const userRefreshCookie = req.cookies.Refresh; // get user id from Refresh Cookie
     const decoded = this.jwtService.verify(userRefreshCookie, {
       secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
     });

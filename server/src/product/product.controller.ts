@@ -7,7 +7,6 @@ export class ProductController {
 
   @Get('all')
   async getSpecifiedCategory(@Query('filter') filter: string) {
-    console.log(filter);
     return this.productService.getFilteredByOneCategory(filter);
   }
   @Get(':id')
