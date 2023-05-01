@@ -21,6 +21,8 @@ import { JwtStrategy } from './auth/strategy/jwt-strategy';
 import { EmailModule } from './email/email.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EmailSchedulingModule } from './email-scheduling/email-scheduling.module';
+import { CartModule } from './cart/cart.module';
+import { Cart } from './cart/entities/cart';
 
 @Module({
   imports: [
@@ -35,7 +37,7 @@ import { EmailSchedulingModule } from './email-scheduling/email-scheduling.modul
       username: 'postgres',
       password: '',
       database: 'postgres',
-      entities: [Product, Vendor, ProductImage, User],
+      entities: [Product, Vendor, ProductImage, User, Cart],
       autoLoadEntities: true,
       synchronize: true,
     }),
@@ -48,6 +50,7 @@ import { EmailSchedulingModule } from './email-scheduling/email-scheduling.modul
     PassportModule,
     EmailModule,
     EmailSchedulingModule,
+    CartModule,
   ],
   providers: [
     LocalStrategy,
