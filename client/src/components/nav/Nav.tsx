@@ -9,9 +9,20 @@ import ClearIcon from '@mui/icons-material/Clear';
 import {DrawerComponent} from "./DrawerComponent";
 import {useDispatch} from "react-redux";
 import {setDrawer} from "../../redux/nav";
+import {useQuery} from "react-query";
+import {useAxiosPrivate} from "../../hooks/use-axios-private";
+import {AxiosInstance} from "axios";
+
+const fetchCart = async (axios:AxiosInstance) => {
+      const data = axios.get('cart')
+}
+
 export const Nav = () => {
     const dispatch = useDispatch();
-    const [accountHover, setAccountHover] = useState(false)
+    const [accountHover, setAccountHover] = useState(false);
+    const axiosPrivate = useAxiosPrivate();
+    const {data} = useQuery({queryKey:['cart'], queryFn: () => fetchCart(axiosPrivate)});
+    console.log(data)
     return (
         <nav className='navbar'>
         <div className='container'>
