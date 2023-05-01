@@ -5,11 +5,7 @@ import { AwsService } from './aws.service';
 export class AwsController {
   constructor(private awsService: AwsService) {}
   @Get()
-  get() {
-    console.log('test123');
-  }
+  get() {}
   @Post('')
-  create() {
-    console.log('test');
-  }
+  create() {}
 }

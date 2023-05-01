@@ -17,6 +17,7 @@ export class Cart {
   id: string;
 
   @OneToOne(() => User, {
+    cascade: true,
     eager: true,
   })
   @JoinColumn()

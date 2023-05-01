@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '../user/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -64,7 +64,6 @@ export class CartService {
         .leftJoinAndSelect('cartItems.product', 'product')
         .where('user.id =:userId', { userId: req.user.id })
         .getOne();
-      console.log(cart);
       if (!cart) {
         // If cart does not exist, create a new one
         cart = await this.cartRepository.create({
@@ -78,33 +77,36 @@ export class CartService {
           quantity: 1,
         });
         cart.products.push(cartItem);
-        console.log(cart);
         await this.cartItemRepository.save(cartItem);
       } else {
         // If cart exists, add the new product to the existing products
-        let cartItem: any = await this.cartItemRepository
+        const cartItem = await this.cartItemRepository
           .createQueryBuilder('cartItem')
           .leftJoinAndSelect('cartItem.product', 'product')
           .where('product.id =:id', {
             id: productId,
-          });
+          })
+          .getOne();
         if (!cartItem) {
+          const cartItem = await this.cartItemRepository.create({
+            cart,
+            product,
+            quantity: 1,
+          });
+          cart.products.push(cartItem);
+          await this.cartItemRepository.save(cartItem);
         } else {
-          cartItem = await this.cartItemRepository
-            .createQueryBuilder('cartItem')
-            .leftJoinAndSelect('cartItem.product', 'product')
-            .update(CartItem)
-            .set({
-              quantity: () => `"quantity" + 1`,
-            })
-            .where('product.id =:productId', { productId })
-            .execute();
+          const cartItemNew = await this.cartItemRepository.preload({
+            id: cartItem?.id,
+            quantity: cartItem.quantity + 1,
+          });
+          if (!cartItemNew) throw new NotFoundException();
+          await this.cartItemRepository.save(cartItemNew);
+          await this.cartRepository.save(cart);
         }
-        console.log(cartItem);
         await this.cartRepository.save(cart);
-        await this.cartItemRepository.save(cartItem);
       }
-
+      console.log(cart.products[0]);
       return cart;
     } else {
       // If the user is not logged in, retrieve the cart items from the cookie
