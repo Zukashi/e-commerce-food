@@ -5,20 +5,25 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { Product } from 'src/product/entities/product.entity';
 import { User } from '../../user/entities/user.entity';
+import { CartItem } from './cart-item.entity';
 
 @Entity()
 export class Cart {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, {
+    eager: true,
+  })
   @JoinColumn()
   user: User;
 
-  @ManyToMany(() => Product)
-  @JoinTable()
-  products: Product[];
+  @OneToMany(() => CartItem, (cartItem) => cartItem.cart, {
+    eager: true,
+  })
+  products: CartItem[];
 }

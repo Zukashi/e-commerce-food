@@ -22,7 +22,7 @@ import { EmailModule } from './email/email.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EmailSchedulingModule } from './email-scheduling/email-scheduling.module';
 import { CartModule } from './cart/cart.module';
-import { Cart } from './cart/entities/cart';
+import { Cart } from './cart/entities/cart.entity';
 
 @Module({
   imports: [
