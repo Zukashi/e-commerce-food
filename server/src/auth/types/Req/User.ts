@@ -1,5 +1,8 @@
 import { Request } from 'express';
 import { User } from '../../../user/entities/user.entity';
-export class ReqWithCustomer extends Request {
+
+interface ReqWithCustomer extends Request {
   user: User;
 }
+
+export { ReqWithCustomer };
