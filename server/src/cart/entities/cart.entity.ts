@@ -27,5 +27,5 @@ export class Cart {
     eager: true,
     cascade: true,
   })
-  products: CartItem[];
+  cartItems: CartItem[];
 }

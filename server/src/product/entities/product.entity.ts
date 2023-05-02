@@ -4,6 +4,7 @@ import {
   Index,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ProductImage } from '../../product-image/entities/product-image.entity';
@@ -53,4 +54,7 @@ export class Product {
     nullable: false,
   })
   vendor: Vendor;
+
+  @OneToOne(() => CartItem, (cartItem) => cartItem.product)
+  cartItem: CartItem;
 }

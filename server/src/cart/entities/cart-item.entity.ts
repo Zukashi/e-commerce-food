@@ -18,13 +18,15 @@ export class CartItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Cart, (cart) => cart.products, {})
+  @ManyToOne(() => Cart, (cart) => cart.cartItems, {
+    cascade: ['insert', 'update'],
+  })
   cart: Cart;
-  @ManyToMany(() => Product, {
+  @OneToOne(() => Product, (product) => product.cartItem, {
     cascade: true,
   })
-  @JoinTable()
-  product: Product[];
+  @JoinColumn()
+  product: Product;
 
   @Column({
     type: 'integer',
