@@ -7,10 +7,12 @@ import { User } from '../user/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   DataSource,
+  In,
   Repository,
   SelectQueryBuilder,
   UpdateQueryBuilder,
 } from 'typeorm';
+import { Response } from 'express';
 import { Cart } from './entities/cart.entity';
 import { ReqWithCustomer } from '../auth/types/Req/User';
 import { AddItemDto } from './dto/AddItem.dto';
@@ -42,7 +44,7 @@ export class CartService {
     } else {
       // If the user is not logged in, retrieve the cart items from the cookie
       const cartItems = req.cookies['cart'] || [];
-      console.log(333);
+      console.log(cartItems);
       return cartItems;
     }
   }
@@ -51,6 +53,7 @@ export class CartService {
     req: ReqWithCustomer,
     addItemDto: AddItemDto,
     productId: string,
+    res: Response,
   ) {
     const product = await this.productRepository.findOneBy({
       id: productId,
@@ -136,9 +139,77 @@ export class CartService {
       return cartUpdated;
     } else {
       // If the user is not logged in, retrieve the cart items from the cookie
-      const cartItems = req.cookies['cart'] || [];
-      console.log(333);
-      return cartItems;
+      let cartItemsAsProductIds: { productId: string; quantity: number }[] =
+        req.cookies['cart'] || [];
+      if (Boolean(cartItemsAsProductIds.length)) {
+        res.cookie(
+          'cart',
+          [
+            {
+              productId,
+              quantity: addItemDto.quantity,
+            },
+          ],
+          {
+            expires: new Date(Date.now() + 60 * 60 * 1000 * 24 * 7),
+            secure: true,
+            httpOnly: true,
+          },
+        );
+      } else {
+        if (
+          cartItemsAsProductIds.some((cartItem) => {
+            return cartItem.productId === productId;
+          })
+        ) {
+          /// if productId already exists in cartItems then delete and replace
+          cartItemsAsProductIds = cartItemsAsProductIds.filter((cartItem) => {
+            return cartItem.productId !== productId;
+          });
+          cartItemsAsProductIds.push({
+            quantity: addItemDto.quantity,
+            productId,
+          });
+        } else {
+          cartItemsAsProductIds.push({
+            quantity: addItemDto.quantity,
+            productId,
+          });
+        }
+        res.cookie(
+          'cart',
+          [
+            ...cartItemsAsProductIds,
+            {
+              productId,
+              quantity: addItemDto.quantity,
+            },
+          ],
+          {
+            expires: new Date(Date.now() + 60 * 60 * 1000 * 24 * 7),
+            secure: true,
+            httpOnly: true,
+          },
+        );
+      }
+
+      const cartItems = await this.productRepository.find({
+        where: cartItemsAsProductIds.map((cartItem) => ({
+          id: cartItem.productId,
+        })),
+      });
+      const productsWithQuantities = cartItems.map((product) => {
+        if (product.id === productId) {
+          return {
+            ...product,
+            quantity: addItemDto.quantity,
+          };
+        } else {
+          return product;
+        }
+      });
+      console.log(cartItems);
+      return productsWithQuantities;
     }
   }
 
