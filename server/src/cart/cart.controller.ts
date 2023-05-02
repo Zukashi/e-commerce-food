@@ -39,7 +39,8 @@ export class CartController {
   async deleteItemFromCart(
     @Req() req: ReqWithCustomer,
     @Param('productId') productId: string,
+    @Res({ passthrough: true }) res: Response,
   ) {
-    await this.cartService.deleteItemFromCart(req, productId);
+    await this.cartService.deleteItemFromCart(req, productId, res);
   }
 }

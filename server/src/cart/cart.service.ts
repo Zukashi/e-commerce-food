@@ -141,7 +141,10 @@ export class CartService {
       // If the user is not logged in, retrieve the cart items from the cookie
       let cartItemsAsProductIds: { productId: string; quantity: number }[] =
         req.cookies['cart'] || [];
-      if (Boolean(cartItemsAsProductIds.length)) {
+      console.log(cartItemsAsProductIds);
+      if (!Boolean(cartItemsAsProductIds.length)) {
+        console.log(9999);
+        cartItemsAsProductIds = [{ productId, quantity: addItemDto.quantity }];
         res.cookie(
           'cart',
           [
@@ -157,15 +160,19 @@ export class CartService {
           },
         );
       } else {
+        console.log(cartItemsAsProductIds, 555);
         if (
           cartItemsAsProductIds.some((cartItem) => {
             return cartItem.productId === productId;
           })
         ) {
+          console.log(cartItemsAsProductIds);
+          new Set(cartItemsAsProductIds.map((product) => product.productId));
           /// if productId already exists in cartItems then delete and replace
           cartItemsAsProductIds = cartItemsAsProductIds.filter((cartItem) => {
             return cartItem.productId !== productId;
           });
+          console.log(cartItemsAsProductIds, 'fitlered and added', productId);
           cartItemsAsProductIds.push({
             quantity: addItemDto.quantity,
             productId,
@@ -198,6 +205,7 @@ export class CartService {
           id: cartItem.productId,
         })),
       });
+      console.log(cartItems);
       const productsWithQuantities = cartItems.map((product) => {
         if (product.id === productId) {
           return {
@@ -208,12 +216,16 @@ export class CartService {
           return product;
         }
       });
-      console.log(cartItems);
+      console.log(productsWithQuantities);
       return productsWithQuantities;
     }
   }
 
-  async deleteItemFromCart(req: ReqWithCustomer, productId: string) {
+  async deleteItemFromCart(
+    req: ReqWithCustomer,
+    productId: string,
+    response: Response,
+  ) {
     const product = await this.productRepository.findOneBy({
       id: productId,
     });
@@ -235,6 +247,17 @@ export class CartService {
         .from(CartItem)
         .where('product.id =:productId', { productId })
         .execute();
+    } else {
+      const cartItemsAsProductIds: { productId: string; quantity: number }[] =
+        req.cookies['cart'] || [];
+      const filteredProducts = cartItemsAsProductIds.filter((cartItem) => {
+        return cartItem.productId !== productId;
+      });
+      response.cookie('cart', filteredProducts, {
+        expires: new Date(Date.now() + 60 * 60 * 1000 * 24 * 7),
+        secure: true,
+        httpOnly: true,
+      });
     }
   }
 }
