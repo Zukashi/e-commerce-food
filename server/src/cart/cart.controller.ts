@@ -26,7 +26,11 @@ export class CartController {
     @Body() addItemDto: AddItemDto,
     @Param('productId') productId: string,
   ) {
-    return this.cartService.addItemToCart(req, addItemDto, productId);
+    return this.cartService.addItemToCartOrUpdateQuantity(
+      req,
+      addItemDto,
+      productId,
+    );
   }
   @Delete('/product/:productId')
   async deleteItemFromCart(

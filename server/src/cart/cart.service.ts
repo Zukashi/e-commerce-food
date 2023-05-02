@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from '../user/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -43,7 +47,7 @@ export class CartService {
     }
   }
 
-  async addItemToCart(
+  async addItemToCartOrUpdateQuantity(
     req: ReqWithCustomer,
     addItemDto: AddItemDto,
     productId: string,
@@ -54,6 +58,9 @@ export class CartService {
 
     if (!product) {
       throw new Error('Product not found');
+    }
+    if (addItemDto.quantity > product?.quantity) {
+      throw new ConflictException('Too high quantity');
     }
     if (req.user) {
       // If the user is logged in, retrieve the cart items from the database
@@ -119,8 +126,7 @@ export class CartService {
         .createQueryBuilder('cart')
         .leftJoinAndSelect('cart.cartItems', 'cartItem')
         .leftJoinAndSelect('cartItem.product', 'product')
-        .where('cart.id = :cartId', { cartId: cart.id })
-        .getOne();
+        .where('cart.id = :cartId', { cartId: cart.id });
       return cartUpdated;
     } else {
       // If the user is not logged in, retrieve the cart items from the cookie
@@ -147,9 +153,11 @@ export class CartService {
       if (!cart) throw new NotFoundException();
       await this.cartItemRepository
         .createQueryBuilder('cartItem')
+        .leftJoinAndSelect('cartItem.product', 'product')
         .delete()
         .from(CartItem)
-        .where('cart =:cart', { cart });
+        .where('product.id =:productId', { productId })
+        .execute();
     }
   }
 }
