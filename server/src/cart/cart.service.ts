@@ -121,12 +121,18 @@ export class CartService {
           if (!cartItemNew) throw new NotFoundException();
         }
       }
-      console.log(cart.cartItems[0]);
-      const cartUpdated = await this.cartRepository
-        .createQueryBuilder('cart')
-        .leftJoinAndSelect('cart.cartItems', 'cartItem')
-        .leftJoinAndSelect('cartItem.product', 'product')
-        .where('cart.id = :cartId', { cartId: cart.id });
+
+      const cartUpdated = await this.cartRepository.findOne({
+        where: {
+          id: cart.id,
+        },
+        relations: {
+          cartItems: {
+            product: true,
+          },
+          user: true,
+        },
+      });
       return cartUpdated;
     } else {
       // If the user is not logged in, retrieve the cart items from the cookie
