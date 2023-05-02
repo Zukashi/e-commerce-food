@@ -6,11 +6,12 @@ import {
   Param,
   Post,
   Req,
+  Res,
 } from '@nestjs/common';
 import { ReqWithCustomer } from '../auth/types/Req/User';
 import { CartService } from './cart.service';
 import { AddItemDto } from './dto/AddItem.dto';
-
+import { Response } from 'express';
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
@@ -23,6 +24,7 @@ export class CartController {
   @Post('/product/:productId')
   async addItemToCart(
     @Req() req: ReqWithCustomer,
+    @Res({ passthrough: true }) res: Response,
     @Body() addItemDto: AddItemDto,
     @Param('productId') productId: string,
   ) {
@@ -30,6 +32,7 @@ export class CartController {
       req,
       addItemDto,
       productId,
+      res,
     );
   }
   @Delete('/product/:productId')
