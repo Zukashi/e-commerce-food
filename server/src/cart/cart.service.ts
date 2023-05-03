@@ -260,4 +260,30 @@ export class CartService {
       });
     }
   }
+
+  async removeElementFromCart(
+    req: ReqWithCustomer,
+    productId: string,
+    res: Response,
+  ) {
+    if (req.user) {
+      await this.cartRepository
+        .createQueryBuilder('cart')
+        .delete()
+        .from(CartItem)
+        .where('product.id =:productId', { productId })
+        .execute();
+    } else {
+      const cart: { productId: string; quantity: number }[] =
+        req.cookies['cart'];
+      const filtered = cart.filter(
+        (product) => product.productId !== productId,
+      );
+      res.cookie('cart', [...filtered], {
+        expires: new Date(Date.now() + 60 * 60 * 1000 * 24 * 7),
+        secure: true,
+        httpOnly: true,
+      });
+    }
+  }
 }

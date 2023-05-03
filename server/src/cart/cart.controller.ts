@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Req,
   Res,
@@ -42,5 +43,14 @@ export class CartController {
     @Res({ passthrough: true }) res: Response,
   ) {
     await this.cartService.deleteItemFromCart(req, productId, res);
+  }
+
+  @Patch('/product/:productId')
+  async removeElementFromCart(
+    @Req() req: ReqWithCustomer,
+    @Param('productId') productId: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    await this.cartService.removeElementFromCart(req, productId, res);
   }
 }
