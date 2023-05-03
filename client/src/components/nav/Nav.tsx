@@ -14,7 +14,9 @@ import {useAxiosPrivate} from "../../hooks/use-axios-private";
 import {AxiosInstance} from "axios";
 
 const fetchCart = async (axios:AxiosInstance) => {
-      const data = axios.get('cart')
+      const res = await axios.get('cart');
+      console.log(res.data)
+      return res.data
 }
 
 export const Nav = () => {
