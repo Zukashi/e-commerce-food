@@ -38,8 +38,6 @@ export class CartService {
         where: { user: req.user },
         relations: ['cartItems'],
       });
-      console.log(cartItems);
-      console.log(888);
       return cartItems;
     } else {
       // If the user is not logged in, retrieve the cart items from the cookie
