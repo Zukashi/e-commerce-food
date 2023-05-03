@@ -141,10 +141,9 @@ export class CartService {
       // If the user is not logged in, retrieve the cart items from the cookie
       let cartItemsAsProductIds: { productId: string; quantity: number }[] =
         req.cookies['cart'] || [];
-      console.log(cartItemsAsProductIds);
+      console.log(cartItemsAsProductIds.length);
       if (!Boolean(cartItemsAsProductIds.length)) {
         console.log(9999);
-        cartItemsAsProductIds = [{ productId, quantity: addItemDto.quantity }];
         res.cookie(
           'cart',
           [
@@ -160,19 +159,17 @@ export class CartService {
           },
         );
       } else {
-        console.log(cartItemsAsProductIds, 555);
         if (
           cartItemsAsProductIds.some((cartItem) => {
             return cartItem.productId === productId;
           })
         ) {
           console.log(cartItemsAsProductIds);
-          new Set(cartItemsAsProductIds.map((product) => product.productId));
           /// if productId already exists in cartItems then delete and replace
           cartItemsAsProductIds = cartItemsAsProductIds.filter((cartItem) => {
             return cartItem.productId !== productId;
           });
-          console.log(cartItemsAsProductIds, 'fitlered and added', productId);
+          console.log(cartItemsAsProductIds);
           cartItemsAsProductIds.push({
             quantity: addItemDto.quantity,
             productId,
@@ -183,21 +180,11 @@ export class CartService {
             productId,
           });
         }
-        res.cookie(
-          'cart',
-          [
-            ...cartItemsAsProductIds,
-            {
-              productId,
-              quantity: addItemDto.quantity,
-            },
-          ],
-          {
-            expires: new Date(Date.now() + 60 * 60 * 1000 * 24 * 7),
-            secure: true,
-            httpOnly: true,
-          },
-        );
+        res.cookie('cart', [...cartItemsAsProductIds], {
+          expires: new Date(Date.now() + 60 * 60 * 1000 * 24 * 7),
+          secure: true,
+          httpOnly: true,
+        });
       }
 
       const cartItems = await this.productRepository.find({
@@ -206,15 +193,11 @@ export class CartService {
         })),
       });
       console.log(cartItems);
-      const productsWithQuantities = cartItems.map((product) => {
-        if (product.id === productId) {
-          return {
-            ...product,
-            quantity: addItemDto.quantity,
-          };
-        } else {
-          return product;
-        }
+      const productsWithQuantities = cartItems.map((product, i) => {
+        return {
+          ...product,
+          quantity: cartItemsAsProductIds[i].quantity,
+        };
       });
       console.log(productsWithQuantities);
       return productsWithQuantities;
