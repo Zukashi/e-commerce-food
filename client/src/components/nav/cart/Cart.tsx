@@ -13,7 +13,9 @@ export const Cart = ({data}:{data:Product[]}) => {
             </ul>
             <div className='total-cart'>
                 <p className='total'>Total</p>
-                <p className='price'>$price</p>
+                <p className='price'>${data?.reduce((prev, value, index) => {
+                    return prev + value.price
+                }, 0)}</p>
             </div>
             <div className='cart-buttons'>
                 <button className='inversed-primary-button'>View Cart</button>

@@ -36,7 +36,7 @@ export class CartService {
       // If the user is logged in, retrieve the cart items from the database
       const cartItems = await this.cartRepository.find({
         where: { user: req.user },
-        relations: ['cartItems'],
+        relations: ['cartItems', 'cartItems.product', 'product.productImages'],
       });
       return cartItems;
     } else {
@@ -49,6 +49,7 @@ export class CartService {
         where: cartItems.map((cartItem) => ({
           id: cartItem.productId,
         })),
+        relations: ['productImages'],
       });
       console.log(cartItems);
       const productsWithQuantities = parsedCartItems.map((product, i) => {
