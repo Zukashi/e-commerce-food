@@ -12,6 +12,7 @@ import {setDrawer} from "../../redux/nav";
 import {useQuery} from "react-query";
 import {useAxiosPrivate} from "../../hooks/use-axios-private";
 import {AxiosInstance} from "axios";
+import { Cart } from './cart/Cart';
 
 const fetchCart = async (axios:AxiosInstance) => {
       const res = await axios.get('cart');
@@ -39,30 +40,7 @@ export const Nav = () => {
                        <FavoriteBorderOutlinedIcon fontSize={'large'}/>
                        <p className='nav-item-text'>Wishlist</p>
                    </div>
-               <div className='fade-container '>
-                   <div className='account-dropdown dropdown-animate cart'>
-                       <ul className='account-list cart-list'>
-                           <div className='one-product-in-cart'>
-                               <img src="" width={'60px'} height={'60px'} alt="test"/>
-                               <div className='product-info-container'>
-                                   <div className='product-title-container'><p className='title'>Peanut Butter </p><ClearIcon fontSize={'small'}/></div>
-                                   <div className='product-amount-price-container'><p>1×</p> <p className='price'>$price</p></div>
-                               </div>
-                           </div>
-
-                       </ul>
-                       <div className='total-cart'>
-                           <p className='total'>Total</p>
-                           <p className='price'>$price</p>
-                       </div>
-                       <div className='cart-buttons'>
-                           <button className='inversed-primary-button'>View Cart</button>
-                           <button className='primary-button' >Checkout</button>
-                       </div>
-                   </div>
-                   <ShoppingCartOutlinedIcon className={'trigger-fade'} fontSize={'large'}/>
-                   <p className="nav-item-text">Cart</p>
-               </div>
+               <Cart data={data}></Cart>
                 <div className='fade-container'>
                     <div className='account-dropdown dropdown-animate'>
                         <ul className='account-list'>
