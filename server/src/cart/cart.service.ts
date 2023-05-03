@@ -32,7 +32,7 @@ export class CartService {
   ) {}
   async getItems(req: ReqWithCustomer) {
     console.log(req.user);
-    if (req.user) {
+    if (req.user && req.cookies['cart'].length < 1) {
       // If the user is logged in, retrieve the cart items from the database
       const cartItems = await this.cartRepository.find({
         where: { user: req.user },
@@ -43,9 +43,24 @@ export class CartService {
       return cartItems;
     } else {
       // If the user is not logged in, retrieve the cart items from the cookie
-      const cartItems = req.cookies['cart'] || [];
+
+      const cartItems: { productId: string; quantity: number }[] =
+        req.cookies['cart'] || [];
+      if (cartItems.length === 0) return [];
+      const parsedCartItems = await this.productRepository.find({
+        where: cartItems.map((cartItem) => ({
+          id: cartItem.productId,
+        })),
+      });
       console.log(cartItems);
-      return cartItems;
+      const productsWithQuantities = parsedCartItems.map((product, i) => {
+        return {
+          ...product,
+          quantity: cartItems[i].quantity,
+        };
+      });
+
+      return productsWithQuantities;
     }
   }
 
@@ -65,7 +80,7 @@ export class CartService {
     if (addItemDto.quantity > product?.quantity) {
       throw new ConflictException('Too high quantity');
     }
-    if (req.user) {
+    if (req.user && req.cookies['cart'].length < 1) {
       // If the user is logged in, retrieve the cart items from the database
       console.log(999);
       let cart = await this.cartRepository
@@ -81,7 +96,6 @@ export class CartService {
           user: req.user,
           cartItems: [],
         });
-        console.log(cart);
         await this.cartRepository.save(cart);
         const cartItem = await this.cartItemRepository.create({
           cart,
@@ -144,6 +158,10 @@ export class CartService {
       console.log(cartItemsAsProductIds.length);
       if (!Boolean(cartItemsAsProductIds.length)) {
         console.log(9999);
+        cartItemsAsProductIds.push({
+          productId,
+          quantity: addItemDto.quantity,
+        });
         res.cookie(
           'cart',
           [
@@ -196,7 +214,7 @@ export class CartService {
       const productsWithQuantities = cartItems.map((product, i) => {
         return {
           ...product,
-          quantity: cartItemsAsProductIds[i].quantity,
+          quantity: cartItemsAsProductIds[i]?.quantity,
         };
       });
       console.log(productsWithQuantities);
