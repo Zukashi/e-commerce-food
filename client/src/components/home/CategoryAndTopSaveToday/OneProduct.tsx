@@ -2,6 +2,7 @@ import {Rating, Skeleton} from '@mui/material';
 import { motion } from 'framer-motion';
 import React, {useState} from 'react';
 import {Product} from "../../../types/product";
+import {useAxiosPrivate} from "../../../hooks/use-axios-private";
 
 export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLSearchParams}) => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -9,6 +10,10 @@ export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLS
     const handleImageLoad = () => {
         setIsLoaded(true);
     };
+    const axiosPrivate = useAxiosPrivate()
+    const onSubmit = async () => {
+        await axiosPrivate.post(`cart/product/${product.id}`, {quantity:1})
+    }
     return (<>
 
           <motion.div key={framerKey.get('filter')}  style={{opacity: isLoaded ? 1 :0  }} initial={{opacity:0, y:40 }} animate={{opacity:1, y:0}}   transition={{duration:0.4}} className='product-container'>
@@ -28,7 +33,9 @@ export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLS
                   <p className='product-vendor'>By {product.vendor.username}</p>
                   <div className='product-price-add-container'>
                       <p>${product.price}</p>
-                      <motion.button className='product-button' whileHover={{ transition: { duration: 0.2 },y:-3, backgroundColor:'#3bb77e', color:"white", opacity:1}}>Add</motion.button>
+                      <motion.button onClick={() => {
+                          onSubmit()
+                      }} className='product-button' whileHover={{ transition: { duration: 0.2 },y:-3, backgroundColor:'#3bb77e', opacity:1}}>Add</motion.button>
                   </div>
               </div>
           </motion.div>
