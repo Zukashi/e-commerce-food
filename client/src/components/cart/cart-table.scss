@@ -1,6 +1,25 @@
 .table-container{
   width: 90%;
-  background: #f8f8f8;
+
   border-radius:5%;
   margin:2rem auto 0;
+  position: relative;
+
+  .product-table{
+    background: #f8f8f8;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    overflow-x:auto;
+  }
+}
+.product-row{
+  padding: 0 1.2rem;
+  border-bottom:1px solid #ddd ;
+  display:block;
+}
+.table-body{
+  display:flex;
+  flex-direction:column;
 }
