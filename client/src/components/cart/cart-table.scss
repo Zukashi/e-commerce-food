@@ -1,3 +1,6 @@
+@import '../../scss/vars';
+
+
 .table-container{
   width: 90%;
 
@@ -17,9 +20,30 @@
 .product-row{
   padding: 0 1.2rem;
   border-bottom:1px solid #ddd ;
-  display:block;
+
 }
-.table-body{
+
+
+
+
+  img{
+    aspect-ratio: 765 / 850;
+    max-height: 120px;
+    width:100px;
+  }
+
+h4{
+  font-weight: bolder;
+  font-size: 20px;
+
+}
+.product-price{
+  color:$base-color;
+  font-size: 1.1rem;
+}
+
+
+td.product-detail{
   display:flex;
-  flex-direction:column;
+
 }
