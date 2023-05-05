@@ -26,11 +26,11 @@
 
 
 
+.img-product{
   img{
-    aspect-ratio: 765 / 850;
-    max-height: 120px;
-    width:100px;
+    width: 100px;
   }
+}
 
 h4{
   font-weight: bolder;
@@ -42,8 +42,3 @@ h4{
   font-size: 1.1rem;
 }
 
-
-td.product-detail{
-  display:flex;
-
-}

@@ -4,14 +4,17 @@ import {Product} from "../../types/product";
 export const OneProductInShopCart = ({product}:{product:Product}) => {
     return (<>
        <div className='product-row-container'>
-           <td className='product-detail'><div className='img-productName'>
-               {<img src={product.productImages[0].imageUrl} alt=""/>}<div className='product-detail'>
+           <td className={'img-product'}>
+               {<img src={product.productImages[0].imageUrl} alt="product image"/>}
+           </td>
+           <td className='product-detail'>
+
                <ul>
                    <li>{product.productName}</li>
                    <li>{product.vendor.username}</li>
 
-               </ul></div>
-           </div></td>
+               </ul>
+           </td>
            <td className='price'><h4>Price</h4><h5 className='product-price'>${product.price}</h5></td>
            <td className='quantity'><h4>Quantity</h4> <div className='quantity-price'><button>-</button>
                <input type="text" value={product.quantity}/><button>+</button></div></td>
