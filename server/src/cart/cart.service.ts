@@ -56,7 +56,6 @@ export class CartService {
         })),
         relations: ['productImages', 'vendor'],
       });
-      console.log(cartItems);
       const productsWithQuantities = parsedCartItems.map((product, i) => {
         return {
           ...product,

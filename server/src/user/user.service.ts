@@ -33,7 +33,6 @@ export class UserService {
 
   async createUser(signUpDto: SignUpDto) {
     const user = this.userRepository.create(signUpDto);
-    console.log(user);
     await this.userRepository.save(user);
     return user;
   }
