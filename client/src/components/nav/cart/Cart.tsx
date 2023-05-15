@@ -1,5 +1,4 @@
 import React from 'react';
-import ClearIcon from "@mui/icons-material/Clear";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import {Product} from "../../../types/product";
 import {OneItemInCart} from "./OneItemInCart";

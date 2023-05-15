@@ -78,6 +78,9 @@
 }
 .account-list.cart-list{
   padding-bottom:15px;
+  display:flex;
+  flex-direction: column;
+  gap: .8rem;
   border-bottom:1px solid #ccc;
 }
 .total-cart{
@@ -120,17 +123,17 @@
 
 .account-dropdown.cart:has( fade-container:hover){
   opacity:1;
-  bottom:-230px;
+  bottom:-300px;
   visibility: visible;
 }
 .account-dropdown.cart:hover{
   opacity:1;
-  bottom:-230px;
+  bottom:-300px;
   visibility: visible;
 }
 
 .account-dropdown.cart{
-  bottom:-230px;
+  bottom:-300px;
   width:290px;
 }
 //user
@@ -149,7 +152,7 @@
 }
 .fade-container:hover .account-dropdown.cart{
   opacity:1;
-  bottom:-210px;
+  bottom:-275px;
   visibility: visible;
 }
 
