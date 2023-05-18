@@ -29,7 +29,7 @@ export const Nav = () => {
     return (
         <nav className='navbar'>
         <div className='container'>
-            <MenuIcon className='icon ' onClick={() => dispatch(setDrawer(true))} fontSize={'large'}/>
+            <MenuIcon className='icon' onClick={() => dispatch(setDrawer(true))} fontSize={'large'}/>
             <div className="input-container"></div>
             <div className='right-side-icons-container'>
                 <div className='fade-container'>
