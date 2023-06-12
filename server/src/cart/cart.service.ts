@@ -32,7 +32,7 @@ export class CartService {
   ) {}
   async getItems(req: ReqWithCustomer) {
     console.log(req.user);
-    if (req.user && req.cookies['cart'].length < 1) {
+    if (req.user && req.cookies['cart']?.length < 1) {
       // If the user is logged in, retrieve the cart items from the database
       const cartItems = await this.cartRepository.find({
         where: { user: req.user },
@@ -83,9 +83,9 @@ export class CartService {
     if (addItemDto.quantity > product?.quantity) {
       throw new ConflictException('Too high quantity');
     }
-    if (req.user && req.cookies['cart'].length < 1) {
+    console.log(req.cookies);
+    if (req.user && req.cookies['cart']?.length < 1) {
       // If the user is logged in, retrieve the cart items from the database
-      console.log(999);
       let cart = await this.cartRepository
         .createQueryBuilder('cart')
         .leftJoinAndSelect('cart.user', 'user')

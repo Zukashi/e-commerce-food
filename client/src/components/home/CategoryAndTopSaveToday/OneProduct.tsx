@@ -38,16 +38,11 @@ export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLS
                   <div className='product-price-add-container'>
                       <p>${product.price}</p>
                      <div>
-                         <select value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} id="">
-                             <option value="1">1</option>
-                             <option value="2">2</option>
-                             <option value="3">3</option>
-                             <option value="4">4</option>
-                             <option value="5">5</option>
-                         </select>
+
                          <motion.button onClick={() => {
                              onSubmit()
-                         }} className='product-button' whileHover={{ transition: { duration: 0.2 },y:-3, backgroundColor:'#3bb77e', opacity:1}}>Add</motion.button>
+                         }} className='product-button' whileHover={{ transition: { duration: 0.2 },y:-3, backgroundColor:'#3bb77e', opacity:1}}>
+                             <i className="fa-solid fa-cart-shopping"></i> Add</motion.button>
                      </div>
                   </div>
               </div>

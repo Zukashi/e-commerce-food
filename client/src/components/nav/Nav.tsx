@@ -7,12 +7,13 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import CompareArrowsOutlinedIcon from '@mui/icons-material/CompareArrowsOutlined';
 import ClearIcon from '@mui/icons-material/Clear';
 import {DrawerComponent} from "./DrawerComponent";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setDrawer} from "../../redux/nav";
 import {useQuery} from "react-query";
 import {useAxiosPrivate} from "../../hooks/use-axios-private";
 import {AxiosInstance} from "axios";
 import { Cart } from './cart/Cart';
+import {RootState} from "../../redux/store/store";
 
 const fetchCart = async (axios:AxiosInstance) => {
       const res = await axios.get('cart');
@@ -21,9 +22,12 @@ const fetchCart = async (axios:AxiosInstance) => {
 }
 
 export const Nav = () => {
+    const user = useSelector((root:RootState) => root.user)
+    console.log(user.user)
     const dispatch = useDispatch();
     const [accountHover, setAccountHover] = useState(false);
     const axiosPrivate = useAxiosPrivate();
+
     const {data} = useQuery({queryKey:['cart'], queryFn: () => fetchCart(axiosPrivate)});
     console.log(data)
     return (
@@ -53,7 +57,7 @@ export const Nav = () => {
                         </ul>
                     </div>
                     <AccountCircleIcon fontSize={'large'} className={'trigger-fade'} />
-                    <p className='nav-item-text'>Account</p>
+                    <p className='nav-item-text'>{user.user.username ? user.user.username : 'Account'}</p>
                 </div>
             </div>
         </div>

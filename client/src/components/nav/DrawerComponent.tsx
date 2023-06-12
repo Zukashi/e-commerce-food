@@ -40,6 +40,7 @@ export const DrawerComponent =() => {
                 </form>
                <ul className='links'>
                    {arrOfNavLinks.map((navLink,i) => <motion.li
+                       key={navLink}
                      initial={{ opacity: 0, x: -300 }}
                      animate={{ opacity: 1, x:0 }}
                      exit={{ opacity: 0, x: -300 }}

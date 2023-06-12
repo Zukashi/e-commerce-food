@@ -22,7 +22,7 @@ export const Category = () => {
 
         <h2 className='popular-header'>Popular Products</h2>
         <ul className='category-list'>
-            {categories.map((category:string[], index) => <motion.li initial={{y:0}} animate={currentIndex === index ? {y:-5} : {y:0}} className={`${currentIndex === index && 'active'}`} onClick={() => onClick(category[1], index)}>{category[0]}</motion.li>)}
+            {categories.map((category:string[], index) => <motion.li key={index} initial={{y:0}} animate={currentIndex === index ? {y:-5} : {y:0}} className={`${currentIndex === index && 'active'}`} onClick={() => onClick(category[1], index)}>{category[0]}</motion.li>)}
         </ul>
 
     </section>)
