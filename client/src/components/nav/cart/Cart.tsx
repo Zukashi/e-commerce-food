@@ -2,6 +2,7 @@ import React from 'react';
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import {Product} from "../../../types/product";
 import {OneItemInCart} from "./OneItemInCart";
+import {Link} from "react-router-dom";
 
 export const Cart = ({data}:{data:Product[]}) => {
     return (<><div className='fade-container '>
@@ -17,7 +18,7 @@ export const Cart = ({data}:{data:Product[]}) => {
                 }, 0)}</p>
             </div>
             <div className='cart-buttons'>
-                <button className='inversed-primary-button'>View Cart</button>
+                <Link to={'/cart'}><button className='inversed-primary-button'>View Cart</button></Link>
                 <button className='primary-button' >Checkout</button>
             </div>
         </div>
