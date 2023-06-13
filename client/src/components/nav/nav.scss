@@ -125,18 +125,19 @@
 
 .account-dropdown.cart:has( fade-container:hover){
   opacity:1;
-  bottom:-300px;
+  top:300px;
   visibility: visible;
 }
 .account-dropdown.cart:hover{
   opacity:1;
-  bottom:-300px;
+  top:300px;
   visibility: visible;
 }
 
 .account-dropdown.cart{
-  bottom:-300px;
+  top:70px;
   width:290px;
+  bottom: unset;
 }
 //user
 .fade-container{
@@ -154,7 +155,8 @@
 }
 .fade-container:hover .account-dropdown.cart{
   opacity:1;
-  bottom:-275px;
+  top:50px;
+  bottom: unset;
   visibility: visible;
 }
 
