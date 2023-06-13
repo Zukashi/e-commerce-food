@@ -19,7 +19,7 @@ export const ShopCart = () => {
         return <Loader/>
     }
     return(<><section style={{backgroundColor:'#fff'}}>
-        <div className='table-container'><div className='product-table'> <table> <tbody className='table-body'>{products?.map((product) => <tr key={product.id} className='product-row'><OneProductInShopCart product={product}key={product.id}/></tr>)}</tbody></table></div></div>
+        <div className='table-container'><div className='product-table'> {products?.map((product) => <div key={product.id} className='product-row'><OneProductInShopCart product={product}key={product.id}/></div>)}</div></div>
 
     </section>
     </>)
