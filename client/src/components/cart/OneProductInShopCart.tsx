@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {Product} from "../../types/product";
 
 export const OneProductInShopCart = ({product}:{product:Product}) => {
-    console.log(product.productImages[0].imageUrl)
     const [quantity, setQuantity] = useState<number>(product.quantity);
     const changeQuantity  = (num:number) => {
         if(!(num < 0))    setQuantity(num)
