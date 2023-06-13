@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 import {Product} from "../../../types/product";
 import {useAxiosPrivate} from "../../../hooks/use-axios-private";
 import {toast} from "react-toastify";
+import {useMutation, useQueryClient} from "react-query";
 
 export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLSearchParams}) => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -11,13 +12,20 @@ export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLS
     const handleImageLoad = () => {
         setIsLoaded(true);
     };
+
     const axiosPrivate = useAxiosPrivate()
-    const onSubmit = async () => {
-        await axiosPrivate.post(`cart/product/${product.id}`, {quantity});
-        toast.success('Product ' + product.productName + ' added to cart', {
-            theme:"dark"
-        })
-    }
+    const queryClient = useQueryClient()
+    const addProduct = useMutation(() => {
+        return axiosPrivate.post(`cart/product/${product.id}` , {quantity});
+    },{
+        onSuccess:async () => {
+            await queryClient.invalidateQueries(['cart'])
+            toast.success('Product ' + product.productName + ' added to cart', {
+                theme:"dark"
+            })
+        }
+    });
+
     return (<>
 
           <motion.div key={framerKey.get('filter')}  style={{opacity: isLoaded ? 1 :0  }} initial={{opacity:0, y:40 }} animate={{opacity:1, y:0}}   transition={{duration:0.4}} className='product-container'>
@@ -40,7 +48,7 @@ export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLS
                      <div>
 
                          <motion.button onClick={() => {
-                             onSubmit()
+                             addProduct.mutate()
                          }} className='product-button' whileHover={{ transition: { duration: 0.2 },y:-3, backgroundColor:'#3bb77e', opacity:1}}>
                              <i className="fa-solid fa-cart-shopping"></i> Add</motion.button>
                      </div>
