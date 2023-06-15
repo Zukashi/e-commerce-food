@@ -15,6 +15,11 @@ const fetchCart = async (axios:AxiosInstance):Promise<Product[]> => {
 export const ShopCart = () => {
     const axiosPrivate = useAxiosPrivate();
     const {data:products, isLoading} = useQuery('cart', () => fetchCart(axiosPrivate))
+    const redirectToCheckout =  async () => {
+        await axiosPrivate.post('stripe/checkout/session', {
+            items:products
+        })
+    }
     if(isLoading){
         return <Loader/>
     }
@@ -30,7 +35,7 @@ export const ShopCart = () => {
                     <b>Total (USD)</b>
                     <b>${products?.reduce((acc, currentValue) => acc + currentValue.price, 0)}</b>
                 </div>
-                <button className='submit-button'>Process To Checkout</button>
+                <button onClick={redirectToCheckout} className='submit-button'>Process To Checkout</button>
             </div>
         </section>
     </>)
