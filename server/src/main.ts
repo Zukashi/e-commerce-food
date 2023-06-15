@@ -3,9 +3,11 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common'; // see https://github
 import * as cookieParser from 'cookie-parser';
 // somewhere in your initialization file
-
+import Stripe from 'stripe';
 import * as dotenv from 'dotenv'; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-
+export const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY ?? '', {
+  apiVersion: '2022-11-15',
+});
 dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
