@@ -23,6 +23,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { EmailSchedulingModule } from './email-scheduling/email-scheduling.module';
 import { CartModule } from './cart/cart.module';
 import { Cart } from './cart/entities/cart.entity';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { Cart } from './cart/entities/cart.entity';
     EmailModule,
     EmailSchedulingModule,
     CartModule,
+    StripeModule,
   ],
   providers: [
     LocalStrategy,
