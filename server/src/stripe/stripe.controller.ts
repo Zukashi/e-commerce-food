@@ -6,7 +6,7 @@ import { StripeService } from './stripe.service';
 export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
   @Post('checkout/session')
-  async redirectToCheckoutStripe(@Body() checkoutDto: CheckoutDto) {
+  async redirectToCheckoutStripe(@Body() checkoutDto: any) {
     return this.stripeService.createSession(checkoutDto);
   }
 }

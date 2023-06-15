@@ -16,9 +16,11 @@ export const ShopCart = () => {
     const axiosPrivate = useAxiosPrivate();
     const {data:products, isLoading} = useQuery('cart', () => fetchCart(axiosPrivate))
     const redirectToCheckout =  async () => {
-        await axiosPrivate.post('stripe/checkout/session', {
+        const res = await axiosPrivate.post('stripe/checkout/session', {
             items:products
-        })
+        });
+        window.location = res.data
+
     }
     if(isLoading){
         return <Loader/>

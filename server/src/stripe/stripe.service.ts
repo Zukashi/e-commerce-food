@@ -10,28 +10,25 @@ export class StripeService {
     try {
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card', 'paypal'],
-        line_items: [
-          checkoutDto.items.map(
-            Promise.all(
-              await (async (item) => {
-                const storeItem = await this.productService.findOne(item.id);
-                return {
-                  price_data: {
-                    currency: 'usd',
-                    product_data: {
-                      name: storeItem.productName,
-                      price: storeItem.price,
-                    },
-                    unit_amount: storeItem.price,
-                  },
-                };
-              }),
-            ),
-          ),
-        ],
+        line_items: await Promise.all(
+          checkoutDto.items.map(async (item) => {
+            const storeItem = await this.productService.findOne(item.id);
+            return {
+              price_data: {
+                currency: 'usd',
+                product_data: {
+                  name: storeItem.productName,
+                },
+                unit_amount: storeItem.price * 100,
+              },
+              quantity: 1,
+            };
+          }),
+        ),
         mode: 'payment',
         success_url: `${process.env.SERVER_URL}/home`,
       });
+      console.log(session.url);
       return session.url;
     } catch (e) {
       console.log(e);
