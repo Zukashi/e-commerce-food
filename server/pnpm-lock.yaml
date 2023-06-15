@@ -118,6 +118,9 @@ dependencies:
   sharp:
     specifier: ^0.32.0
     version: 0.32.0
+  stripe:
+    specifier: ^12.9.0
+    version: 12.9.0
   typeorm:
     specifier: ^0.3.14
     version: 0.3.14(mysql2@3.2.0)(pg@8.10.0)(ts-node@10.7.0)
@@ -7067,7 +7070,6 @@ packages:
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
-    dev: true
 
   /querystring@0.2.0:
     resolution: {integrity: sha512-X/xY82scca2tau62i9mDyU9K+I+djTMUsvwf7xnUX5GLvVzgJybOJf4Y6o9Zx3oJK/LSXg5tTZBjwzqVPaPO2g==}
@@ -7620,6 +7622,14 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
     dev: true
+
+  /stripe@12.9.0:
+    resolution: {integrity: sha512-stYtrWetRYUsEbsUVyJaPG9Sppt0ds2szBqXsuDG6KZPPuUmCccbpceLrhoOBwNl1RziEfNB7oG9wg1n2eW+EQ==}
+    engines: {node: '>=12.*'}
+    dependencies:
+      '@types/node': 18.15.11
+      qs: 6.11.1
+    dev: false
 
   /strnum@1.0.5:
     resolution: {integrity: sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==}
