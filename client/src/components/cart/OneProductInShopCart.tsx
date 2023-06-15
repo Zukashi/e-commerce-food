@@ -4,7 +4,7 @@ import {Product} from "../../types/product";
 export const OneProductInShopCart = ({product}:{product:Product}) => {
     const [quantity, setQuantity] = useState<number>(product.quantity);
     const changeQuantity  = (num:number) => {
-        if(!(num < 0))    setQuantity(num)
+        if(!(num < 1))    setQuantity(num)
 
     }
     return (<>

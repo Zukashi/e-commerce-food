@@ -1,13 +1,18 @@
 @import '../../scss/vars';
 
-
+.product-table{
+  margin:30px auto 0;
+}
 .product-row-container{
   display:flex;
   overflow-x: scroll;
+  border-top:1px solid #ccc;
   align-items: center;
   background-color: #f8f8f8;
+  padding:1rem;
   width: 90%;
-  margin:30px auto 0;
+  margin:0 auto 0;
+
   gap: 1.3rem;
   height: 150px;
 }

@@ -7,7 +7,7 @@ import {Product} from "../../types/product";
 import {Loader} from "../loader/Loader";
 import { OneProductInShopCart } from './OneProductInShopCart';
 import './cart-table.scss';
-
+import './cart-total.scss';
 const fetchCart = async (axios:AxiosInstance):Promise<Product[]> => {
     const res = await axios.get('cart');
     return res.data
@@ -22,5 +22,16 @@ export const ShopCart = () => {
         <div className='table-container'><div className='product-table'> {products?.map((product) => <div key={product.id} className='product-row'><OneProductInShopCart product={product}key={product.id}/></div>)}</div></div>
 
     </section>
+
+        <section className={"cart-total"}>
+            <div className='cart-total-content'>
+                <h2>Cart Total</h2>
+                <div className='price-container'>
+                    <b>Total (USD)</b>
+                    <b>${products?.reduce((acc, currentValue) => acc + currentValue.price, 0)}</b>
+                </div>
+                <button className='submit-button'>Process To Checkout</button>
+            </div>
+        </section>
     </>)
 }
