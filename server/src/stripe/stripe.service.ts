@@ -21,15 +21,15 @@ export class StripeService {
                 },
                 unit_amount: storeItem.price * 100,
               },
-              quantity: 1,
+              quantity: storeItem.quantity,
             };
           }),
         ),
         mode: 'payment',
-        success_url: `${process.env.SERVER_URL}/home`,
+        success_url: `${process.env.SERVER_URL}/checkout/success`,
       });
       console.log(session.url);
-      return session.url;
+      return session;
     } catch (e) {
       console.log(e);
     }

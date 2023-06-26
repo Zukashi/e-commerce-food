@@ -19,7 +19,9 @@ export const ShopCart = () => {
         const res = await axiosPrivate.post('stripe/checkout/session', {
             items:products
         });
-        window.location = res.data
+        console.log(res.data.completed)
+        window.location = res.data.url
+
 
     }
     if(isLoading){
