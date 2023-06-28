@@ -1,12 +1,36 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Product} from "../../types/product";
-
+import {useMutation, useQueryClient} from "react-query";
+import {AxiosInstance} from "axios";
+import {useAxiosPrivate} from "../../hooks/use-axios-private";
+const changeQuantityOfCart = async (axios:AxiosInstance, quantity:number, productId:string) => {
+    const res = await axios.patch(`cart/product/${productId}/quantity`, {quantity})
+}
 export const OneProductInShopCart = ({product}:{product:Product}) => {
-    const [quantity, setQuantity] = useState<number>(product.quantity);
+    const [quantity, setQuantity] = useState<number>( product.quantity);
+    const queryClient = useQueryClient()
+    const axiosPrivate = useAxiosPrivate()
+    const { mutate, isLoading, error } = useMutation(async () => {
+        console.log(quantity)
+        const res = await axiosPrivate.patch(`cart/product/${product.id}/quantity`, {quantity})
+        return res.data
+    }, {
+        onSuccess: data => {
+
+        },
+        onError: (error) => {
+            // Error actions
+        },
+    });
     const changeQuantity  = (num:number) => {
-        if(!(num < 1))    setQuantity(num)
+
+        if(!(num < 1))  setQuantity( num)
 
     }
+    useEffect(() => {
+        console.log(quantity)
+        mutate();
+    }, [quantity]);
     return (<>
        <div className='product-row-container'>
 
@@ -25,7 +49,7 @@ export const OneProductInShopCart = ({product}:{product:Product}) => {
            <div className='price category'><h4>Price</h4><h5 className='product-price'>${product.price}</h5></div>
            <div className='quantity category'><h4>Quantity</h4> <div className='quantity-price'><button onClick={() => changeQuantity(quantity - 1)}><i className='fa fa-minus ms-0' ></i></button>
                <p  >{quantity}</p><button onClick={() => changeQuantity(quantity + 1)}><i className='fa fa-plus ms-0'></i></button></div></div>
-           <div className='total category'><h4>Total</h4><p>${product.quantity * product.price}</p></div>
+           <div className='total category'><h4>Total</h4><p>${quantity * product.price}</p></div>
            <div className='action category'><h4>Action</h4><p>Remove</p>
                </div>
        </div>
