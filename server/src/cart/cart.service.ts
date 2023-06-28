@@ -18,6 +18,7 @@ import { ReqWithCustomer } from '../auth/types/Req/User';
 import { AddItemDto } from './dto/AddItem.dto';
 import { Product } from '../product/entities/product.entity';
 import { CartItem } from './entities/cart-item.entity';
+import { ChangeItemDto } from './dto/ChangeItem.dto';
 @Injectable()
 export class CartService {
   constructor(
@@ -32,39 +33,26 @@ export class CartService {
   ) {}
   async getItems(req: ReqWithCustomer) {
     console.log(req.user);
-    if (req.user && req.cookies['cart']?.length < 0) {
-      // If the user is logged in, retrieve the cart items from the database
-      const cartItems = await this.cartRepository.find({
-        where: { user: req.user },
-        relations: [
-          'cartItems',
-          'cartItems.product',
-          'product.productImages',
-          'product.vendor',
-        ],
-      });
-      return cartItems;
-    } else {
-      // If the user is not logged in, retrieve the cart items from the cookie
 
-      const cartItems: { productId: string; quantity: number }[] =
-        req.cookies['cart'] || [];
-      if (cartItems.length === 0) return [];
-      const parsedCartItems = await this.productRepository.find({
-        where: cartItems.map((cartItem) => ({
-          id: cartItem.productId,
-        })),
-        relations: ['productImages', 'vendor'],
-      });
-      const productsWithQuantities = parsedCartItems.map((product, i) => {
-        return {
-          ...product,
-          quantity: cartItems[i].quantity,
-        };
-      });
+    const cartItems: { productId: string; quantity: number }[] =
+      req.cookies['cart'] || [];
+    if (cartItems.length === 0) return [];
+    console.log(cartItems);
+    const parsedCartItems = await this.productRepository.find({
+      where: cartItems.map((cartItem) => ({
+        id: cartItem.productId,
+      })),
+      relations: ['productImages', 'vendor'],
+    });
+    console.log(parsedCartItems);
+    const productsWithQuantities = parsedCartItems.map((product, i) => {
+      return {
+        ...product,
+        quantity: cartItems[i].quantity,
+      };
+    });
 
-      return productsWithQuantities;
-    }
+    return productsWithQuantities;
   }
 
   async addItemToCartOrUpdateQuantity(
@@ -198,5 +186,28 @@ export class CartService {
         httpOnly: true,
       });
     }
+  }
+
+  changeItemQuantityInCart(
+    req: ReqWithCustomer,
+    changeItemDto: ChangeItemDto,
+    productId: string,
+    res: Response,
+  ) {
+    const cartItemsAsProductIds: { productId: string; quantity: number }[] =
+      req.cookies['cart'] || [];
+    console.log(changeItemDto);
+    const filtered = cartItemsAsProductIds.map((cartItem) => {
+      if (cartItem.productId === productId) {
+        cartItem.quantity = changeItemDto.quantity;
+      }
+      return cartItem;
+    });
+    console.log(filtered, 555);
+    res.cookie('cart', [...filtered], {
+      expires: new Date(Date.now() + 60 * 60 * 1000 * 24 * 7),
+      secure: true,
+      httpOnly: true,
+    });
   }
 }
