@@ -7,6 +7,7 @@ import { ProductService } from '../product/product.service';
 export class StripeService {
   constructor(private readonly productService: ProductService) {}
   async createSession(checkoutDto: CheckoutDto) {
+    console.log(checkoutDto);
     try {
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card', 'paypal'],
@@ -19,9 +20,9 @@ export class StripeService {
                 product_data: {
                   name: storeItem.productName,
                 },
-                unit_amount: storeItem.price * 100,
+                unit_amount: item.price * 100,
               },
-              quantity: storeItem.quantity,
+              quantity: item.quantity,
             };
           }),
         ),

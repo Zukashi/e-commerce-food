@@ -24,6 +24,7 @@ export const ShopCart = () => {
 
 
     }
+    console.log(products)
     if(isLoading || isFetching){
         return <Loader/>
     }
@@ -37,9 +38,9 @@ export const ShopCart = () => {
                 <h2>Cart Total</h2>
                 <div className='price-container'>
                     <b>Total (USD)</b>
-                    <b>${products?.reduce((acc, currentValue) => acc + currentValue.price, 0)}</b>
+                    <b>${products?.reduce((acc, currentValue) => acc + currentValue.price * currentValue.quantity, 0)}</b>
                 </div>
-                <button onClick={redirectToCheckout} className='submit-button'>Process To Checkout</button>
+                <button onClick={redirectToCheckout} className='submit-button'>Proceed To Checkout</button>
             </div>
         </section>
     </>)
