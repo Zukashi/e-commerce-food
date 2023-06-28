@@ -1,4 +1,11 @@
 @import '../../scss/vars';
+@media(min-width: $lg){
+  .cart-table{
+  display:flex;
+    align-items: start;
+
+}}
+
 
 .product-table{
   margin:30px auto 0;
@@ -69,7 +76,18 @@
 }
 @media(min-width: $lg){
   .product-row-container{
-    padding:1rem 3rem;
+    padding:1rem 5rem;
+    gap: 2.5rem;
+    margin:unset;
+    width: 100%;
+  }
+  .product-table{
+    margin:unset
+  }
+}
+@media(min-width: $xl2){
+  .product-row-container{
+    gap: 4rem;
   }
 }
 @media(min-width:$md){

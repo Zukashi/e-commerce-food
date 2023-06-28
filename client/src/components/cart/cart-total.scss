@@ -1,3 +1,4 @@
+@import '../../scss/vars';
 .cart-total{
   margin:15px auto 0;
   width: 90%;
@@ -43,4 +44,10 @@
   color:black;
   font-weight: 400;
   width: 100%;
+}
+@media(min-width:$lg){
+  .cart-total{
+    width: 25%;
+    margin:unset
+  }
 }

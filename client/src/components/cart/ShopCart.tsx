@@ -8,6 +8,7 @@ import {Loader} from "../loader/Loader";
 import { OneProductInShopCart } from './OneProductInShopCart';
 import './cart-table.scss';
 import './cart-total.scss';
+import './cart-main.scss'
 import {Link, Navigate, useNavigate} from "react-router-dom";
 const fetchCart = async (axios:AxiosInstance):Promise<Product[]> => {
     const res = await axios.get('cart');
@@ -33,7 +34,7 @@ export const ShopCart = () => {
     if(products.length < 1){
         return <h2 className='cart-empty'>Cart is empty</h2>
     }
-    return(<><section style={{backgroundColor:'#fff'}}>
+    return(<main className='cart-main'><section className={"cart-table"} style={{backgroundColor:'#fff'}}>
         <div className='table-container'><div className='product-table'> {products?.map((product) => <div key={product.id} className='product-row'><OneProductInShopCart product={product}key={product.id}/></div>)}</div></div>
 
     </section>
@@ -51,5 +52,5 @@ export const ShopCart = () => {
                 </div>
             </div>
         </section>
-    </>)
+    </main>)
 }

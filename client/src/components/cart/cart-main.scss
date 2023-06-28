@@ -1,0 +1,10 @@
+@import '../../scss/vars';
+@media(min-width:$lg){
+  .cart-main{
+    display:flex;
+    justify-content: space-between;
+    margin: 20px auto;
+    width:85%;
+
+  }
+}
