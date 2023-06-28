@@ -14,6 +14,7 @@ import {useAxiosPrivate} from "../../hooks/use-axios-private";
 import {AxiosInstance} from "axios";
 import { Cart } from './cart/Cart';
 import {RootState} from "../../redux/store/store";
+import {Loader} from "../loader/Loader";
 
 const fetchCart = async (axios:AxiosInstance) => {
       const res = await axios.get('cart');
@@ -28,8 +29,11 @@ export const Nav = () => {
     const [accountHover, setAccountHover] = useState(false);
     const axiosPrivate = useAxiosPrivate();
 
-    const {data} = useQuery({queryKey:['cart'], queryFn: () => fetchCart(axiosPrivate)});
+    const {data, isLoading, isFetching} = useQuery({queryKey:['cart'], queryFn: () => fetchCart(axiosPrivate)});
     console.log(data)
+    if(isLoading || isFetching) {
+        return <Loader/>
+    }
     return (
         <nav className='navbar'>
         <div className='container'>

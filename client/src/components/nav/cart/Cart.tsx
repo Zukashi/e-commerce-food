@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import {Product} from "../../../types/product";
 import {OneItemInCart} from "./OneItemInCart";
@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 
 export const Cart = ({data}:{data:Product[]}) => {
     return (<><div className='fade-container '>
-        <div className='account-dropdown dropdown-animate cart'>
+        <div className='account-dropdown dropdown-animate cart'  >
             <ul className='account-list cart-list'>
                 {data?.map((product) => <OneItemInCart key={product.id} product={product}/>)}
 
@@ -18,11 +18,11 @@ export const Cart = ({data}:{data:Product[]}) => {
                 }, 0)}</p>
             </div>
             <div className='cart-buttons'>
-                <Link to={'/cart'}><button className='inversed-primary-button'>View Cart</button></Link>
+                <Link to={'/cart'}><button className='inversed-primary-button' >View Cart</button></Link>
                 <button className='primary-button' >Checkout</button>
             </div>
         </div>
-        <ShoppingCartOutlinedIcon className={'trigger-fade'} fontSize={'large'}/>
+        <ShoppingCartOutlinedIcon  className={'trigger-fade'} fontSize={'large'}/>
         <p className="nav-item-text">Cart</p>
     </div></>)
 }

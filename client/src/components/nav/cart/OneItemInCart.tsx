@@ -24,6 +24,6 @@ export const  OneItemInCart = ({product}:{product:Product}) => {
             </div>
 
         </div>
-        <ClearIcon fontSize={'small'} onClick={() => deleteProduct.mutate(product.id)}/>
+        <ClearIcon className='product-delete-button' fontSize={'small'} onClick={() => deleteProduct.mutate(product.id)}/>
     </div></>)
 }

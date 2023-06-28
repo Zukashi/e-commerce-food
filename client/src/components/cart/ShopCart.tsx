@@ -14,7 +14,7 @@ const fetchCart = async (axios:AxiosInstance):Promise<Product[]> => {
 }
 export const ShopCart = () => {
     const axiosPrivate = useAxiosPrivate();
-    const {data:products, isLoading} = useQuery('cart', () => fetchCart(axiosPrivate))
+    const {data:products, isLoading, isFetching} = useQuery('cart', () => fetchCart(axiosPrivate))
     const redirectToCheckout =  async () => {
         const res = await axiosPrivate.post('stripe/checkout/session', {
             items:products
@@ -24,7 +24,7 @@ export const ShopCart = () => {
 
 
     }
-    if(isLoading){
+    if(isLoading || isFetching){
         return <Loader/>
     }
     return(<><section style={{backgroundColor:'#fff'}}>

@@ -42,7 +42,10 @@
 }
 // cart
 .one-product-in-cart-container{
-  display:flex
+  display:flex;
+  .product-delete-button{
+    cursor:pointer;
+  }
 }
 .one-product-in-cart{
   display:flex;
@@ -150,9 +153,7 @@
 .trigger-fade{
   cursor:pointer;
 }
-.fade-container:hover{
-  cursor:pointer;
-}
+
 .fade-container:hover .account-dropdown.cart{
   opacity:1;
   top:50px;
