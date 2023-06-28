@@ -8,17 +8,20 @@ export class StripeService {
   constructor(private readonly productService: ProductService) {}
   async createSession(checkoutDto: CheckoutDto) {
     console.log(checkoutDto);
+
     try {
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card', 'paypal'],
         line_items: await Promise.all(
           checkoutDto.items.map(async (item) => {
             const storeItem = await this.productService.findOne(item.id);
+            console.log(storeItem);
             return {
               price_data: {
                 currency: 'usd',
                 product_data: {
                   name: storeItem.productName,
+                  images: [storeItem.productImages[0].imageUrl],
                 },
                 unit_amount: item.price * 100,
               },

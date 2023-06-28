@@ -58,7 +58,7 @@ export const OneProductInShopCart = ({product}:{product:Product}) => {
            <div className='quantity category'><h4>Quantity</h4> <div className='quantity-price'><button onClick={() => changeQuantity(quantity - 1)}><i className='fa fa-minus ms-0' ></i></button>
                <p  >{quantity}</p><button onClick={() => changeQuantity(quantity + 1)}><i className='fa fa-plus ms-0'></i></button></div></div>
            <div className='total category'><h4>Total</h4><p>${quantity * product.price}</p></div>
-           <div className='action category'><h4>Action</h4><p onClick={() => deleteProduct.mutate(product.id)}>Remove</p>
+           <div className='action category'><h4>Action</h4><p style={{cursor:"pointer"}} onClick={() => deleteProduct.mutate(product.id)}>Remove</p>
                </div>
        </div>
 
