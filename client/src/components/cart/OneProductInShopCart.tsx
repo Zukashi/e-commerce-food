@@ -15,12 +15,20 @@ export const OneProductInShopCart = ({product}:{product:Product}) => {
         const res = await axiosPrivate.patch(`cart/product/${product.id}/quantity`, {quantity})
         return res.data
     }, {
-        onSuccess: data => {
-
+        onSuccess: (data) => {
+            queryClient.setQueryData(['cart'], data)
         },
         onError: (error) => {
             // Error actions
         },
+    });
+    const deleteProduct = useMutation((id:string) => {
+        return axiosPrivate.delete(`cart/product/${id}`);
+    },{
+        onSuccess:async () => {
+            await queryClient.invalidateQueries(['cart'])
+
+        }
     });
     const changeQuantity  = (num:number) => {
 
@@ -50,7 +58,7 @@ export const OneProductInShopCart = ({product}:{product:Product}) => {
            <div className='quantity category'><h4>Quantity</h4> <div className='quantity-price'><button onClick={() => changeQuantity(quantity - 1)}><i className='fa fa-minus ms-0' ></i></button>
                <p  >{quantity}</p><button onClick={() => changeQuantity(quantity + 1)}><i className='fa fa-plus ms-0'></i></button></div></div>
            <div className='total category'><h4>Total</h4><p>${quantity * product.price}</p></div>
-           <div className='action category'><h4>Action</h4><p>Remove</p>
+           <div className='action category'><h4>Action</h4><p onClick={() => deleteProduct.mutate(product.id)}>Remove</p>
                </div>
        </div>
 

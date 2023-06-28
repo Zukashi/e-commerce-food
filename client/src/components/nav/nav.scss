@@ -88,6 +88,13 @@
   gap: .8rem;
   border-bottom:1px solid #ccc;
 }
+
+.cart-empty-nav{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .total-cart{
   margin-top: 5px;
   display:flex;

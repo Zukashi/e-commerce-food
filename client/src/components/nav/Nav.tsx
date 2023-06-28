@@ -30,8 +30,7 @@ export const Nav = () => {
     const axiosPrivate = useAxiosPrivate();
 
     const {data, isLoading, isFetching} = useQuery({queryKey:['cart'], queryFn: () => fetchCart(axiosPrivate)});
-    console.log(data)
-    if(isLoading || isFetching) {
+    if(isLoading || isFetching){
         return <Loader/>
     }
     return (
