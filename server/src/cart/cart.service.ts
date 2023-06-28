@@ -188,7 +188,7 @@ export class CartService {
     }
   }
 
-  changeItemQuantityInCart(
+  async changeItemQuantityInCart(
     req: ReqWithCustomer,
     changeItemDto: ChangeItemDto,
     productId: string,
@@ -196,7 +196,6 @@ export class CartService {
   ) {
     const cartItemsAsProductIds: { productId: string; quantity: number }[] =
       req.cookies['cart'] || [];
-    console.log(changeItemDto);
     const filtered = cartItemsAsProductIds.map((cartItem) => {
       if (cartItem.productId === productId) {
         cartItem.quantity = changeItemDto.quantity;
@@ -209,5 +208,6 @@ export class CartService {
       secure: true,
       httpOnly: true,
     });
+    return this.getItems(req);
   }
 }
