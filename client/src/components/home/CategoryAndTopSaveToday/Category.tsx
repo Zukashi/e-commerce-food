@@ -20,7 +20,7 @@ export const Category = () => {
     const categories = [['All', 'all'], ['Milks & Dairies, ', 'milks & dairies'], ['Beverages','beverages']]
     return (<section className='section-category'>
 
-        <h2 className='popular-header'>Popular Products</h2>
+        <h2 className='popular-header'> Popular Products</h2>
         <ul className='category-list'>
             {categories.map((category:string[], index) => <motion.li key={index} initial={{y:0}} animate={currentIndex === index ? {y:-5} : {y:0}} className={`${currentIndex === index && 'active'}`} onClick={() => onClick(category[1], index)}>{category[0]}</motion.li>)}
         </ul>

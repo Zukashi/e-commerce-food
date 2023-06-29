@@ -36,7 +36,7 @@ export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLS
                           src={product.productImages[0].imageUrl}
                           onLoad={handleImageLoad}
                           alt={`Image of ${product.productName} product`}
-                          style={{ display: isLoaded ? 'block' : 'none',   height:'255px', width:'240px' }}
+                          style={{ display: isLoaded ? 'inline' : 'none',   height:'255px', width:'240px' }}
                       />
                   </div>
                   <p className={'product-category'}>{product.category}</p>

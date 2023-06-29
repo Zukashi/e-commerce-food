@@ -39,6 +39,8 @@
       font-weight: 500;
     }
     .img-wrapper{
+      display:flex;
+      justify-content: center;
       width: 85%;
       margin:0 auto 2rem;
     }
@@ -66,5 +68,25 @@
 
       }
     }
+  }
+}
+
+@media(min-width:$md){
+  .top-products{
+    flex-direction: row;
+    overflow-y:unset
+  }
+  .product-container{
+    width: 50%;
+  }
+}
+@media(min-width:$lg){
+  .product-container{
+    width: 33%;
+  }
+}
+@media(min-width:$xl){
+  .product-container{
+    width: 25%;
   }
 }
