@@ -5,6 +5,11 @@ import { ProductService } from './product.service';
 export class ProductController {
   constructor(private productService: ProductService) {}
 
+  @Get('best')
+  async getBestSellers() {
+    return this.productService.getBestSellers();
+  }
+
   @Get('all')
   async getSpecifiedCategory(@Query('filter') filter: string) {
     return this.productService.getFilteredByOneCategory(filter);

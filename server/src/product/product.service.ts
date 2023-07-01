@@ -70,4 +70,12 @@ export class ProductService {
     }
     return productsFromDb;
   }
+
+  async getBestSellers() {
+    const bestSellers = await this.productRepository.find({
+      relations: ['productImages', 'vendor'],
+      take: 5,
+    });
+    return bestSellers;
+  }
 }
