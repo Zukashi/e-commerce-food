@@ -1,4 +1,5 @@
 @import '../../scss/vars';
+@import '../../scss/mixins/submit-button';
 .cart-total{
   margin:15px auto 0;
   width: 90%;
@@ -27,6 +28,14 @@
   align-items: center;
   font-size:4rem;
   font-weight: bold;
+}
+.cart-empty-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  button{
+    @include submit-button
+  }
 }
 .button-container-cart{
   padding:1rem 0;

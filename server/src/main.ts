@@ -15,6 +15,7 @@ async function bootstrap() {
       origin: ['http://localhost:5173'],
       credentials: true,
     },
+    rawBody: true,
   });
 
   app.use(cookieParser());

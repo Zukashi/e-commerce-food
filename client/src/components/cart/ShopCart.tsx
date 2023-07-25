@@ -22,8 +22,10 @@ export const ShopCart = () => {
         const res = await axiosPrivate.post('stripe/checkout/session', {
             items:products
         });
-        console.log(res.data.completed)
-        window.location = res.data.url
+        console.log(res.data)
+        if(res.data === "Success"){
+            await axiosPrivate.delete('cart')
+        }
 
 
     }
@@ -32,7 +34,14 @@ export const ShopCart = () => {
         return <Loader/>
     }
     if(products.length < 1){
-        return <h2 className='cart-empty'>Cart is empty</h2>
+        return <>
+            <h2 className='cart-empty'><img src="https://www.99fashionbrands.com/wp-content/uploads/2020/12/empty_cart.png" alt=""/></h2>
+            <div className='cart-empty-button'>
+                <div>
+                    <Link to='/'><button>Return to home</button></Link>
+                </div>
+            </div>
+        </>
     }
     return(<main className='cart-main'><section className={"cart-table"} style={{backgroundColor:'#fff'}}>
         <div className='table-container'><div className='product-table'> {products?.map((product) => <div key={product.id} className='product-row'><OneProductInShopCart product={product}key={product.id}/></div>)}</div></div>
