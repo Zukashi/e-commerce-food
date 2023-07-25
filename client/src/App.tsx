@@ -12,7 +12,6 @@ import { VendorLayout } from './layouts/VendorLayout';
 import {VendorUploads} from "./components/vendor/vendor-uploads/vendor-uploads";
 import {ProtectedRoute} from "./auth/ProtectedRoute";
 import {RefreshUserDataOnEveryRequest} from "./components/PersistLogin";
-import {CheckoutPage} from "./pages/CheckoutPage";
 import {ShopCart} from "./components/cart/ShopCart";
 
 function App() {
@@ -33,7 +32,6 @@ function App() {
                                 </Route>
                                 <Route path={'shop'} element={<Shop/>}/>
                                 <Route index element={<Home/>}/>
-                                <Route path={'checkout'} element={<CheckoutPage/>}></Route>
                                 <Route path={'cart'} element={<ShopCart/>}></Route>
                             </Route>
                         </Route>

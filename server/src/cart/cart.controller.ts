@@ -18,6 +18,13 @@ import { ChangeItemDto } from './dto/ChangeItem.dto';
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
+  @Delete('/')
+  async deleteCartItems(
+    @Req() req: ReqWithCustomer,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.cartService.deleteCart(res);
+  }
   @Get('')
   async getCartItems(@Req() req: ReqWithCustomer) {
     return this.cartService.getItems(req);

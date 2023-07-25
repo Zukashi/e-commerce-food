@@ -146,10 +146,6 @@ export class CartService {
     productId: string,
     response: Response,
   ) {
-    const product = await this.productRepository.findOneBy({
-      id: productId,
-    });
-
     const cartItemsAsProductIds: { productId: string; quantity: number }[] =
       req.cookies['cart'] || [];
     const filteredProducts = cartItemsAsProductIds.filter((cartItem) => {
@@ -209,5 +205,13 @@ export class CartService {
       httpOnly: true,
     });
     return this.getItems(req);
+  }
+
+  deleteCart(res: Response) {
+    res.cookie('cart', [], {
+      expires: new Date(Date.now() + 60 * 60 * 1000 * 24 * 7),
+      secure: true,
+      httpOnly: true,
+    });
   }
 }
