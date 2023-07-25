@@ -2,10 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { CheckoutDto } from './dto/checkout.dto';
 import { stripe } from '../main';
 import { ProductService } from '../product/product.service';
+import { CartService } from '../cart/cart.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class StripeService {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private configService: ConfigService,
+    private readonly productService: ProductService,
+  ) {}
   async createSession(checkoutDto: CheckoutDto) {
     console.log(checkoutDto);
 
@@ -30,12 +35,17 @@ export class StripeService {
           }),
         ),
         mode: 'payment',
-        success_url: `${process.env.SERVER_URL}/checkout/success`,
+        success_url: `${process.env.SERVER_URL}`,
       });
-      console.log(session.url);
       return session;
     } catch (e) {
       console.log(e);
     }
+  }
+
+  public async constructEventFromPayload(signature: string, payload: string) {
+    const webhookSecret = this.configService.get('STRIPE_WEBHOOK_SECRET');
+
+    return stripe.webhooks.constructEvent(payload, signature, webhookSecret);
   }
 }
