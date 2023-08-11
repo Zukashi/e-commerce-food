@@ -37,6 +37,7 @@ export class StripeService {
         mode: 'payment',
         success_url: `${process.env.SERVER_URL}`,
       });
+
       return session;
     } catch (e) {
       console.log(e);

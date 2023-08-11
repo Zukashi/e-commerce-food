@@ -6,19 +6,32 @@ import {
   RawBodyRequest,
   Req,
   Res,
+  Headers,
+  Get,
 } from '@nestjs/common';
 import { CheckoutDto } from './dto/checkout.dto';
 import { StripeService } from './stripe.service';
 import { CartService } from '../cart/cart.service';
 import Response from 'express';
+import { stripe } from '../main';
 @Controller('stripe')
 export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
-  @Post('checkout/session')
-  async redirectToCheckoutStripe(@Body() checkoutDto: any) {
-    return this.stripeService.createSession(checkoutDto);
+  // @Post('checkout/session')
+  // async redirectToCheckoutStripe(@Body() checkoutDto: any) {
+  //   return this.stripeService.createSession(checkoutDto);
+  // }
+  @Post('create-payment-intent')
+  async getSecret(@Body() arrSumDto: { arrSum: number }) {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: arrSumDto.arrSum * 100,
+      currency: 'usd',
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+    return paymentIntent.client_secret;
   }
-
   @Post()
   async handleIncomingEvents(
     @Headers('stripe-signature') signature: string,
