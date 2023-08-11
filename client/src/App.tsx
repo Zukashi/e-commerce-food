@@ -13,6 +13,7 @@ import {VendorUploads} from "./components/vendor/vendor-uploads/vendor-uploads";
 import {ProtectedRoute} from "./auth/ProtectedRoute";
 import {RefreshUserDataOnEveryRequest} from "./components/PersistLogin";
 import {ShopCart} from "./components/cart/ShopCart";
+import {PaymentPage} from "./pages/PaymentPage";
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
                                 <Route path={'shop'} element={<Shop/>}/>
                                 <Route index element={<Home/>}/>
                                 <Route path={'cart'} element={<ShopCart/>}></Route>
+                                <Route path={'payment'} element={<PaymentPage/>}></Route>
                             </Route>
                         </Route>
             <Route element={<LayoutDefault/>}>
