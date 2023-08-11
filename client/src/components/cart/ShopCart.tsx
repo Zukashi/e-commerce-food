@@ -10,25 +10,17 @@ import './cart-table.scss';
 import './cart-total.scss';
 import './cart-main.scss'
 import {Link, Navigate, useNavigate} from "react-router-dom";
+import {Simulate} from "react-dom/test-utils";
+import cut = Simulate.cut;
 const fetchCart = async (axios:AxiosInstance):Promise<Product[]> => {
     const res = await axios.get('cart');
     return res.data
 }
 export const ShopCart = () => {
     const axiosPrivate = useAxiosPrivate();
-    const navigate =useNavigate()
     const {data:products, isLoading, isFetching} = useQuery('cart', () => fetchCart(axiosPrivate))
-    const redirectToCheckout =  async () => {
-        const res = await axiosPrivate.post('stripe/checkout/session', {
-            items:products
-        });
-        console.log(res.data)
-        if(res.data === "Success"){
-            await axiosPrivate.delete('cart')
-        }
-
-
-    }
+    const navigate =useNavigate()
+    const arrSum = products?.reduce((acc, currentValue) => acc + currentValue.price * currentValue.quantity, 0)
 
     if(isLoading || isFetching || !products){
         return <Loader/>
@@ -53,10 +45,10 @@ export const ShopCart = () => {
                 <h2>Cart Total</h2>
                 <div className='price-container'>
                     <b>Total (USD)</b>
-                    <b>${products?.reduce((acc, currentValue) => acc + currentValue.price * currentValue.quantity, 0)}</b>
+                    <b>${arrSum}</b>
                 </div>
                 <div className='button-container-cart'>
-                    <button onClick={redirectToCheckout} className='proceed-to-checkout-button'>Proceed To Checkout</button>
+                    <Link to={'/payment'} state={arrSum}><button  className='proceed-to-checkout-button'>Proceed To Checkout</button></Link>
                     <button onClick={() => navigate(-1)}  className='return-to-shopping-button'><i className='fa-solid fa-arrow-left-long'></i> Return To Shopping</button>
                 </div>
             </div>
