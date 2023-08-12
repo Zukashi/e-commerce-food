@@ -76,7 +76,11 @@ export const CheckoutForm = () => {
         });
         setIsLoading(false);
     };
-
+    if (!stripe || !elements) {
+        // Stripe.js has not yet loaded.
+        // Make sure to disable form submission until Stripe.js has loaded.
+        return <Loader/>;
+    }
 
     return (
         <form id="payment-form" className='payment-form-container' onSubmit={handleSubmit}>

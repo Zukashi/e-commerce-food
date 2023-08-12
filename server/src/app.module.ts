@@ -24,6 +24,7 @@ import { EmailSchedulingModule } from './email-scheduling/email-scheduling.modul
 import { CartModule } from './cart/cart.module';
 import { Cart } from './cart/entities/cart.entity';
 import { StripeModule } from './stripe/stripe.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { StripeModule } from './stripe/stripe.module';
     EmailSchedulingModule,
     CartModule,
     StripeModule,
+    OrderModule,
   ],
   providers: [
     LocalStrategy,
