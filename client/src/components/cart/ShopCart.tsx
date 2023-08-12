@@ -6,9 +6,9 @@ import {AxiosInstance} from "axios";
 import {Product} from "../../types/product";
 import {Loader} from "../loader/Loader";
 import { OneProductInShopCart } from './OneProductInShopCart';
-import './cart-table.scss';
-import './cart-total.scss';
-import './cart-main.scss'
+import './scss/cart-table.scss';
+import './scss/cart-total.scss';
+import './scss/cart-main.scss'
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import {Simulate} from "react-dom/test-utils";
 import cut = Simulate.cut;

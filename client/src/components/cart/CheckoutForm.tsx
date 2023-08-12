@@ -5,15 +5,18 @@ import {
     useStripe,
     useElements
 } from "@stripe/react-stripe-js";
+import './scss/checkout-form.scss'
+
 const fetchCart = async (axios:AxiosInstance):Promise<Product[]> => {
     const res = await axios.get('cart');
     return res.data
 }
-import {useEffect, useState} from "react";
+import React, {MouseEventHandler, useEffect, useState} from "react";
 import {useAxiosPrivate} from "../../hooks/use-axios-private";
 import {useQuery} from "react-query";
 import {AxiosInstance} from "axios";
 import {Product} from "../../types/product";
+import {Loader} from "../loader/Loader";
 export const CheckoutForm = () => {
     const stripe = useStripe();
     const elements = useElements();
@@ -55,7 +58,7 @@ export const CheckoutForm = () => {
             }
         });
     }, [stripe]);
-    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!stripe || !elements) {
@@ -63,29 +66,32 @@ export const CheckoutForm = () => {
             // Make sure to disable form submission until Stripe.js has loaded.
             return;
         }
-
         setIsLoading(true);
 
-        // const response = await stripe.confirmPayment({
-        //     elements,
-        //     confirmParams: {
-        //         return_url: "http://localhost:5173",
-        //     },
-        // });
+        const response = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: "http://localhost:5173/payment/success",
+            },
+        });
         setIsLoading(false);
     };
 
 
     return (
-        <form id="payment-form" onSubmit={handleSubmit}>
+        <form id="payment-form" className='payment-form-container' onSubmit={handleSubmit}>
 
             <PaymentElement id="payment-element"  />
-            <button disabled={isLoading || !stripe || !elements} id="submit">
+            {!isLoading ? <>
+                <div className='button-container'>
+                    <button disabled={isLoading || !stripe || !elements} id="submit" >
         <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
+           Pay now
         </span>
-            </button>
+                    </button>
+                </div>
             {message && <div id="payment-message">{message}</div>}
+            </> : <Loader/>}
         </form>
     );
 }
