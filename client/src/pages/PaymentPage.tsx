@@ -6,12 +6,24 @@ import {CheckoutForm} from "../components/cart/CheckoutForm";
 import {useAxiosPrivate} from "../hooks/use-axios-private";
 import {Loader} from "../components/loader/Loader";
 import {useLocation, useSearchParams} from "react-router-dom";
+import {AxiosInstance} from "axios/index";
+import {Product} from "../types/product";
+import {useQuery} from "react-query";
+
+const fetchCart = async (axios:AxiosInstance):Promise<Product[]> => {
+    const res = await axios.get('cart');
+    return res.data
+}
+
 export const PaymentPage = () => {
     const [clientSecret, setClientSecret] = useState("");
     let [searchParams, setSearchParams] = useSearchParams();
     const axiosPrivate = useAxiosPrivate();
     const location = useLocation();
-    console.log(location.state)
+    const {data:products, isLoading, isFetching} = useQuery('cart', () => fetchCart(axiosPrivate))
+    const createOrder = async () => {
+        const res = await axiosPrivate.post("order", products)
+    }
     const callPayment = async() => {
         const res = await axiosPrivate.post("stripe/create-payment-intent", {arrSum:location.state})
         setClientSecret(res.data)
@@ -20,7 +32,6 @@ export const PaymentPage = () => {
     useEffect(() => {
         !clientSecret && callPayment()
     }, [])
-    console.log(clientSecret)
     const options = {
         clientSecret,
     };
