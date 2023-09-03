@@ -34,7 +34,7 @@ export class StripeController {
     @Req() req: RawBodyRequest<Request>,
   ) {
     if (!signature) {
-      throw new BadRequestException('Missing stripe-signature header');
+      throw new BadRequestException('Missing stripe-signature header.');
     }
     if (!req.rawBody) {
       throw new BadRequestException('Invalid payload');
