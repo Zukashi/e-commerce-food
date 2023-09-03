@@ -35,7 +35,7 @@ export class StripeService {
           }),
         ),
         mode: 'payment',
-        success_url: `${process.env.SERVER_URL}`,
+        success_url: `${process.env.FRONTEND_URL}`,
       });
 
       return session;
