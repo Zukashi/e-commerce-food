@@ -65,7 +65,7 @@ export class UserService {
     if (!user) throw new NotFoundException();
     await this.userRepository.save(user);
   }
-  async create(registrationData: any) {
+  async create(registrationData: SignUpDto) {
     const user = this.userRepository.create(registrationData);
     return this.userRepository.save(user);
   }

@@ -32,12 +32,9 @@ export class CartService {
     private readonly cartItemRepository: Repository<CartItem>,
   ) {}
   async getItems(req: ReqWithCustomer) {
-    console.log(req.user);
-
     const cartItems: { productId: string; quantity: number }[] =
       req.cookies['cart'] || [];
     if (cartItems.length === 0) return [];
-    console.log(cartItems);
     const parsedCartItems = await this.productRepository.find({
       where: cartItems.map((cartItem) => ({
         id: cartItem.productId,

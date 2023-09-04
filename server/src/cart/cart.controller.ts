@@ -9,11 +9,13 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
+import Request from 'express';
 import { ReqWithCustomer } from '../auth/types/Req/User';
 import { CartService } from './cart.service';
 import { AddItemDto } from './dto/AddItem.dto';
 import { Response } from 'express';
 import { ChangeItemDto } from './dto/ChangeItem.dto';
+import { ReqWithVendor } from '../auth/types/Req/Vendor';
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
@@ -25,8 +27,8 @@ export class CartController {
   ) {
     return this.cartService.deleteCart(res);
   }
-  @Get('')
-  async getCartItems(@Req() req: ReqWithCustomer) {
+  @Get('/')
+  async getCartItems(@Req() req: ReqWithCustomer | ReqWithVendor) {
     return this.cartService.getItems(req);
   }
   @Patch('/product/:productId/quantity')

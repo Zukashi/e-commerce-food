@@ -22,6 +22,7 @@ import { User } from '../user/entities/user.entity';
 import { Request } from 'express';
 import { VendorService } from '../vendor/vendor.service';
 import { Vendor } from '../vendor/entities/vendor.entity';
+import { SignUpDto } from './dto/signUp.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -92,6 +93,7 @@ export class AuthController {
     @Body() body: { email: string; password: string; username: string },
     @Req() request: Request,
   ) {
+    console.log(123);
     let user = await this.vendorService.findOne({
       value: body.username,
       field: 'username',
@@ -123,7 +125,7 @@ export class AuthController {
     };
   }
   @Post('register')
-  async register(@Body() registrationData: any) {
+  async register(@Body() registrationData: SignUpDto) {
     return this.authenticationService.register(registrationData);
   }
 

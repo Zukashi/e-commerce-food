@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
 import { TokenPayload } from './tokenPaylod';
 import * as bcrypt from 'bcrypt';
+import { SignUpDto } from './dto/signUp.dto';
+import { VendorService } from '../vendor/vendor.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -11,6 +13,7 @@ export class AuthenticationService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly vendorService: VendorService,
   ) {}
 
   public getCookiesForLogOut() {
@@ -55,14 +58,24 @@ export class AuthenticationService {
       );
     }
   }
-  public async register(registrationData: any) {
+  public async register(registrationData: SignUpDto) {
     const hashedPassword = await bcrypt.hash(registrationData.password, 10);
     try {
-      const createdUser = await this.userService.create({
-        ...registrationData,
-        password: hashedPassword,
-      });
-      return createdUser;
+      if (registrationData.role === 'customer') {
+        await this.userService.isAlreadyInDB(registrationData);
+        const createdUser = await this.userService.create({
+          ...registrationData,
+          password: hashedPassword,
+        });
+        return createdUser;
+      } else if (registrationData.role === 'vendor') {
+        await this.vendorService.isAlreadyInDB(registrationData);
+        const createdVendor = await this.vendorService.createVendor({
+          ...registrationData,
+          password: hashedPassword,
+        });
+        return createdVendor;
+      }
     } catch (error) {
       throw new HttpException(
         'Something went wrong',

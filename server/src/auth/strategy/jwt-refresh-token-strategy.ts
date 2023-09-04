@@ -42,6 +42,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
         payload.userId,
       );
       if (!user) throw new NotFoundException();
+
       return user;
     }
   }

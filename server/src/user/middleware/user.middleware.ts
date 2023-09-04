@@ -39,7 +39,7 @@ export class UserMiddleware implements NestMiddleware {
     const user2 = await this.vendorRepository.findOneBy({
       id: decoded.userId,
     });
-    if (user2?.refresh_token === userRefreshCookie && user2) {
+    if (user2) {
       req.user = user2;
       next();
     }

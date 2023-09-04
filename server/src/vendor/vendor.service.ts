@@ -64,7 +64,7 @@ export class VendorService {
     return user;
   }
 
-  async isAlreadyInDb(signUpDto: SignUpDto) {
+  async isAlreadyInDB(signUpDto: SignUpDto) {
     const user = await this.vendorRepository.find({
       where: [
         { username: signUpDto.username },
@@ -81,7 +81,7 @@ export class VendorService {
   }
 
   async createVendor(signUpDto: SignUpDto) {
-    const user = await this.vendorRepository.create(signUpDto);
+    const user = this.vendorRepository.create(signUpDto);
     return this.vendorRepository.save(user);
   }
 
@@ -95,7 +95,7 @@ export class VendorService {
     await this.vendorRepository.save(user);
   }
 
-  async getVendorIfRefreshTokenMatches(refreshToken: any, userId: string) {
+  async getVendorIfRefreshTokenMatches(refreshToken: string, userId: string) {
     const user = await this.findOne({ field: 'id', value: userId });
     if (!user.refresh_token) {
       throw new UnauthorizedException('Not found token');
@@ -104,7 +104,6 @@ export class VendorService {
       refreshToken,
       user.refresh_token,
     );
-
     if (isRefreshTokenMatching) {
       return user;
     }

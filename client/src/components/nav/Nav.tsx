@@ -17,7 +17,8 @@ import {RootState} from "../../redux/store/store";
 import {Loader} from "../loader/Loader";
 
 const fetchCart = async (axios:AxiosInstance) => {
-      const res = await axios.get('cart');
+    const res = await axios.get('cart');
+
       console.log(res.data)
       return res.data
 }
@@ -26,11 +27,9 @@ export const Nav = () => {
     const user = useSelector((root:RootState) => root.user)
     console.log(user.user)
     const dispatch = useDispatch();
-    const [accountHover, setAccountHover] = useState(false);
     const axiosPrivate = useAxiosPrivate();
-
     const {data, isLoading, isFetching} = useQuery({queryKey:['cart'], queryFn: () => fetchCart(axiosPrivate)});
-    if(isLoading || isFetching){
+    if(isLoading){
         return <Loader/>
     }
     return (
