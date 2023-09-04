@@ -49,7 +49,7 @@ export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLS
 
                          <motion.button onClick={() => {
                              addProduct.mutate()
-                         }} className='product-button' whileHover={{ transition: { duration: 0.2 },y:-3, backgroundColor:'#3bb77e', opacity:1}}>
+                         }} className='product-button' whileHover={{ transition: { duration: 0.2 },y:0, backgroundColor:'#3bb77e', opacity:1}}>
                              <i className="fa-solid fa-cart-shopping"></i> Add</motion.button>
                      </div>
                   </div>

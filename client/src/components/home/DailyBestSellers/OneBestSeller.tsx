@@ -24,7 +24,7 @@ export const OneBestSeller = ({product}:{product:Product}) => {
                     <p>{product.price}</p>
                     <div>
 
-                        <motion.button  className='best-product-button' >
+                        <motion.button  className='best-product-button'  whileHover={{ transition: { duration: 0.2 },y:0, backgroundColor:'#3bb77e', opacity:1}}>
                             <i className="fa-solid fa-cart-shopping"></i> Add</motion.button>
                     </div>
                 </div>

@@ -65,6 +65,13 @@ export const UploadsForm = () => {
                        labelId="category-label"
                        {...register('category')}
                        label="Select Category"
+                       className={'customSelect'}
+                       sx={{
+                           '& MuiInputBase-root': {
+                               padding: '24px'
+                           },
+                       }}
+
                    >
                        <MenuItem value={'vegetables & fruits'}>Vegetables & Fruits</MenuItem>
                        <MenuItem value={'milks & dairies'}>Milks & Dairies</MenuItem>

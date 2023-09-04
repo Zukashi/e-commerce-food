@@ -13,11 +13,12 @@
     width:100%;
     border-radius:5px;
     background: #fff;
-   
 
 
   }
-
+.customSelect.MuiInputBase-root{
+  padding-left:24px;
+}
 .confirm-send{
   @include submit-button;
 }

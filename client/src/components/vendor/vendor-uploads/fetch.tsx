@@ -19,7 +19,7 @@ export const createProduct = async ({data, axiosPrivate, vendor}:{axiosPrivate:A
         })
     }
     const imageFile = new File([resMainImg?.data], 'image.jpg', { type: 'image/jpeg' });
-    await formData.append("image", imageFile);
+    formData.append("image", imageFile);
 
     // sub images
     const responses = await Promise.all(vendor.subImages.map(async (imgUrl:string) => {
@@ -28,11 +28,11 @@ export const createProduct = async ({data, axiosPrivate, vendor}:{axiosPrivate:A
         })
     }));
     console.log(vendor.subImages)
-    await responses.forEach(async (r,i) => {
-        const imageFile = new File([r.data], `image${i+2}.jpg`, { type: 'image/jpeg' });
-        await formData.append(`image`, imageFile);
+    responses.forEach(async (r, i) => {
+        const imageFile = new File([r.data], `image${i + 2}.jpg`, {type: 'image/jpeg'});
+        formData.append(`image`, imageFile);
     }, Error());
-    await formData.append('product', JSON.stringify(data));
+    formData.append('product', JSON.stringify(data));
     console.log(formData.getAll('image'))
     const res = await axiosPrivate.post('vendor/product', formData, {
         headers:{

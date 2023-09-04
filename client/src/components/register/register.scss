@@ -38,11 +38,14 @@
 }
 .MuiInputBase-root{
   border-radius:5px;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 .error-message{
   display:inline-block;
-  margin-top: 3px;
+  margin-top: .1rem;
+  margin-bottom: .8rem;
   color:$error-color;
   font-weight: 500;
 }

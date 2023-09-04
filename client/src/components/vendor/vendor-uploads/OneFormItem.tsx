@@ -25,5 +25,11 @@ export const  OneFormItem = ({label,i, errors, register}:{label:string[], i :num
                          animate={inView ? "visible" : "hidden"}
                          transition={{ duration: 0.4, delay:i * 0.1 }}
                          variants={animationVariants}
-                         key={label[1]}><TextField   {...register(label[1] as registerType)} type={i > 0 && i < 3 ? 'number' : 'text'} label={label[0]} variant="outlined"/><p className='error-message'>{errors[(label[1] as registerType)]?.message} </p></motion.span>)
+
+                         key={label[1]}><TextField   {...register(label[1] as registerType)} type={i > 0 && i < 3 ? 'number' : 'text'} label={label[0]} onKeyDown={(event) => {
+        if (!/[0-9]/.test(event.key) && (i > 0 && i < 3)) {
+            event.preventDefault();
+        }
+
+    }} variant="outlined"/><p className='error-message'>{errors[(label[1] as registerType)]?.message} </p></motion.span>)
 }
