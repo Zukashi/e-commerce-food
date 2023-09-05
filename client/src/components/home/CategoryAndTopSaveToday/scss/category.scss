@@ -1,23 +1,26 @@
 @import '../../../../scss/vars';
 
-.popular-header{
+.popular-header {
   font-size: 2rem;
   font-weight: 500;
   margin-top: 2.5rem;
 
 
 }
-.category-list{
-  display:flex;
-  gap: 1rem;
-  margin: 1.5rem 0;
 
-  li{
+.category-list {
+  display: flex;
+  gap: 0.7rem;
+  margin: 1.5rem 0;
+  max-width: 100%;
+
+  li {
     font-size: 1.03rem;
-    cursor:pointer
+    cursor: pointer
   }
-  li.active{
-    color:$base-color;
-    font-weight:600;
+
+  li.active {
+    color: $base-color;
+    font-weight: 600;
   }
 }
