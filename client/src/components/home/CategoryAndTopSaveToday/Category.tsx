@@ -17,7 +17,7 @@ export const Category = () => {
         setSearchParams(params)
     };
 
-    const categories = [['All', 'all'], ['Milks & Dairies, ', 'milks & dairies'], ['Beverages','beverages']]
+    const categories = [['All', 'all'], ['Milks & Dairies ', 'milks & dairies'], ['Beverages','beverages'], ['Vegetables & Fruits', 'vegetables & fruits'],['Meats & Seafood', 'meats & seafood']]
     return (<section className='section-category'>
 
         <h2 className='popular-header'> Popular Products</h2>

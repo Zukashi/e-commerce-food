@@ -16,6 +16,7 @@ import * as yup from "yup";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useNavigate} from "react-router-dom";
 import axios from "../../api/axios";
+import {toastPosition, toastTheme} from "../../config/api";
 
 const schema = yup.object().shape({
 
@@ -37,15 +38,15 @@ export const Register = () => {
                    const response =await  axios.post(`auth/register`, data);
                    console.log(response)
                    toast.success('Successfully registered', {
-                       position:"top-right",
-                       theme:'dark'
+                       position:toastPosition,
+                       theme:toastTheme
                    })
                    navigate('/login')
                }catch(e: any){
                    console.log(e)
                    toast.error(e.response.data.message, {
-                       position:"top-right",
-                       theme:'dark'
+                       position:toastPosition,
+                       theme:toastTheme
                    })
                }
 

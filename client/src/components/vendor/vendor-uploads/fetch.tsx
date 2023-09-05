@@ -2,6 +2,7 @@ import {UploadProductFormValues} from "./UploadsForm";
 import axios, {AxiosInstance} from "axios";
 import {Images} from "../../../redux/vendor-uploads";
 import {toast} from "react-toastify";
+import {toastTheme} from "../../../config/api";
 
 export const createProduct = async ({data, axiosPrivate, vendor}:{axiosPrivate:AxiosInstance,data:UploadProductFormValues, vendor:Images}) => {
     const formData = new FormData();
@@ -15,7 +16,7 @@ export const createProduct = async ({data, axiosPrivate, vendor}:{axiosPrivate:A
         });
     }catch(e){
         toast.error("Main image for product is required to proceed", {
-            theme:"dark"
+            theme:toastTheme
         })
     }
     const imageFile = new File([resMainImg?.data], 'image.jpg', { type: 'image/jpeg' });

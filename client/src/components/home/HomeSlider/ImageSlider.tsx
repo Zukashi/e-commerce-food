@@ -8,6 +8,7 @@ import {useAxiosPrivate} from "../../../hooks/use-axios-private";
 import {toast} from "react-toastify";
 import * as yup from "yup";
 import {yupResolver} from "@hookform/resolvers/yup";
+import {toastTheme} from "../../../config/api";
 const schema = yup.object({
     email:yup.string().email().required()
 })
@@ -34,7 +35,7 @@ export const ImageSlider = ({slides}:{slides:Slides}) => {
     const setupNewsletter:SubmitHandler<{email:string}> = async (data) => {
         await axiosPrivate.post('email-scheduling/newsletter', data);
         toast.success("Thank you for subscribing to our newsletter", {
-            theme:"dark",
+            theme:toastTheme,
         })
 
     }

@@ -50,6 +50,7 @@ export class ProductService {
         .innerJoinAndSelect('product.productImages', 'productImages')
         .innerJoinAndSelect('product.vendor', 'vendor')
         .getMany();
+      console.log(productsFromDb);
     } else {
       productsFromDb = await this.dataSource
         .getRepository(Product)

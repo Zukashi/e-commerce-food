@@ -27,7 +27,9 @@ export const  OneFormItem = ({label,i, errors, register}:{label:string[], i :num
                          variants={animationVariants}
 
                          key={label[1]}><TextField   {...register(label[1] as registerType)} type={i > 0 && i < 3 ? 'number' : 'text'} label={label[0]} onKeyDown={(event) => {
-        if (!/[0-9]/.test(event.key) && (i > 0 && i < 3)) {
+        const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight'];
+        if (!/[0-9]/.test(event.key) && (i > 0 && i < 3) &&
+            !allowedKeys.includes(event.key))  {
             event.preventDefault();
         }
 

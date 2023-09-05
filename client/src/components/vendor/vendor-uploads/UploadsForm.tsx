@@ -13,6 +13,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../../redux/store/store";
 import {toast, useToast} from "react-toastify";
 import {OneFormItem} from "./OneFormItem";
+import {toastPosition, toastTheme} from "../../../config/api";
 const schema = yup.object().shape({
 
     productName: yup.string().strict().required('product name is required'),
@@ -43,8 +44,8 @@ export const UploadsForm = () => {
         onSuccess:(data:Product) => {
             console.log(data)
             toast.success(`Product ${data.productName} has been added`, {
-                position: toast.POSITION.TOP_RIGHT,
-                theme:"dark"
+                position: toastPosition,
+                theme:toastTheme
             });
         }
 

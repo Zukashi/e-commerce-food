@@ -7,6 +7,7 @@ import * as yup from "yup";
 import {toast} from "react-toastify";
 import {useLocation, useNavigate} from "react-router-dom";
 import './login.scss'
+import {toastPosition, toastTheme} from "../../config/api";
 
 
 type Login  = {
@@ -34,8 +35,8 @@ export const Login = () => {
         // if user came here from different subsite then show this toast
         if(typeof location?.state?.from === 'string'){
             toast.warning("You're not authorized to view that data",{
-                position:"top-right",
-                theme:'dark',
+                position:toastPosition,
+                theme:toastTheme,
                 autoClose:4000,
             })
         }
@@ -56,15 +57,15 @@ export const Login = () => {
                 navigate('/')
             }
             toast.success('Logged successfully', {
-                position:"top-right",
-                theme:'dark',
+                position:toastPosition,
+                theme:toastTheme,
                 autoClose:1500,
             })
         }catch(e:any){
             console.log(e)
             toast.error(e, {
-                position:"top-right",
-                theme:'dark'
+                position:toastPosition,
+                theme:toastTheme
             })
         }
     }

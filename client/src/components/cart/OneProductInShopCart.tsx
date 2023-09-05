@@ -3,6 +3,8 @@ import {Product} from "../../types/product";
 import {useMutation, useQueryClient} from "react-query";
 import {AxiosInstance} from "axios";
 import {useAxiosPrivate} from "../../hooks/use-axios-private";
+import {toast} from "react-toastify";
+import {toastPosition, toastTheme} from "../../config/api";
 const changeQuantityOfCart = async (axios:AxiosInstance, quantity:number, productId:string) => {
     const res = await axios.patch(`cart/product/${productId}/quantity`, {quantity})
 }
@@ -27,6 +29,10 @@ export const OneProductInShopCart = ({product}:{product:Product}) => {
     },{
         onSuccess:async () => {
             await queryClient.invalidateQueries(['cart'])
+            toast.success('Successfully registered', {
+                position:toastPosition,
+                theme:toastTheme
+            })
 
         }
     });
