@@ -42,7 +42,6 @@ export const UploadsForm = () => {
     const axiosPrivate = useAxiosPrivate();
     const createNewProduct  = useMutation(  createProduct,{
         onSuccess:(data:Product) => {
-            console.log(data)
             toast.success(`Product ${data.productName} has been added`, {
                 position: toastPosition,
                 theme:toastTheme

@@ -5,7 +5,7 @@ import {Product} from "../../../types/product";
 import {useAxiosPrivate} from "../../../hooks/use-axios-private";
 import {toast} from "react-toastify";
 import {useMutation, useQueryClient} from "react-query";
-import {toastTheme} from "../../../config/api";
+import {toastPosition, toastTheme} from "../../../config/api";
 
 export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLSearchParams}) => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -22,6 +22,7 @@ export const OneProduct = ({product, framerKey}:{product:Product, framerKey:URLS
         onSuccess:async () => {
             await queryClient.invalidateQueries(['cart'])
             toast.success('Product ' + product.productName + ' added to cart', {
+                position:toastPosition,
                 theme:toastTheme
             })
         }

@@ -51,7 +51,7 @@ export const LayoutDefault = () => {
             animate={{ opacity: isTop ? 0 : 1 }}
             transition={{ duration: 0.2 }}
 
-            style={{position:"fixed", right:"2rem", bottom:"2rem", color:"black", border:"2px solid black", borderRadius:"50%", width:"30px", height:"30px", display:"flex", justifyContent:"center", alignItems:"center" }}  ><i className="fa-solid fa-arrow-up"></i></motion.a>
+            style={{position:"fixed", right:"2rem", bottom:"2rem", color:"black", border:"2px solid black", borderRadius:"50%", width:"30px", height:"30px", display:"flex", justifyContent:"center", alignItems:"center", cursor:"pointer" }}  ><i className="fa-solid fa-arrow-up"></i></motion.a>
 
     </>)
 }
