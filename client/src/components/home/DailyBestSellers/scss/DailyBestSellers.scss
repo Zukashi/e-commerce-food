@@ -10,11 +10,13 @@
 }
 .embla__button{
   display:flex;
+  background: #F2F3F4;
   justify-content: center;
   align-items: center;
   height: 40px;
   width: 40px;
   border-radius:50%;
+  border:0;
 }
 .embla__next{
   position:absolute;

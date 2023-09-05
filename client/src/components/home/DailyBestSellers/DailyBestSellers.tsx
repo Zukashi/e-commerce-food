@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react';
 import './scss/DailyBestSellers.scss'
 import {Rating} from "@mui/material";
-import {motion} from "framer-motion";
+import {motion, TargetAndTransition, VariantLabels} from "framer-motion";
 import {useQuery} from "react-query";
 import {useAxiosPrivate} from "../../../hooks/use-axios-private";
 import {AxiosInstance} from "axios";
@@ -15,6 +15,10 @@ const fetchBestSellers = async (axios:AxiosInstance):Promise<Product[]> => {
 }
 export const DailyBestSellers  = () => {
     const axiosPrivate = useAxiosPrivate();
+    const buttonTransition : VariantLabels | TargetAndTransition | undefined = { transition: { duration: 0.2 },
+     backgroundColor:'#3bb77e', opacity:1
+    }
+
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true })
     const {data, refetch, isLoading, isRefetching,isFetching } = useQuery('products/best', () => fetchBestSellers(axiosPrivate));
     const scrollPrev = useCallback(() => {    if (emblaApi) emblaApi.scrollPrev()  }, [emblaApi])
@@ -28,12 +32,12 @@ export const DailyBestSellers  = () => {
         {data.map((product) => <OneBestSeller key={product.id} product={product}/>)}
         </div>
         </div>
-            <button className="embla__prev embla__button" onClick={scrollPrev}>
+            <motion.button className="embla__prev embla__button"  whileHover={buttonTransition}  onClick={scrollPrev}>
                 <i className="fa-solid fa-arrow-left"></i>
-            </button>
-            <button className="embla__next embla__button" onClick={scrollNext}>
+            </motion.button>
+            <motion.button whileHover={buttonTransition}  className="embla__next embla__button" onClick={scrollNext}>
                 <i className="fa-solid fa-arrow-right"></i>
-            </button>
+            </motion.button>
         </div>
     </>
 }
