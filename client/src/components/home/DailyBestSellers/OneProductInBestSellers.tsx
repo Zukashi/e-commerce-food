@@ -5,7 +5,7 @@ import {Product} from "../../../types/product";
 import {useMutation, useQueryClient} from "react-query";
 import {toast} from "react-toastify";
 import {useAxiosPrivate} from "../../../hooks/use-axios-private";
-import {toastTheme} from "../../../config/api";
+import {toastPosition, toastTheme} from "../../../config/api";
 
 export const  OneProductInBestSellers = ({product}:{product:Product}) => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -20,6 +20,7 @@ export const  OneProductInBestSellers = ({product}:{product:Product}) => {
         onSuccess:async () => {
             await queryClient.invalidateQueries(['cart'])
             toast.success('Product ' + product.productName + ' added to cart', {
+                position:toastPosition,
                 theme:toastTheme
             })
         }
