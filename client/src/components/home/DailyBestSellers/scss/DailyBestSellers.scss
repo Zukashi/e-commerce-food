@@ -5,6 +5,40 @@
   margin-top: 2.5rem;
 }
 
+.container__embla{
+  position:relative
+}
+.embla__button{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 40px;
+  border-radius:50%;
+}
+.embla__next{
+  position:absolute;
+  z-index: 30;
+  right:5%;
+  top: 30%;
+}
+.embla__prev{
+  position:absolute;
+  z-index:30;
+  left:5%;
+  top: 30%;
+}
+.embla {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+}
+.embla__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
 .best-product-container{
   min-height: 100%;
   border:1px solid #ccc;

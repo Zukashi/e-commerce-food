@@ -5,7 +5,8 @@ import {Product} from "../../../types/product";
 
 export const OneBestSeller = ({product}:{product:Product}) => {
     return ( <>
-        <div className='best-product-container'>
+        <div className='embla__slide'>
+        <div className='best-product-container '>
             <div className='best-product-content-container'>
                 <div className='best-image-wrapper'>
                     <img
@@ -28,6 +29,7 @@ export const OneBestSeller = ({product}:{product:Product}) => {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </>)
 }
