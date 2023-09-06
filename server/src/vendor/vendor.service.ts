@@ -17,6 +17,7 @@ import { Vendor } from './entities/vendor.entity';
 import { SignUpDto } from '../auth/dto/signUp.dto';
 import * as bcrypt from 'bcrypt';
 import { ReqWithVendor } from '../auth/types/Req/Vendor';
+import { OrderService } from '../order/order.service';
 
 @Injectable()
 export class VendorService {
@@ -30,6 +31,7 @@ export class VendorService {
     private readonly productService: ProductService,
     private readonly awsService: AwsService,
     private readonly productImageService: ProductImageService,
+    private readonly orderService: OrderService,
   ) {}
   async createProduct(
     createProductDto: CreateVendorProductDTO,
@@ -112,5 +114,9 @@ export class VendorService {
 
   async getVendorProducts(req: ReqWithVendor) {
     return this.productService.getProductFromVendor(req.user.id);
+  }
+
+  async getVendorOrders(req: ReqWithVendor) {
+    return this.orderService.getOrdersOfVendor(req);
   }
 }

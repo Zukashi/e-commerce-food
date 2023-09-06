@@ -28,7 +28,7 @@ export class CartController {
     return this.cartService.deleteCart(res);
   }
   @Get('/')
-  async getCartItems(@Req() req: ReqWithCustomer | ReqWithVendor) {
+  async getCartItems(@Req() req: ReqWithCustomer) {
     return this.cartService.getItems(req);
   }
   @Patch('/product/:productId/quantity')

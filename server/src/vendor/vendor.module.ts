@@ -14,6 +14,7 @@ import { ProductImageModule } from '../product-image/product-image.module';
 import { ProductModule } from '../product/product.module';
 import { Vendor } from './entities/vendor.entity';
 import { UserModule } from '../user/user.module';
+import { OrderModule } from '../order/order.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UserModule } from '../user/user.module';
     forwardRef(() => UserModule),
     forwardRef(() => ProductModule),
     ProductImageModule,
+    forwardRef(() => OrderModule),
   ],
   controllers: [VendorController],
   providers: [VendorService],

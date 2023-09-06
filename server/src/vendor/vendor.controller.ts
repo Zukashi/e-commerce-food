@@ -36,4 +36,10 @@ export class VendorController {
   async getProduct(@Req() req: ReqWithVendor) {
     return await this.vendorService.getVendorProducts(req);
   }
+
+  @UseGuards(JwtAuthenticationGuard)
+  @Get('orders')
+  async getOrders(@Req() req: ReqWithVendor) {
+    return await this.vendorService.getVendorOrders(req);
+  }
 }
