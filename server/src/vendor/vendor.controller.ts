@@ -32,8 +32,8 @@ export class VendorController {
     return await this.vendorService.createProduct(product, files, req.user);
   }
   @UseGuards(JwtAuthenticationGuard)
-  @Get('product')
+  @Get('products')
   async getProduct(@Req() req: ReqWithVendor) {
-    console.log(req.user);
+    return await this.vendorService.getVendorProducts(req);
   }
 }

@@ -79,4 +79,14 @@ export class ProductService {
     });
     return bestSellers;
   }
+
+  async getProductFromVendor(id: string) {
+    const vendorProducts = await this.dataSource
+      .getRepository(Product)
+      .createQueryBuilder('product')
+      .innerJoinAndSelect('product.productImages', 'productImages.product')
+      .where('product.vendorId = :vendorId', { vendorId: id })
+      .getMany();
+    return vendorProducts;
+  }
 }

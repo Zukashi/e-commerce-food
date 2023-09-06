@@ -16,6 +16,7 @@ import { SignInDto } from '../auth/dto/signIn.dto';
 import { Vendor } from './entities/vendor.entity';
 import { SignUpDto } from '../auth/dto/signUp.dto';
 import * as bcrypt from 'bcrypt';
+import { ReqWithVendor } from '../auth/types/Req/Vendor';
 
 @Injectable()
 export class VendorService {
@@ -107,5 +108,9 @@ export class VendorService {
     if (isRefreshTokenMatching) {
       return user;
     }
+  }
+
+  async getVendorProducts(req: ReqWithVendor) {
+    return this.productService.getProductFromVendor(req.user.id);
   }
 }
