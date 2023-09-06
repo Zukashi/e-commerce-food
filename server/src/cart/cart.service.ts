@@ -41,7 +41,6 @@ export class CartService {
       })),
       relations: ['productImages', 'vendor'],
     });
-    console.log(parsedCartItems);
     const productsWithQuantities = parsedCartItems.map((product, i) => {
       return {
         ...product,
@@ -71,9 +70,7 @@ export class CartService {
     // If the user is not logged in, retrieve the cart items from the cookie
     let cartItemsAsProductIds: { productId: string; quantity: number }[] =
       req.cookies['cart'] || [];
-    console.log(cartItemsAsProductIds.length);
     if (!Boolean(cartItemsAsProductIds.length)) {
-      console.log(9999);
       cartItemsAsProductIds.push({
         productId,
         quantity: addItemDto.quantity,
@@ -126,14 +123,12 @@ export class CartService {
         })),
         relations: ['vendor'],
       });
-      console.log(cartItems);
       const productsWithQuantities = cartItems.map((product, i) => {
         return {
           ...product,
           quantity: cartItemsAsProductIds[i]?.quantity,
         };
       });
-      console.log(productsWithQuantities);
       return productsWithQuantities;
     }
   }
@@ -195,7 +190,6 @@ export class CartService {
       }
       return cartItem;
     });
-    console.log(filtered, 555);
     res.cookie('cart', [...filtered], {
       expires: new Date(Date.now() + 60 * 60 * 1000 * 24 * 7),
       secure: true,

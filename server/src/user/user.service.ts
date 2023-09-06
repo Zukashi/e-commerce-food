@@ -25,7 +25,6 @@ export class UserService {
     value: string | undefined;
     field: string;
   }) {
-    console.log(value, field);
     const user = await this.userRepository.findOneBy({ [`${field}`]: value });
     if (!user) throw new NotFoundException();
     return user;

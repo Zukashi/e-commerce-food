@@ -12,8 +12,6 @@ export class StripeService {
     private readonly productService: ProductService,
   ) {}
   async createSession(checkoutDto: CheckoutDto) {
-    console.log(checkoutDto);
-
     try {
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card', 'paypal'],
@@ -39,9 +37,7 @@ export class StripeService {
       });
 
       return session;
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   }
 
   public async constructEventFromPayload(signature: string, payload: string) {

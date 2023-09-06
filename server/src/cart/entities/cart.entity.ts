@@ -22,10 +22,4 @@ export class Cart {
   })
   @JoinColumn()
   user: User;
-
-  @OneToMany(() => CartItem, (cartItem) => cartItem.cart, {
-    eager: true,
-    cascade: true,
-  })
-  cartItems: CartItem[];
 }

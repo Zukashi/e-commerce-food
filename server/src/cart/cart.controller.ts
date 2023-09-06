@@ -29,7 +29,8 @@ export class CartController {
   }
   @Get('/')
   async getCartItems(@Req() req: ReqWithCustomer) {
-    return this.cartService.getItems(req);
+    const cart = await this.cartService.getItems(req);
+    return cart;
   }
   @Patch('/product/:productId/quantity')
   async changeQuantityOfProductInCart(

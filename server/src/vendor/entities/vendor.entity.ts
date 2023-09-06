@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Product } from '../../product/entities/product.entity';
+import { Order } from '../../order/entities/order.entity';
 
 @Entity()
 export class Vendor {
@@ -34,4 +35,6 @@ export class Vendor {
 
   @OneToMany((type) => Product, (product) => product.vendor)
   products: Product[];
+  @OneToMany(() => Order, (order) => order.vendor)
+  orders: Order[];
 }

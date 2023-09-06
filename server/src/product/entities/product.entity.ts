@@ -54,7 +54,4 @@ export class Product {
     nullable: false,
   })
   vendor: Vendor;
-
-  @OneToOne(() => CartItem, (cartItem) => cartItem.product)
-  cartItem: CartItem;
 }

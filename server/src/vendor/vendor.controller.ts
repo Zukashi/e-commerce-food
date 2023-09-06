@@ -40,6 +40,7 @@ export class VendorController {
   @UseGuards(JwtAuthenticationGuard)
   @Get('orders')
   async getOrders(@Req() req: ReqWithVendor) {
+    console.log(req, 999);
     return await this.vendorService.getVendorOrders(req);
   }
 }
