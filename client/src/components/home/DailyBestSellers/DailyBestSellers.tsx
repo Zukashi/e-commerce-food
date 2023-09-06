@@ -9,35 +9,47 @@ import {Product} from "../../../types/product";
 import {Loader} from "../../loader/Loader";
 import {OneBestSeller} from "./OneBestSeller";
 import useEmblaCarousel from "embla-carousel-react";
-const fetchBestSellers = async (axios:AxiosInstance):Promise<Product[]> => {
+
+const fetchBestSellers = async (axios: AxiosInstance): Promise<Product[]> => {
     const res = await axios.get('product/best');
     return res.data
 }
-export const DailyBestSellers  = () => {
+export const DailyBestSellers = () => {
     const axiosPrivate = useAxiosPrivate();
-    const buttonTransition : VariantLabels | TargetAndTransition | undefined = { transition: { duration: 0.2 },
-     backgroundColor:'#3bb77e', opacity:1
+    const buttonTransition: VariantLabels | TargetAndTransition | undefined = {
+        transition: {duration: 0.2},
+        backgroundColor: '#3bb77e', opacity: 1
     }
 
-    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true })
-    const {data, refetch, isLoading, isRefetching,isFetching } = useQuery('products/best', () => fetchBestSellers(axiosPrivate));
-    const scrollPrev = useCallback(() => {    if (emblaApi) emblaApi.scrollPrev()  }, [emblaApi])
-    const scrollNext = useCallback(() => {    if (emblaApi) emblaApi.scrollNext()  }, [emblaApi])
-    if(!data){
+    const [emblaRef, emblaApi] = useEmblaCarousel({loop: true,})
+    const {
+        data,
+    } = useQuery('products/best', () => fetchBestSellers(axiosPrivate));
+    const scrollPrev = useCallback(() => {
+        if (emblaApi) emblaApi.scrollPrev()
+    }, [emblaApi])
+    const scrollNext = useCallback(() => {
+        if (emblaApi) emblaApi.scrollNext()
+    }, [emblaApi])
+    if (!data) {
         return <Loader/>
     }
     return <>
         <h2 className='best-sellers-header'>Daily Best Sellers</h2>
-        <div className="embla container__embla" >     <div className="embla__viewport" ref={emblaRef}>   <div className="embla__container">
-        {data.map((product) => <OneBestSeller key={product.id} product={product}/>)}
-        </div>
-        </div>
-            <motion.button className="embla__prev embla__button"  whileHover={buttonTransition}  onClick={scrollPrev}>
-                <i className="fa-solid fa-arrow-left"></i>
-            </motion.button>
-            <motion.button whileHover={buttonTransition}  className="embla__next embla__button" onClick={scrollNext}>
-                <i className="fa-solid fa-arrow-right"></i>
-            </motion.button>
-        </div>
+        <section className='daily-best-sellers'>
+            <div className="embla container__embla">
+                <div className="embla__viewport" ref={emblaRef}>
+                    <div className="embla__container">
+                        {data.map((product) => <OneBestSeller key={product.id} product={product}/>)}
+                    </div>
+                </div>
+                <motion.button className="embla__prev embla__button" whileHover={buttonTransition} onClick={scrollPrev}>
+                    <i className="fa-solid fa-arrow-left"></i>
+                </motion.button>
+                <motion.button whileHover={buttonTransition} className="embla__next embla__button" onClick={scrollNext}>
+                    <i className="fa-solid fa-arrow-right"></i>
+                </motion.button>
+            </div>
+        </section>
     </>
 }
