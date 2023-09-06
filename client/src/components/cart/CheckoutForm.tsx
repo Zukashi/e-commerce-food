@@ -40,7 +40,7 @@ export const CheckoutForm = () => {
             return;
         }
 
-        stripe.retrievePaymentIntent(clientSecret).then(({paymentIntent}) => {
+        stripe.retrievePaymentIntent(clientSecret).then(async ({paymentIntent}) => {
             if (!paymentIntent) {
                 return null
             }
@@ -77,7 +77,16 @@ export const CheckoutForm = () => {
                 return_url: `${clientUrl}/payment/success`,
             },
         });
-        console.log(response)
+        console.log(response.error)
+        if (response.error) {
+            // Handle error here
+            console.log("Payment Error:", response.error);
+            setIsLoading(false);
+        } else {
+            // Handle successful payment here
+
+
+        }
         setIsLoading(false);
     };
     if (!stripe || !elements) {

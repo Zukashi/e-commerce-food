@@ -22,19 +22,23 @@ export const PaymentPage = () => {
     const axiosPrivate = useAxiosPrivate();
     const location = useLocation();
     const {data: products, isLoading, isFetching} = useQuery('cart', () => fetchCart(axiosPrivate))
-    const createOrder = async () => {
-        try {
-            console.log(products);
-            const res = await axiosPrivate.post("order", {products});
-            console.log("Order created", res.data);
-        } catch (error) {
-            console.error("Error creating order:", error);
-        }
-    };
+
+
     const callPayment = async () => {
         try {
             const res = await axiosPrivate.post("stripe/create-payment-intent", {arrSum: location.state});
-            await createOrder();
+            if (res.data) {
+                const createOrder = async () => {
+                    try {
+                        console.log(products);
+                        const res = await axiosPrivate.post("order", {products});
+                        console.log("Order created", res.data);
+                    } catch (error) {
+                        console.error("Error creating order:", error);
+                    }
+                };
+                await createOrder();
+            }
             setClientSecret(res.data);
             setSearchParams({payment_intent_client_secret: res.data});
         } catch (error) {
@@ -42,7 +46,8 @@ export const PaymentPage = () => {
         }
     };
     useEffect(() => {
-        !clientSecret && callPayment()
+        !clientSecret && callPayment();
+
     }, [])
     const options = {
         clientSecret,
