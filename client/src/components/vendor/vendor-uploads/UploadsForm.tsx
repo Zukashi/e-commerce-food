@@ -6,13 +6,13 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {useMutation} from "react-query";
 import {createProduct} from "./fetch";
-import {Product} from '../../../../../server/src/product/entities/product.entity'
 import {useAxiosPrivate} from "../../../hooks/use-axios-private";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../redux/store/store";
 import {toast, useToast} from "react-toastify";
 import {OneFormItem} from "./OneFormItem";
 import {toastPosition, toastTheme} from "../../../config/api";
+import {Product} from "../../../types/product";
 
 const schema = yup.object().shape({
 

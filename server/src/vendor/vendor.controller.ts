@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Req,
   UploadedFiles,
@@ -29,5 +30,10 @@ export class VendorController {
     // parse createProductDto because it's in JSON currently
     const product = JSON.parse(createProductDto);
     return await this.vendorService.createProduct(product, files, req.user);
+  }
+  @UseGuards(JwtAuthenticationGuard)
+  @Get('product')
+  async getProduct(@Req() req: ReqWithVendor) {
+    console.log(req.user);
   }
 }
