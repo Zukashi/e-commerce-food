@@ -34,11 +34,13 @@ export const createProduct = async ({data, axiosPrivate, vendor}:{axiosPrivate:A
         formData.append(`image`, imageFile);
     }, Error());
     formData.append('product', JSON.stringify(data));
-    const res = await axiosPrivate.post('vendor/product', formData, {
+
+        const res = await axiosPrivate.post('vendor/product', formData, {
         headers:{
             "Content-Type":"multipart/form-data"
         }
         },
     );
     return res.data
+
 }

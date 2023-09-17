@@ -9,10 +9,11 @@ import {createProduct} from "./fetch";
 import {useAxiosPrivate} from "../../../hooks/use-axios-private";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../redux/store/store";
-import {toast, useToast} from "react-toastify";
+import {toast} from "react-toastify";
 import {OneFormItem} from "./OneFormItem";
 import {toastPosition, toastTheme} from "../../../config/api";
 import {Product} from "../../../types/product";
+import {AxiosError} from "axios";
 
 const schema = yup.object().shape({
 
@@ -46,7 +47,20 @@ export const UploadsForm = () => {
                 position: toastPosition,
                 theme: toastTheme
             });
+        },
+          onError: (error: AxiosError) => {
+        if (error.response && error.response.status === 409) {
+            toast.error('Resource conflict. Please try again.', {
+                position: toastPosition,
+                theme: toastTheme
+            });
+        } else {
+            toast.error('An error occurred. Please try again.', {
+                position: toastPosition,
+                theme: toastTheme
+            });
         }
+    }
 
     });
 
@@ -81,7 +95,7 @@ export const UploadsForm = () => {
 
                 </FormControl>
                 <p className='error-message'>{errors[('category' as registerType)]?.message} </p>
-                {labels.map((label, i) => <OneFormItem label={label} i={i} register={register}
+                {labels.map((label, i) => <OneFormItem key={i} label={label} i={i} register={register}
                                                        errors={errors}></OneFormItem>)}
 
                 <button type={"submit"} className='confirm-send'>SUBMIT</button>
