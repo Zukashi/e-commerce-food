@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  HttpException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -34,21 +35,43 @@ export class VendorService {
     files: Array<Express.Multer.File>,
     vendor: Vendor,
   ) {
-    const product = await this.productService.create(createProductDto, vendor);
-    const products = await Promise.all(
-      files.map(async (file) => {
-        return this.productImageService.create(file);
-      }),
-    );
-    products.forEach(async (productImage) => {
-      const newProduct = await this.productImageRepository.preload({
-        ...productImage,
-        product: product,
-      });
-      if (!newProduct) throw new NotFoundException();
-      await this.productImageRepository.save(newProduct);
-    }, Error());
-    return product;
+    try {
+      // Create product
+      const product = await this.productService.create(
+        createProductDto,
+        vendor,
+      );
+
+      // Create product images
+      const productImages = await Promise.all(
+        files.map((file) => this.productImageService.create(file)),
+      );
+      console.log(product, productImages);
+      // Link product images to the product
+      await Promise.all(
+        productImages.map(async (productImage) => {
+          await this.productImageService.createOneSignedUrl(productImage);
+          productImage.product = product;
+          console.log(productImage);
+          const newProductImage = await this.productImageRepository.save(
+            productImage,
+          );
+          // @TODO productid in productimage isnt saved and INSERT INTO product inserts default values?
+          return productImage;
+        }),
+      );
+
+      // Refetch the product from the database to get the most updated version
+      const updatedProduct = await this.productService.findOne(product.id);
+
+      if (!updatedProduct) {
+        throw new NotFoundException('Product not found');
+      }
+      return product;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status || 500);
+    }
   }
 
   async findOne({

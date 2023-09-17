@@ -13,7 +13,6 @@ import { ProductImage } from './product-image/entities/product-image.entity';
 import { APP_PIPE } from '@nestjs/core';
 import { User } from './user/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
-import Joi from 'joi';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './auth/local.strategy';
 import { JwtRefreshTokenStrategy } from './auth/strategy/jwt-refresh-token-strategy';
@@ -42,6 +41,7 @@ import { OrderModule } from './order/order.module';
       entities: [Product, Vendor, ProductImage, User, Cart],
       autoLoadEntities: true,
       synchronize: true,
+      logging: true,
     }),
     ProductModule,
     AwsModule,

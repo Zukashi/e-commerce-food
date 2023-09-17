@@ -48,7 +48,6 @@ export class Product {
   })
   productImages: ProductImage[];
 
-  @Index('product_vendorId_index')
   @ManyToOne((type) => Vendor, (vendor) => vendor.products, {
     cascade: true,
     nullable: false,

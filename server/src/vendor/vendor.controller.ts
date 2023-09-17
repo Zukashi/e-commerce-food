@@ -28,6 +28,7 @@ export class VendorController {
   ) {
     // parse createProductDto because it's in JSON currently
     const product = JSON.parse(createProductDto);
+    console.log(product);
     return await this.vendorService.createProduct(product, files, req.user);
   }
   @UseGuards(JwtAuthenticationGuard)

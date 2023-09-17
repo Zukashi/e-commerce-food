@@ -18,9 +18,9 @@ export class ProductImage {
   @Column({ nullable: true })
   imageUrl: string;
 
-  @Index('product-image_productId_index')
-  @ManyToOne((type) => Product, (product) => product.productImages, {
-    onDelete: 'CASCADE',
+  @ManyToOne(() => Product, (product) => product.productImages, {
+    eager: true,
+    onDelete: 'CASCADE', // automatically delete ProductImage when Product is deleted
   })
   product: Product;
 }

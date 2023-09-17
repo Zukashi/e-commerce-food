@@ -8,9 +8,6 @@ export class CreateVendorProductDTO {
   @IsNumber()
   readonly price: number;
 
-  @IsEnum(ProductCategoryEnum)
-  readonly category: ProductCategoryEnum;
-
   @IsNumber()
   readonly quantity: number;
 
