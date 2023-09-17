@@ -9,10 +9,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../product/entities/product.entity';
 import { Repository } from 'typeorm';
 import { ProductImage } from '../product-image/entities/product-image.entity';
-import { AwsService } from '../aws/aws.service';
 import { ProductImageService } from '../product-image/product-image.service';
 import { ProductService } from '../product/product.service';
-import { SignInDto } from '../auth/dto/signIn.dto';
 import { Vendor } from './entities/vendor.entity';
 import { SignUpDto } from '../auth/dto/signUp.dto';
 import * as bcrypt from 'bcrypt';
@@ -25,11 +23,9 @@ export class VendorService {
     @InjectRepository(Vendor)
     private readonly vendorRepository: Repository<Vendor>,
     @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
     @InjectRepository(ProductImage)
     private readonly productImageRepository: Repository<ProductImage>,
     private readonly productService: ProductService,
-    private readonly awsService: AwsService,
     private readonly productImageService: ProductImageService,
     private readonly orderService: OrderService,
   ) {}
@@ -76,7 +72,6 @@ export class VendorService {
         },
       ],
     });
-    console.log(user);
     if (user.length)
       throw new ConflictException(
         'Vendor with this email or username already exists in the database',

@@ -12,7 +12,6 @@ import {
 import { VendorService } from './vendor.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import JwtAuthenticationGuard from '../auth/guards/JwtAuthGuard';
-import { ReqWithCustomer } from '../auth/types/Req/User';
 import { ReqWithVendor } from '../auth/types/Req/Vendor';
 const sharp = require('sharp');
 

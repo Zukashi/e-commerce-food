@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3Client } from '../../libs/awsClient';
@@ -22,7 +27,7 @@ export class ProductImageService {
     if (!productsFromDb) throw new NotFoundException(`Products not found`);
     for (const product of productsFromDb) {
       const getObjectParams = {
-        Bucket: this.configService.get<string>("BUCKET_NAME"),
+        Bucket: this.configService.get<string>('BUCKET_NAME'),
         Key: product.imageName,
       };
       const command = new GetObjectCommand(getObjectParams);
@@ -40,11 +45,15 @@ export class ProductImageService {
 
   async create(file: Express.Multer.File) {
     const imageName = await this.awsService.create(file);
-    const product = this.productImageRepository.create({
-      imageName: imageName,
-    });
-    await this.productImageRepository.save(product);
-    return product;
+    try {
+      const product = this.productImageRepository.create({
+        imageName: imageName,
+      });
+      await this.productImageRepository.save(product);
+      return product;
+    } catch (e) {
+      throw new HttpException('image with this name already exists', 409);
+    }
   }
   async update(id: string, file: Express.Multer.File) {
     const { id: productId, imageName } = await this.awsService.updateImage(

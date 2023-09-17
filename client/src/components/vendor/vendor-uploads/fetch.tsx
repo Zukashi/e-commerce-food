@@ -28,13 +28,12 @@ export const createProduct = async ({data, axiosPrivate, vendor}:{axiosPrivate:A
             responseType:"blob"
         })
     }));
-    console.log(vendor.subImages)
+
     responses.forEach(async (r, i) => {
         const imageFile = new File([r.data], `image${i + 2}.jpg`, {type: 'image/jpeg'});
         formData.append(`image`, imageFile);
     }, Error());
     formData.append('product', JSON.stringify(data));
-    console.log(formData.getAll('image'))
     const res = await axiosPrivate.post('vendor/product', formData, {
         headers:{
             "Content-Type":"multipart/form-data"

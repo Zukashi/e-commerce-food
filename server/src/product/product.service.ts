@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -31,14 +32,18 @@ export class ProductService {
   }
 
   async create(createProductDto: CreateVendorProductDTO, vendor: Vendor) {
-    const product = await this.productRepository.create({
-      ...createProductDto,
-      price: Number(createProductDto.price),
-      quantity: Number(createProductDto.quantity),
-      vendor,
-    });
-    await this.productRepository.save(product);
-    return product;
+    try {
+      const product = this.productRepository.create({
+        ...createProductDto,
+        price: Number(createProductDto.price),
+        quantity: Number(createProductDto.quantity),
+        vendor,
+      });
+      await this.productRepository.save(product);
+      return product;
+    } catch (e) {
+      throw new ConflictException(e, 'product with this name already exists');
+    }
   }
 
   async getFilteredByOneCategory(filter: string) {

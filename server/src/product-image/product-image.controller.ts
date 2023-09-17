@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   Param,
   Patch,
   Post,
@@ -29,7 +30,9 @@ export class ProductImageController {
   async createOne(@UploadedFile() file: Express.Multer.File) {
     try {
       await this.productImageService.create(file);
-    } catch (e) {}
+    } catch (e) {
+      throw new HttpException(e.message, e.statusCode);
+    }
   }
   @Delete(':id')
   deleteOne(@Param('id') id: string) {
