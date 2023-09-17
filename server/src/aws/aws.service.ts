@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { Product } from '../product/entities/product.entity';
 import { ProductImage } from '../product-image/entities/product-image.entity';
 import { ProductImageService } from '../product-image/product-image.service';
+import {ConfigService} from "@nestjs/config";
 const sharp = require('sharp');
 
 @Injectable()
@@ -18,11 +19,11 @@ export class AwsService {
     private readonly productImageRepository: Repository<ProductImage>,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    private configService: ConfigService
   ) {}
 
   randomImageName = () => uuid();
   async create(file: Express.Multer.File) {
-    console.log(file);
     const buffer = await sharp(file.buffer)
       .resize(1920, 1080, {
         fit: 'contain',
@@ -31,7 +32,7 @@ export class AwsService {
 
     const imageName = this.randomImageName();
     const params = {
-      Bucket: process.env.BUCKET_NAME,
+      Bucket: this.configService.get<string>('BUCKET_NAME'),
       Key: imageName,
       Body: buffer,
       ContentType: file.mimetype,
@@ -39,7 +40,6 @@ export class AwsService {
 
     const command = new PutObjectCommand(params);
     await s3Client.send(command);
-    console.log(imageName);
     return imageName;
   }
 
@@ -47,7 +47,7 @@ export class AwsService {
     const product = await this.productImageRepository.findOneBy({ id });
     if (!product) throw new NotFoundException();
     const params = {
-      Bucket: process.env.BUCKET_NAME,
+      Bucket: this.configService.get<string>('BUCKET_NAME'),
       Key: product.imageName,
     };
     const command = new DeleteObjectCommand(params);
@@ -63,7 +63,7 @@ export class AwsService {
       })
       .toBuffer();
     const params = {
-      Bucket: process.env.BUCKET_NAME,
+      Bucket: this.configService.get<string>('BUCKET_NAME'),
       Key: product.imageName,
       Body: buffer,
       ContentType: file.mimetype,

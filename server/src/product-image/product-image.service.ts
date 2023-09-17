@@ -22,7 +22,7 @@ export class ProductImageService {
     if (!productsFromDb) throw new NotFoundException(`Products not found`);
     for (const product of productsFromDb) {
       const getObjectParams = {
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: this.configService.get<string>("BUCKET_NAME"),
         Key: product.imageName,
       };
       const command = new GetObjectCommand(getObjectParams);
@@ -40,7 +40,7 @@ export class ProductImageService {
 
   async create(file: Express.Multer.File) {
     const imageName = await this.awsService.create(file);
-    const product = await this.productImageRepository.create({
+    const product = this.productImageRepository.create({
       imageName: imageName,
     });
     await this.productImageRepository.save(product);

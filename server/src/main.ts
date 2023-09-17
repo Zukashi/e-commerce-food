@@ -1,10 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common'; // see https://github
+import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
-// somewhere in your initialization file
 import Stripe from 'stripe';
-import * as dotenv from 'dotenv'; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+import * as dotenv from 'dotenv';
 export const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY ?? '', {
   apiVersion: '2022-11-15',
 });
